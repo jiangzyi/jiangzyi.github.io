@@ -93,12 +93,54 @@
 
 
 
-<meta property="og:type" content="website">
+<meta name="description" content="iOS9中的storyboards教程：Part1 翻译自:Storyboards Tutorial in iOS 9: Part 1    原帖由导师小组的Matthijs Hollemans 发布。 Storyboards 是在iOS5的时候出现的一个新功能，它帮助我们在构建界面时节省了很多的时间。 我用一张图来展示什么是Storyboards，这就是你将要在这个教程里构建的Storyboar">
+<meta property="og:type" content="article">
 <meta property="og:title" content="蒋正义的修炼之路">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/index.html">
 <meta property="og:site_name" content="蒋正义的修炼之路">
+<meta property="og:description" content="iOS9中的storyboards教程：Part1 翻译自:Storyboards Tutorial in iOS 9: Part 1    原帖由导师小组的Matthijs Hollemans 发布。 Storyboards 是在iOS5的时候出现的一个新功能，它帮助我们在构建界面时节省了很多的时间。 我用一张图来展示什么是Storyboards，这就是你将要在这个教程里构建的Storyboar">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/BeginningStoryboard.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/XcodeProject.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/MainWindow.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/MainStoryboard.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/DragControls.gif">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/DocumentOutline.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/TheDock.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/SimulatorTesting.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/InfoPlist.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/ProjectSettingsMain.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/TabBarController.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/12_sb_containment.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/InitialViewController.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/13_sb_initialcontroller2.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/SimulatorAppWithTabs.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/AddTableViewController.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/NavigationController.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/Relationship.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/EmbedVC1.gif">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/Drag-tab-items.gif">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/SimulatorFirstTabWithTableView.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/TabBarPlayers.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/PlayersImage.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/NavigationItem.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/AppWithTabBarImages.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/CellSetup.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/PlayersViewController.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/PlayersVCClass.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/AppWithPlayers.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/StackView.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/PinIcon.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/Constraints.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/FinalCell.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/WrongCellHeight.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/RightHeight1.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/AppProperRowHeight.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/NameLabel.gif">
+<meta property="og:updated_time" content="2017-06-26T15:59:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="蒋正义的修炼之路">
+<meta name="twitter:description" content="iOS9中的storyboards教程：Part1 翻译自:Storyboards Tutorial in iOS 9: Part 1    原帖由导师小组的Matthijs Hollemans 发布。 Storyboards 是在iOS5的时候出现的一个新功能，它帮助我们在构建界面时节省了很多的时间。 我用一张图来展示什么是Storyboards，这就是你将要在这个教程里构建的Storyboar">
+<meta name="twitter:image" content="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/iOS9%E4%B8%AD%E7%9A%84storyboards%E6%95%99%E7%A8%8B%EF%BC%9APart1/BeginningStoryboard.png">
 
 
 
@@ -126,13 +168,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/06/24/iOS9中的storyboards教程：Part1/"/>
 
 
 
 
 
-  <title>蒋正义的修炼之路</title>
+  <title> | 蒋正义的修炼之路</title>
   
 
 
@@ -157,9 +199,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -242,9 +282,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -270,9 +310,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/24/iOS9中的storyboards教程：Part1/" itemprop="url">未命名</a></h1>
+          <h1 class="post-title" itemprop="name headline"></h1>
         
 
         <div class="post-meta">
@@ -319,9 +357,7 @@
       
 
       
-        
-          
-            <h1 id="iOS9中的storyboards教程：Part1"><a href="#iOS9中的storyboards教程：Part1" class="headerlink" title="iOS9中的storyboards教程：Part1"></a>iOS9中的storyboards教程：Part1</h1><blockquote>
+        <h1 id="iOS9中的storyboards教程：Part1"><a href="#iOS9中的storyboards教程：Part1" class="headerlink" title="iOS9中的storyboards教程：Part1"></a>iOS9中的storyboards教程：Part1</h1><blockquote>
 <p>翻译自:<a href="https://www.raywenderlich.com/113388/storyboards-tutorial-in-ios-9-part-1" target="_blank" rel="external">Storyboards Tutorial in iOS 9: Part 1</a>  </p>
 </blockquote>
 <pre><code>原帖由导师小组的Matthijs Hollemans 发布。
@@ -459,20 +495,27 @@ Table View Controller自带一个空白的prototype cell。选中这个cell然�
 <pre><code>看上去好多了。现在，你将从dequeueReusableCellWithIdentifier收到的对象转换为PlayerCell，然后可以简单得将正确的player对象传递到cell中。
 </code></pre><p>在PlayerCell中设置player变量将自动将值设置到label和image view中，cell将使用你在storyboard中连接的IBOutlets。使用prototype cell使table view的使用少了很多麻烦事。<br>    再次运行app。它看上去应该跟之前一样，但是在场景后面我们现在使用的是自己的table view cell子类。</p>
 
-          
+      
+    </div>
+
+    <div>
+      
         
+
       
     </div>
 
     <div>
       
-    </div>
+        
 
-    <div>
       
     </div>
 
     <div>
+      
+        
+
       
     </div>
 
@@ -480,367 +523,38 @@ Table View Controller自带一个空白的prototype cell。选中这个cell然�
       
 
       
-
-      
-
       
       
-        <div class="post-eof"></div>
+
       
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/24/postName/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="蒋正义">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋正义的修炼之路">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/24/postName/" itemprop="url">postName</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-24T00:45:09+08:00">
-                2017-06-24
-              </time>
+              <a href="/2017/06/24/postName/" rel="next" title="postName">
+                <i class="fa fa-chevron-left"></i> postName
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/24/FirstNight/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="蒋正义">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋正义的修炼之路">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/24/FirstNight/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-24T00:14:16+08:00">
-                2017-06-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h2 id="title-First-Night"><a href="#title-First-Night" class="headerlink" title=" title: First Night"></a> title: First Night</h2><blockquote>
-<p>我有一头<strong>小毛驴</strong>，可是我从来都不骑。</p>
-</blockquote>
-
-          
-        
+    <div class="post-spread">
       
     </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/23/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="蒋正义">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋正义的修炼之路">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/23/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-23T23:19:19+08:00">
-                2017-06-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-  </section>
-
-  
+  </div>
 
 
           </div>
@@ -848,6 +562,10 @@ Table View Controller自带一个空白的prototype cell。选中这个cell然�
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -867,8 +585,17 @@ Table View Controller自带一个空白的prototype cell。选中这个cell然�
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -912,6 +639,22 @@ Table View Controller自带一个空白的prototype cell。选中这个cell然�
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#iOS9中的storyboards教程：Part1"><span class="nav-number">1.</span> <span class="nav-text">iOS9中的storyboards教程：Part1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#项目入门"><span class="nav-number">1.1.</span> <span class="nav-text">项目入门</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加到我的选项卡"><span class="nav-number">1.2.</span> <span class="nav-text">添加到我的选项卡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#加入Table-View-Controller"><span class="nav-number">1.3.</span> <span class="nav-text">加入Table View Controller</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Prototype-Cells"><span class="nav-number">1.4.</span> <span class="nav-text">Prototype Cells</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设计你自己的Prototype-Cell"><span class="nav-number">1.5.</span> <span class="nav-text">设计你自己的Prototype Cell</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Cell的子类"><span class="nav-number">1.6.</span> <span class="nav-text">使用Cell的子类</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1025,10 +768,10 @@ Table View Controller自带一个空白的prototype cell。选中这个cell然�
   
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-  
+
 
   
 
