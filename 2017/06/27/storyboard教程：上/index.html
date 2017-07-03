@@ -138,7 +138,7 @@
 <meta property="og:image" content="http://yoursite.com/2017/06/27/storyboard教程：上/RightHeight1.png">
 <meta property="og:image" content="http://yoursite.com/2017/06/27/storyboard教程：上/AppProperRowHeight.png">
 <meta property="og:image" content="http://yoursite.com/2017/06/27/storyboard教程：上/NameLabel.gif">
-<meta property="og:updated_time" content="2017-06-27T16:24:58.000Z">
+<meta property="og:updated_time" content="2017-06-29T16:08:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="storyboard教程：上">
 <meta name="twitter:description" content="翻译自:Storyboards Tutorial in iOS 9: Part 1  Storyboards 是在iOS5的时候出现的一个新功能，它帮助我们在构建界面时节省了很多的时间。我用一张图来展示什么是Storyboards，这就是你将要在这个教程里构建的Storyboards。  你可能不清楚这个app是做什么的，但你可以很清楚的看到app的各个screen和他们之间的连接关系。Sto">
@@ -367,7 +367,7 @@
 <p>你可能不清楚这个app是做什么的，但你可以很清楚的看到app的各个screen和他们之间的连接关系。<br>Storyboards有以下几个优点：</p>
 <ul>
 <li>你可以在视觉上很直观的布局你view controllers中的各个场景并且表现他们之间的连接。通过stroryboard你会对你app中的各个场景有更好的概念。</li>
-<li>Stroyboards还可以表现场景间的跳转。这个跳转被称为’segues’,你可以通过在stroryboard中连接view controllers来创建‘sugeus’。通过它你就可以在UI上少写点代码啦。</li>
+<li>Stroyboards还可以表现场景间的跳转。这个跳转被称为”segues”,你可以通过在stroryboard中连接view controllers来创建”sugeus”。通过它你就可以在UI上少写点代码啦。</li>
 <li>在Storyboards中使用table view会简单很多。有了tableview 的prototype cells和static cells功能，你基本上就可以在stroryboard的编辑栏里来设计你的tableview了，减少了很多你原来不得不写的代码。</li>
 <li>Storyboards在使用Auto Layout上也简单很多。Auto Layout定义了你页面中各个UI的位置和大小，有了这个强大的功能，你在适配不同大小的屏幕时就简单多了。在这个教 程中，你只会使用用一点点Auto Layout，但是在这个教程外，你可以通过<a href="https://www.raywenderlich.com/?p=%2083129" target="_blank" rel="external">Auto Layout Tutorial</a>或者<a href="http://www.raywenderlich.com/video-tutorials#autolayout" target="_blank" rel="external">watch the video series</a>来了解更多的内容。</li>
 </ul>
@@ -427,7 +427,7 @@
 <blockquote>
 <p><strong>注意</strong>:屏幕缩小的时候不能拉取控件，你需要先通过双击画面来恢复会屏幕的正常尺寸。</p>
 </blockquote>
-<p>点击Build和Run，你会看到控制台输出一些类似的东西：<br><em>Ratings[18955:1293100] Failed to instantiate the default view controller for UIMainStoryboardFile ‘Main’ - perhaps the designated entry point is not set?</em><br>错误非常清晰，你没有设置一个entry point。意思就是你在删除之前的场景后没有设置新的初始控制器。为了解决这个问题，选中Tab Bar Controller，在<em>Attributes Inspector</em>。勾选<em>Is Initial View Controller</em>栏。</p>
+<p>点击Build和Run，你会看到控制台输出一些类似的东西：<br><strong>Ratings[18955:1293100] Failed to instantiate the default view controller for UIMainStoryboardFile “Main” - perhaps the designated entry point is not set?</strong><br>错误非常清晰，你没有设置一个entry point。意思就是你在删除之前的场景后没有设置新的初始控制器。为了解决这个问题，选中Tab Bar Controller，在<strong>Attributes Inspector</strong>。勾选<strong>Is Initial View Controller</strong>栏。</p>
 <p><img src="/2017/06/27/storyboard教程：上/InitialViewController.png" alt=""></p>
 <p>之前指向被删除的view controller的箭头现在应该指向Tab Bar Controller：</p>
 <p><img src="/2017/06/27/storyboard教程：上/13_sb_initialcontroller2.png" alt=""></p>
@@ -504,8 +504,8 @@
 <p><img src="/2017/06/27/storyboard教程：上/FinalCell.png" alt=""></p>
 <p>因为这是一个自定义cell，你不能再使用<strong>UITableview</strong>的<strong>textLabel</strong>和<strong>detailTextLabel</strong>属性来输入文字到这些label中了。这两个属性指向的label现在并不在这个cell。你只能在标准cell类型中使用这些属性。相应的，你可以使用tag来找到这些label。</p>
 <blockquote>
-<pre><code>Tag只是为了简单才在这里使用的。在下面的教程中你会创建一个继承自UITbaleViewCell的自定义类来包含这些label相关联的属性。
-</code></pre></blockquote>
+<p>Tag只是为了简单才在这里使用的。在下面的教程中你会创建一个继承自UITbaleViewCell的自定义类来包含这些label相关联的属性。</p>
+</blockquote>
 <p>在Arrtibutes inspector中设置<strong>Name</strong>label的tag值为100，<strong>Game</strong>label为101，<strong>Image View</strong>为102.<br>接着打开<strong>PlayersViewController.swift</strong>，添加一个名为<strong>imageForRating</strong>的新方法：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">func imageForRating(rating:Int) -&gt; UIImage? &#123;</div><div class="line">  let imageName = &quot;\(rating)Stars&quot;</div><div class="line">  return UIImage(named: imageName)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>很简单。这个方法根据不同的评级返回不同的星级图片。还是在PalyersViewController中，像下面这样改变<strong>tableView(_:cellForRowAtIndexPath:)</strong>方法：</p>
@@ -571,6 +571,22 @@
       
       
 
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/28/storyboard教程：下/" rel="prev" title="storyboard教程：下">
+                storyboard教程：下 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
 
       
@@ -639,7 +655,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
