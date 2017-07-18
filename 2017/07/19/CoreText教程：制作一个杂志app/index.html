@@ -1,0 +1,896 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="翻译自:Core Text Tutorial for iOS: Making a Magazine App  Core Text是底层的文字处理引擎，当跟Core Graphics或Quartz一起使用时，可以对文本布局和格式进行细粒度的控制。 苹果在iOS7的时候发布了一个名为Text kit的高级库，它能存储，布局并显示具有各种排版特性的文本。尽管Text Kit很强大，并且布局文本时足够">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CoreText教程：制作一个杂志app">
+<meta property="og:url" content="http://yoursite.com/2017/07/19/CoreText教程：制作一个杂志app/index.html">
+<meta property="og:site_name" content="蒋正义的修炼之路">
+<meta property="og:description" content="翻译自:Core Text Tutorial for iOS: Making a Magazine App  Core Text是底层的文字处理引擎，当跟Core Graphics或Quartz一起使用时，可以对文本布局和格式进行细粒度的控制。 苹果在iOS7的时候发布了一个名为Text kit的高级库，它能存储，布局并显示具有各种排版特性的文本。尽管Text Kit很强大，并且布局文本时足够">
+<meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2017/06/Screen-Shot-2017-06-07-at-12.43.13-PM.png">
+<meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2017/06/Screen-Shot-2017-06-07-at-12.47.10-PM-245x500.png">
+<meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2017/06/Screen-Shot-2017-06-07-at-12.49.19-PM-245x500.png">
+<meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2011/06/CTClasses.jpg">
+<meta property="og:image" content="http://www.raywenderlich.com/downloads/zombieMagMaterials.zip">
+<meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2017/06/zombie-thumbsup.png">
+<meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2017/06/Screen-Shot-2017-06-07-at-12.58.34-PM-245x500.png">
+<meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2017/06/zombie-happy.png">
+<meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2017/06/Screen-Shot-2017-06-08-at-12.41.06-PM.png">
+<meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2011/06/CTRunDelegate.jpg">
+<meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2017/04/runBounds.png">
+<meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2017/06/Screen-Shot-2017-06-08-at-12.51.19-PM.png">
+<meta property="og:updated_time" content="2017-07-18T16:11:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CoreText教程：制作一个杂志app">
+<meta name="twitter:description" content="翻译自:Core Text Tutorial for iOS: Making a Magazine App  Core Text是底层的文字处理引擎，当跟Core Graphics或Quartz一起使用时，可以对文本布局和格式进行细粒度的控制。 苹果在iOS7的时候发布了一个名为Text kit的高级库，它能存储，布局并显示具有各种排版特性的文本。尽管Text Kit很强大，并且布局文本时足够">
+<meta name="twitter:image" content="https://koenig-media.raywenderlich.com/uploads/2017/06/Screen-Shot-2017-06-07-at-12.43.13-PM.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/19/CoreText教程：制作一个杂志app/"/>
+
+
+
+
+
+  <title>CoreText教程：制作一个杂志app | 蒋正义的修炼之路</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">蒋正义的修炼之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/19/CoreText教程：制作一个杂志app/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="蒋正义">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋正义的修炼之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CoreText教程：制作一个杂志app</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-19T00:10:59+08:00">
+                2017-07-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p> 翻译自:<a href="https://www.raywenderlich.com/153591/core-text-tutorial-ios-making-magazine-app" target="_blank" rel="external">Core Text Tutorial for iOS: Making a Magazine App</a></p>
+</blockquote>
+<p><strong>Core Text</strong>是底层的文字处理引擎，当跟<strong>Core Graphics</strong>或<strong>Quartz</strong>一起使用时，可以对文本布局和格式进行细粒度的控制。</p>
+<p>苹果在iOS7的时候发布了一个名为<a href="https://www.raywenderlich.com/77092/text-kit-tutorial-swift" target="_blank" rel="external">Text kit</a>的高级库，它能存储，布局并显示具有各种排版特性的文本。尽管Text Kit很强大，并且布局文本时足够用了，但是Core Text能提供跟多控制。例如，如果你需要直接使用Quartz，那就使用Core Text。如果你需要构建你自己的布局引擎，Core Text能帮助你生成<a href="https://developer.apple.com/library/content/documentation/StringsTextFonts/Conceptual/CoreText_Programming/Introduction/Introduction.html#//apple_ref/doc/uid/TP40005533" target="_blank" rel="external">字形并使用优秀的排版功能来将它们相对彼此定位。</a></p>
+<p>本教程将引导你使用Core Text来创建一个很简单的杂志程序…为僵尸写的。</p>
+<p>对了，只要你忙着学习本教程，僵尸月刊的读者们就同意不吃掉你的大闹了。所以我们可能需要马上开始了。</p>
+<blockquote>
+<p><strong>注意：</strong>为了重复理解本教程，你需要知道iOS开发的基础知识。如果你刚开始接触iOS开发，那么我推荐你先看一下<a href="https://www.raywenderlich.com/category/ios" target="_blank" rel="external">其他教程</a>。</p>
+</blockquote>
+<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>打开Xcode，使用<strong>Single View Application模板</strong>创建新的<strong>Swift universal project</strong>，并命名为<strong>CoreTextMagazine</strong>。</p>
+<p>接下来，添加Core Text framework到你的项目中：</p>
+<ol>
+<li>在项目导航栏里点击项目文件</li>
+<li>在”General”栏下，向下滑到底部的”Linked Frameworks and Libraries”</li>
+<li>点击”+”并搜索”CoreText”</li>
+<li>选择”CoreText.framework”并点击”Add”按钮。</li>
+</ol>
+<p>现在项目已经建立完毕了，是时候开始编码了。</p>
+<h2 id="添加一个Core-Text视图"><a href="#添加一个Core-Text视图" class="headerlink" title="添加一个Core Text视图"></a>添加一个Core Text视图</h2><p>首先，我们创建一个自定义的<strong>UIView</strong>，在它的<strong>draw(_:)</strong>方法里使用Core Text。</p>
+<p>创建一个新的<strong>UIView</strong>的子类<strong>CTView</strong>。</p>
+<p>打开<strong>CTView.swift</strong>,在<strong>import UIKit</strong>下添加如下代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">import CoreText</div></pre></td></tr></table></figure>
+<p>接下来，设置这个自定义视图为应用的主视图。打开<strong>Main.storyboard</strong>,打开右边栏的<strong>Utilities</strong>菜单，然后选择工具栏里的<strong>Identity Inspecrot</strong>图标。在<strong>Interface Builder</strong>左手边的菜单里，选中<strong>View</strong>。将<strong>Utilities</strong>菜单里的<strong>Class</strong>栏里填的<strong>UIView</strong>修改为<strong>CTView</strong>。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2017/06/Screen-Shot-2017-06-07-at-12.43.13-PM.png" alt=""></p>
+<p>接着，打开<strong>CTView.swift</strong>并将注释掉的draw(_:)替换为一下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">//1	 	 </div><div class="line">override func draw(_ rect: CGRect) &#123;	 	 </div><div class="line">  // 2	 	 </div><div class="line">  guard let context = UIGraphicsGetCurrentContext() else &#123; return &#125;	 	 </div><div class="line">  // 3	 	 </div><div class="line">  let path = CGMutablePath()	 	 </div><div class="line">  path.addRect(bounds)	 	 </div><div class="line">  // 4</div><div class="line">  let attrString = NSAttributedString(string: &quot;Hello World&quot;)</div><div class="line">  // 5</div><div class="line">  let framesetter = CTFramesetterCreateWithAttributedString(attrString as CFAttributedString)</div><div class="line">  // 6</div><div class="line">  let frame = CTFramesetterCreateFrame(framesetter, CFRangeMake(0, attrString.length), path, nil) </div><div class="line">  // 7</div><div class="line">  CTFrameDraw(frame, context)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>让我们一步一步的看这段代码:</p>
+<ol>
+<li>再是图创建时，<strong>draw(_:)</strong>会自动运行来渲染视图的显示。</li>
+<li>打开用来绘制的当前图像上下文。</li>
+<li>创建一个限定绘制区域的路径，在本例中就是整个视图的边界。</li>
+<li>在Core Text中，你使用<strong>NSAttributedStirng</strong>，而不是<strong>String</strong>或<strong>NSString</strong>来持有文本和文本属性。初始化内容为<strong>Hello World</strong>的attributed string。</li>
+<li><strong>CTFramesetterCreateWithAttributedString</strong>通过所提供的attributed string来创建<strong>CTFramesetter</strong>。<strong>CTFramesetter</strong>将管理你的字体引用和你的绘制位置。</li>
+<li>通过CTFramesetterCreateFrame在路径里渲染全部的字符串来创建<strong>CTFrame</strong>。</li>
+<li><strong>CTFrameDraw</strong>在给定的上下文里绘制<strong>CTFrame</strong>。</li>
+</ol>
+<p>这就是画一个简单文本所需要做的事情。编译运行看下效果如何。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2017/06/Screen-Shot-2017-06-07-at-12.47.10-PM-245x500.png" alt=""></p>
+<p>…看上去好像不太对。就跟很多的底层API一样，Core Text使用Y轴翻转坐标系。更糟糕的是，内容也竖直翻转了。</p>
+<p>在<strong>guard let context</strong>语句下加入以下代码来修复内容的方向问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// Flip the coordinate system</div><div class="line">context.textMatrix = .identity</div><div class="line">context.translateBy(x: 0, y: bounds.size.height)</div><div class="line">context.scaleBy(x: 1.0, y: -1.0)</div></pre></td></tr></table></figure>
+<p>该代码通过对视图的上下文使用转化来翻转内容。</p>
+<p>编译运行app。不要担心状态栏的重叠问题。你将学习如何使用页面间距来解决这个问题。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2017/06/Screen-Shot-2017-06-07-at-12.49.19-PM-245x500.png" alt=""></p>
+<p>恭喜你构建了第一个Core Text app。僵尸们对你的进步很满意。</p>
+<h2 id="Core-Text对象模型"><a href="#Core-Text对象模型" class="headerlink" title="Core Text对象模型"></a>Core Text对象模型</h2><p>也许你对<strong>CTFramesetter</strong>和<strong>CTFrame</strong>还有点疑惑，没关系，下面我来做下介绍。</p>
+<p>Core Text对象模型看上去是这样的：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2011/06/CTClasses.jpg" alt=""></p>
+<p>当你创建了一个<strong>CTFramesetter</strong>引用并给它提供一个<strong>NSAttributedString</strong>。一个<strong>CTTypesetter</strong>实例就自动创建来管理你的字体了。接下来就使用<strong>CTFramesetter</strong>来创建一个或多个你用来渲染文本的frame。</p>
+<p>当你创建好文本，提供用来在它的矩形内渲染的文本范围。Core Text自动为每一行创建了<strong>CTLine</strong>，为每一个有相同格式的文本片段创建<strong>CTRun</strong>。比如说，Core Text会为一行中的几个红色的字创建<strong>CTRun</strong>，然后是纯文本的<strong>CTRun</strong>，然后又是粗体字的<strong>CTRun</strong>，等等。也就是说，Core Text基于<strong>NSAttributedString</strong>的属性来创建<strong>CTRun</strong>。此外，每一个<strong>CTRun</strong>对象可以采用不同的属性，所以你可以很好的控制字距，连字，宽度，高度等。</p>
+<h2 id="回到杂志app"><a href="#回到杂志app" class="headerlink" title="回到杂志app"></a>回到杂志app</h2><p>下载并解压<img src="http://www.raywenderlich.com/downloads/zombieMagMaterials.zip" alt="僵尸杂志材料"></p>
+<p>将文件夹拉到你Xcode项目中。出现提示时候，请确保勾选了<strong>Copy items if needed</strong>和<strong>Create groups</strong>。</p>
+<p>为了完成这个app，你需要对文本应用各种属性。你将创建一个简单的文本标记解析器，它将使用标签来设置杂志app的格式。</p>
+<p>创建一个新的Cocoa Touch类，命名为<strong>MarkupParser</strong>，设置为<strong>NSObject</strong>的子类。</p>
+<p>首先，先看一下<strong>zombies.txt</strong>。看看整个文本是如何包含括号内的格式化标签？”img src”标签关联杂志的图片，”font color/face”标签确定文本颜色和字体。</p>
+<p>打开<strong>MarkupParser.swift</strong>并将下面的代码写入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">import UIKit</div><div class="line">import CoreText</div><div class="line"></div><div class="line">class MarkupParser: NSObject &#123;</div><div class="line">  </div><div class="line">  // MARK: - Properties</div><div class="line">  var color: UIColor = .black</div><div class="line">  var fontName: String = &quot;Arial&quot;</div><div class="line">  var attrString: NSMutableAttributedString!</div><div class="line">  var images: [[String: Any]] = []</div><div class="line"></div><div class="line">  // MARK: - Initializers</div><div class="line">  override init() &#123;</div><div class="line">    super.init()</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  // MARK: - Internal</div><div class="line">  func parseMarkup(_ markup: String) &#123;</div><div class="line"></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里我们添加了一些属性来持有字体和文本颜色。设定他们的默认值。创建一个变量来持有<strong>parseMarkup(_:)</strong>生成的attributed  string。然后创建一个数组，它将最终保存定义文本中找到的图片大小，位置，文件名相关信息的字典。</p>
+<p>写一个解析器通常是很难的，但是本教程的解析器将会非常简单并只支持开标签–也就是说一个标签将设置紧跟着它的文本的样式直到一个标签。文本标记看上去是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">These are &lt;font color=&quot;red&quot;&gt;red&lt;font color=&quot;black&quot;&gt; and</div><div class="line">&lt;font color=&quot;blue&quot;&gt;blue &lt;font color=&quot;black&quot;&gt;words.</div></pre></td></tr></table></figure>
+<p>最终生成的输出就像这样：</p>
+<p>These are <font color="red">red</font> and <font color="blue">blue</font> words.</p>
+<p>在<strong>parseMarkup(_:)</strong>中添加如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">//1</div><div class="line">attrString = NSMutableAttributedString(string: &quot;&quot;)</div><div class="line">//2 </div><div class="line">do &#123;</div><div class="line">  let regex = try NSRegularExpression(pattern: &quot;(.*?)(&lt;[^&gt;]+&gt;|\\Z)&quot;,</div><div class="line">                                      options: [.caseInsensitive,</div><div class="line">                                                .dotMatchesLineSeparators])</div><div class="line">  //3</div><div class="line">  let chunks = regex.matches(in: markup, </div><div class="line">                             options: NSRegularExpression.MatchingOptions(rawValue: 0), </div><div class="line">                             range: NSRange(location: 0,</div><div class="line">                                            length: markup.characters.count))</div><div class="line">&#125; catch _ &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ol>
+<li><strong>attrString</strong>刚开始是空的，但是最终将包含解析后的标记语言。</li>
+<li>这个正则表达式，匹配马上跟着标签的文本块。它的意思是：查看字符串知道你找到一个开括号，然后接着看字符串直到你遇到了一个闭括号（或者是文档的结束部分）。</li>
+<li>搜索正则表达式匹配的整个标记语言范围，然后生成一个<strong>NSTextCheckingResults</strong>数组。</li>
+</ol>
+<blockquote>
+<p><strong>注意：</strong>更多关于正则表达式的内容可以在<a href="https://www.raywenderlich.com/86205/nsregularexpression-swift-tutorial" target="_blank" rel="external">NSRegularExpression Tutorial</a>看到。</p>
+</blockquote>
+<p>现在你已经解析了整个文本和格式标签到<strong>chunks</strong>中，你将循环<strong>chunks</strong>来构建attributed string。</p>
+<p>但是在那之前，你有注意到<strong>matches(in:options:range:)</strong>是如何接收一个<strong>NSRange</strong>来作为一个参数的吗？在你的标记文本使用<strong>NSRegangeExpression</strong>函数时，将会有很多<strong>NSRange</strong>到<strong>Range</strong>的转换。swift是我们所有人的一个好朋友，所以我们需要帮一下它。</p>
+<p>还是在<strong>MarkupParser.swift</strong>中，在文件的末尾添加下面的<strong>extension</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">// MARK: - String</div><div class="line">extension String &#123;</div><div class="line">  func range(from range: NSRange) -&gt; Range&lt;String.Index&gt;? &#123;</div><div class="line">    guard let from16 = utf16.index(utf16.startIndex,</div><div class="line">                                   offsetBy: range.location,</div><div class="line">                                   limitedBy: utf16.endIndex),</div><div class="line">      let to16 = utf16.index(from16, offsetBy: range.length, limitedBy: utf16.endIndex),</div><div class="line">      let from = String.Index(from16, within: self),</div><div class="line">      let to = String.Index(to16, within: self) else &#123;</div><div class="line">        return nil</div><div class="line">   &#125;</div><div class="line"></div><div class="line">    return from ..&lt; to</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>此函数将String的起始和结束索引（以NSRange表示）转换为<strong>String.UTF16View.Index</strong>格式，即字符串UTF-16代码单元集合中的​​位置;然后转换每个<strong>String.UTF16View.Index</strong>到<strong>String.Index</strong>格式。当组合时，就会产生Swift的范围格式<strong>Range</strong>。只要索引时有效的，这个方法就会返回原始<strong>NSRange</strong>的<strong>Range</strong>表现。</p>
+<p>现在是时候回头去处理文本和标签块了。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2017/06/zombie-thumbsup.png" alt=""></p>
+<p>在<strong>parseMarkup(_:)</strong>中的<strong>let chunks</strong>(在<strong>do</strong>代码块里)下添加如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">let defaultFont: UIFont = .systemFont(ofSize: UIScreen.main.bounds.size.height / 40)</div><div class="line">//1</div><div class="line">for chunk in chunks &#123;  </div><div class="line">  //2</div><div class="line">  guard let markupRange = markup.range(from: chunk.range) else &#123; continue &#125;</div><div class="line">  //3    </div><div class="line">  let parts = markup.substring(with: markupRange).components(separatedBy: &quot;&lt;&quot;)</div><div class="line">  //4</div><div class="line">  let font = UIFont(name: fontName, size: UIScreen.main.bounds.size.height / 40) ?? defaultFont       </div><div class="line">  //5</div><div class="line">  let attrs = [NSAttributedStringKey.foregroundColor: color, NSAttributedStringKey.font: font] as [NSAttributedStringKey : Any]</div><div class="line">  let text = NSMutableAttributedString(string: parts[0], attributes: attrs)</div><div class="line">  attrString.append(text)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>循环遍历<strong>chunks</strong>。</li>
+<li>取得目前<strong>NSTextCheckingResult</strong>的范围，展开<strong>Range<string.index></string.index></strong>，只要它存在，就继续执行代码。</li>
+<li>将<strong>chunk</strong>根据”&lt;”拆分成两部分。第一部分包含杂志文本，第二部分包含标签（如果有的话）。</li>
+<li>使用<strong>fontName</strong>和跟屏幕大小相关的大小创建一个字体，字体名字目前默认是<strong>Arial</strong>，如果<strong>fontName</strong>不能产生一个有效的<strong>UIFont</strong>，设置<strong>font</strong>为默认的font。</li>
+<li>创建字体格式的字典，将其应用于<strong>part[0]</strong>来创建attributed string，然后将该字符串添加到最终字符串里。</li>
+</ol>
+<p>为了处理”font”标签，在<strong>attrString.append(text)</strong>后面插入如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">// 1</div><div class="line">if parts.count &lt;= 1 &#123;</div><div class="line">  continue</div><div class="line">&#125;</div><div class="line">let tag = parts[1]</div><div class="line">//2</div><div class="line">if tag.hasPrefix(&quot;font&quot;) &#123;</div><div class="line">  let colorRegex = try NSRegularExpression(pattern: &quot;(?&lt;=color=\&quot;)\\w+&quot;, </div><div class="line">                                           options: NSRegularExpression.Options(rawValue: 0))</div><div class="line">  colorRegex.enumerateMatches(in: tag, </div><div class="line">    options: NSRegularExpression.MatchingOptions(rawValue: 0), </div><div class="line">    range: NSMakeRange(0, tag.characters.count)) &#123; (match, _, _) in</div><div class="line">      //3</div><div class="line">      if let match = match,</div><div class="line">        let range = tag.range(from: match.range) &#123;</div><div class="line">          let colorSel = NSSelectorFromString(tag.substring(with:range) + &quot;Color&quot;)</div><div class="line">          color = UIColor.perform(colorSel).takeRetainedValue() as? UIColor ?? .black</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line">  //5    </div><div class="line">  let faceRegex = try NSRegularExpression(pattern: &quot;(?&lt;=face=\&quot;)[^\&quot;]+&quot;,</div><div class="line">                                          options: NSRegularExpression.Options(rawValue: 0))</div><div class="line">  faceRegex.enumerateMatches(in: tag, </div><div class="line">    options: NSRegularExpression.MatchingOptions(rawValue: 0), </div><div class="line">    range: NSMakeRange(0, tag.characters.count)) &#123; (match, _, _) in</div><div class="line"></div><div class="line">      if let match = match,</div><div class="line">        let range = tag.range(from: match.range) &#123;</div><div class="line">          fontName = tag.substring(with: range)</div><div class="line">      &#125;</div><div class="line">  &#125;</div><div class="line">&#125; //end of font parsing</div></pre></td></tr></table></figure>
+<ol>
+<li>如果小于两部分，跳过循环体的剩余部分。否则，将第二部分存储为<strong>tag</strong>。</li>
+<li>如果<strong>tag</strong>以”font”开头，创建一个正则表达式来找到字体的”color”值，然后使用这个正则来遍历<strong>tag</strong>里匹配的”color”值。在这个例子中，这里应该只有一个匹配的颜色值。</li>
+<li>如果<strong>enumerateMatches(in:options:range:using:)</strong>返回一个带着有效范围的<strong>match</strong>对象，找到这个指定的值（比如<strong>\<font color="red" \=""></font></strong>返回”red”）并将”Color”添加在后面来组成一个<strong>UIColor</strong>选择器。执行这个选择器，并将返回值设置到类中的<strong>color</strong>里。如果没有返回值无效的话就设置为黑色。</li>
+<li>类似的，创建正则表达式来处理字体的”face”值。如果找到匹配的，设置<strong>fontName</strong>为该值。</li>
+</ol>
+<p>现在<strong>parseMarkup(_:)</strong>能解析标记语言并为Core Text生成<strong>NSAttributedString</strong>了。</p>
+<p>我们让<strong>UIView</strong>来显示赋給它的文本。打开<strong>CTView.swift</strong>并在<strong>draw(_:):</strong>下添加如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">// MARK: - Properties</div><div class="line">var attrString: NSAttributedString!</div><div class="line"></div><div class="line">// MARK: - Internal</div><div class="line">func importAttrString(_ attrString: NSAttributedString) &#123;</div><div class="line">  self.attrString = attrString</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接着，删除<strong>draw(_:)</strong>里的<strong>let attrString = NSAttributedString(string: “Hello World”)</strong>。</p>
+<p>现在你创建了一个实例变量来持有attributed string和一个方法来给它赋值。</p>
+<p>接着，打开<strong>ViewController.swift</strong>并添加如下代码到<strong>viewDidLoad():</strong>里：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">// 1</div><div class="line">guard let file = Bundle.main.path(forResource: &quot;zombies&quot;, ofType: &quot;txt&quot;) else &#123; return &#125;</div><div class="line">  </div><div class="line">do &#123;</div><div class="line">  let text = try String(contentsOfFile: file, encoding: .utf8)</div><div class="line">  // 2</div><div class="line">  let parser = MarkupParser()</div><div class="line">  parser.parseMarkup(text)</div><div class="line">  (view as? CTView)?.importAttrString(parser.attrString)</div><div class="line">&#125; catch _ &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>将<strong>zombie.txt</strong>文件中的文本加载成<strong>string</strong>。</li>
+<li>创建一个parser，输入文本，然后将解析出的attributed string传入<strong>viewController</strong>的<strong>CTView</strong>中。</li>
+</ol>
+<p>编译运行一下app！</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2017/06/Screen-Shot-2017-06-07-at-12.58.34-PM-245x500.png" alt=""></p>
+<p>是不是很棒呢？多亏了50行的解析你能很方便的使用文本文件来持有杂志app的内容。</p>
+<p>##杂志app的基本布局</p>
+<p>如果你认为可怜的一页就能容下整个僵尸月刊的话，你就大错特错了。Core Text在布局多行的时候非常强大。因为<strong>CTFrameGetVisibleStringRange</strong>能告诉你一个给定的frame能放下多少文本。意思就是你可以先创建一列，当一列满了之后，你可以在创建另一列。</p>
+<p>在这个app中，你需要先打印列，然后是页，然后是一整个杂志。所以是时候将你的<strong>CTView</strong>设置为是<strong>UIScrollView</strong>的子类了。</p>
+<p>打开<strong>CTView.swift</strong>并修改<strong>class CTView</strong>行为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">class CTView: UIScrollView &#123;</div></pre></td></tr></table></figure>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2017/06/zombie-happy.png" alt=""></p>
+<p>到目前为止，你已经在<strong>draw(_:)</strong>中创建了你的framesetter和frame，但是由于你将要有很多不同格式的很多行，所以最好还是创建单独的列实例。</p>
+<p>创建一个新的Cocoa Touch Class文件命名为<strong>CTColumnView</strong>，<strong>UIView</strong>的子类。</p>
+<p>打开<strong>CTColumnView.swift</strong>并添加如何代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">import UIKit</div><div class="line">import CoreText</div><div class="line"></div><div class="line">class CTColumnView: UIView &#123;</div><div class="line">  </div><div class="line">  // MARK: - Properties</div><div class="line">  var ctFrame: CTFrame!</div><div class="line">  </div><div class="line">  // MARK: - Initializers</div><div class="line">  required init(coder aDecoder: NSCoder) &#123;</div><div class="line">    super.init(coder: aDecoder)!</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  required init(frame: CGRect, ctframe: CTFrame) &#123;</div><div class="line">    super.init(frame: frame)</div><div class="line">    self.ctFrame = ctframe</div><div class="line">    backgroundColor = .white</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  // MARK: - Life Cycle</div><div class="line">  override func draw(_ rect: CGRect) &#123;</div><div class="line">    guard let context = UIGraphicsGetCurrentContext() else &#123; return &#125;</div><div class="line">      </div><div class="line">    context.textMatrix = .identity</div><div class="line">    context.translateBy(x: 0, y: bounds.size.height)</div><div class="line">    context.scaleBy(x: 1.0, y: -1.0)</div><div class="line">      </div><div class="line">    CTFrameDraw(ctFrame, context)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这行代码就跟你最初在<strong>CTView</strong>中做的一样渲染了一个<strong>CTFrame</strong>。自定的初始化器<strong>init(frame:ctframe:)</strong>，设置了：</p>
+<ol>
+<li>此视图的frame。</li>
+<li>用来在contenxt中绘制的<strong>CTFrame</strong>。</li>
+<li>视图的背景颜色为白色。</li>
+</ol>
+<p>接着，创建一个新的swift文件命名为<strong>CTSettings.swift</strong>，用来持有你的列设定。替换<strong>CTSettings.swift</strong>的内容为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">import UIKit</div><div class="line">import Foundation</div><div class="line"></div><div class="line">class CTSettings &#123;</div><div class="line">  //1</div><div class="line">  // MARK: - Properties</div><div class="line">  let margin: CGFloat = 20</div><div class="line">  var columnsPerPage: CGFloat!</div><div class="line">  var pageRect: CGRect!</div><div class="line">  var columnRect: CGRect!</div><div class="line">  </div><div class="line">  // MARK: - Initializers</div><div class="line">  init() &#123;</div><div class="line">    //2</div><div class="line">    columnsPerPage = UIDevice.current.userInterfaceIdiom == .phone ? 1 : 2</div><div class="line">    //3</div><div class="line">    pageRect = UIScreen.main.bounds.insetBy(dx: margin, dy: margin)</div><div class="line">    //4</div><div class="line">    columnRect = CGRect(x: 0,</div><div class="line">                        y: 0,</div><div class="line">                        width: pageRect.width / columnsPerPage,</div><div class="line">                        height: pageRect.height).insetBy(dx: margin, dy: margin)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>这些属性决定每页的边距大小（本教程默认是20）；每页的行数；每一页的frame；和每一列的frame。</li>
+<li>由于这本杂志要在iPhone和iPad上都能看，所以在iPad上展现两列，在iPhone上展现一列。这样不同的屏幕大小的列数都是合适的。</li>
+<li>将整个页面的大小嵌入边距大小来计算pageRect。</li>
+<li>将页面大小的宽度除以每行的列数得到新的frame并将这个frame嵌入边距得到<strong>columnRect</strong>。</li>
+</ol>
+<p>打开<strong>CTView.swift</strong>，将整个内容替换为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">import UIKit</div><div class="line">import CoreText</div><div class="line"></div><div class="line">class CTView: UIScrollView &#123;</div><div class="line"></div><div class="line">  //1</div><div class="line">  func buildFrames(withAttrString attrString: NSAttributedString,</div><div class="line">                   andImages images: [[String: Any]]) &#123;</div><div class="line">    //3</div><div class="line">    isPagingEnabled = true</div><div class="line">    //4</div><div class="line">    let framesetter = CTFramesetterCreateWithAttributedString(attrString as CFAttributedString)</div><div class="line">    //4</div><div class="line">    var pageView = UIView()</div><div class="line">    var textPos = 0</div><div class="line">    var columnIndex: CGFloat = 0</div><div class="line">    var pageIndex: CGFloat = 0</div><div class="line">    let settings = CTSettings()</div><div class="line">    //5</div><div class="line">    while textPos &lt; attrString.length &#123;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ol>
+<li><strong>buildFrames(withAttrString:andImages:)</strong>将创建<strong>CTColumnViews</strong>并将它们添加进scrollview。</li>
+<li>启用scrollview的翻页功能。所以无论何时用户停止滚动，scrollview就会捕捉到，然后一整个页面就能显示出来。</li>
+<li><strong>CTFramesetter framesetter</strong>将创建每一列的attributed text的<strong>CTFrame</strong>。</li>
+<li><strong>UIView pageView</strong>将被当做是每一页当中列子视图的容器。<strong>textPos</strong>将会跟踪下一个字符。<strong>columnIndex</strong>将跟踪当前的列。<strong>pageIndex</strong>将跟踪当前页。<strong>setting</strong>能让你访问app的边距的大小，每页的列数，页面大小和列大小设定。</li>
+<li>你将要遍历<strong>attString</strong>并一列一列的布局文本，直到当前的文本位置到最后了。</li>
+</ol>
+<p>下面我们就来遍历<strong>attrString</strong>。在<strong>while textPos &lt; attrString.length</strong>里添加下列代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">//1</div><div class="line">if columnIndex.truncatingRemainder(dividingBy: settings.columnsPerPage) == 0 &#123;</div><div class="line">  columnIndex = 0</div><div class="line">  pageView = UIView(frame: settings.pageRect.offsetBy(dx: pageIndex * bounds.width, dy: 0))</div><div class="line">  addSubview(pageView)</div><div class="line">  //2</div><div class="line">  pageIndex += 1</div><div class="line">&#125;   </div><div class="line">//3</div><div class="line">let columnXOrigin = pageView.frame.size.width / settings.columnsPerPage</div><div class="line">let columnOffset = columnIndex * columnXOrigin</div><div class="line">let columnFrame = settings.columnRect.offsetBy(dx: columnOffset, dy: 0)</div></pre></td></tr></table></figure>
+<ol>
+<li>如果列索引除以每页的列数取余等于0，那就表示该列是这一页的第一列，创建一个新的页视图来持有这些列。通过获取<strong>settings.pageRect</strong>并将它沿x轴方向偏移当前页乘以屏幕宽度的大小来计算新页的frame。这样在scrollview里，每一页都会在前一页的右边。</li>
+<li>增加<strong>pageIndex</strong>。</li>
+<li>通过将<strong>pageView</strong>的宽度除以<strong>settings.columnsPerPage</strong>来得到每列的宽度;将宽度乘以列索引以获得列偏移量;然后通过将标准<strong>columnRect</strong>并偏移<strong>columnOffset</strong>来创建当前列的frame。</li>
+</ol>
+<p>接下来，在<strong>columnFrame</strong>初始化器下添加：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">//1   </div><div class="line">let path = CGMutablePath()</div><div class="line">path.addRect(CGRect(origin: .zero, size: columnFrame.size))</div><div class="line">let ctframe = CTFramesetterCreateFrame(framesetter, CFRangeMake(textPos, 0), path, nil)</div><div class="line">//2</div><div class="line">let column = CTColumnView(frame: columnFrame, ctframe: ctframe)</div><div class="line">pageView.addSubview(column)</div><div class="line">//3</div><div class="line">let frameRange = CTFrameGetVisibleStringRange(ctframe)</div><div class="line">textPos += frameRange.length</div><div class="line">//4</div><div class="line">columnIndex += 1</div></pre></td></tr></table></figure>
+<ol>
+<li>创建一个<strong>CGMutablePath</strong>获得列的大小，然后从<strong>textPos</strong>开始，用尽可能多的文本来渲染一个新的<strong>CTFrame</strong>。</li>
+<li>使用<strong>CGRect columnFrame</strong>和<strong>CTFrame ctframe</strong>创建一个<strong>CTColumnView</strong>并添加该列到<strong>pageView</strong>。</li>
+<li>使用<strong>CTFrameGetVisibleStringRange(_:)</strong>来计算该列包含文本的范围，然后将<strong>textPos</strong>增加范围的长度来反映当前的文本位置。</li>
+<li>在下一次循环前列索引加1。</li>
+</ol>
+<p>最后在循环结束后设置scrollview的content size。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">contentSize = CGSize(width: CGFloat(pageIndex) * bounds.size.width,</div><div class="line">                     height: bounds.size.height)</div></pre></td></tr></table></figure>
+<p>通过将content size设置为屏幕宽度乘以页数，僵尸现在可以滑到到最后了。</p>
+<p>打开<strong>ViewController.swift</strong>并替换</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(view as? CTView)?.importAttrString(parser.attrString)</div></pre></td></tr></table></figure>
+<p>为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">(view as? CTView)?.buildFrames(withAttrString: parser.attrString, andImages: parser.images)</div></pre></td></tr></table></figure>
+<p>在iPad上编译运行app，检查一下这两列的布局。在页面间左右滑动一下。看上去不错。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2017/06/Screen-Shot-2017-06-08-at-12.41.06-PM.png" alt=""></p>
+<p>你已经有了多列和格式化的文本，但是你还缺少图片。用Core Text并不能直接画图，毕竟这是一个文本框架。但是在您已经创建的解析器的帮助下，添加图像应该不会太难。</p>
+<h2 id="使用Core-Text画图"><a href="#使用Core-Text画图" class="headerlink" title="使用Core Text画图"></a>使用Core Text画图</h2><p>尽管Core Text不能画图，作为一个布局引擎，它可以留下空白空间来为图片腾出空间。通过设置<strong>CTRun</strong>的代理，你可以决定<strong>CTRun</strong>的上升空间，降下空间和宽度，就像这样：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2011/06/CTRunDelegate.jpg" alt=""></p>
+<p>当Core Text带着<strong>CTRunDelegate</strong>渲染到一个<strong>CTRun</strong>时,它会询问代理：我需要为这块数据留下多少空间。通过在<strong>CTRunDelegate</strong>设置这些属性，你可以在这些文本中为这些图片留下空间。</p>
+<p>首先我们要支持解析<strong>img</strong>标签。打开<strong>MarkupParser.swift</strong>并在”} //end of font parsing”后面添加如何代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">//1</div><div class="line">else if tag.hasPrefix(&quot;img&quot;) &#123; </div><div class="line">      </div><div class="line">  var filename:String = &quot;&quot;</div><div class="line">  let imageRegex = try NSRegularExpression(pattern: &quot;(?&lt;=src=\&quot;)[^\&quot;]+&quot;,</div><div class="line">                                           options: NSRegularExpression.Options(rawValue: 0))</div><div class="line">  imageRegex.enumerateMatches(in: tag, </div><div class="line">    options: NSRegularExpression.MatchingOptions(rawValue: 0), </div><div class="line">    range: NSMakeRange(0, tag.characters.count)) &#123; (match, _, _) in</div><div class="line"></div><div class="line">    if let match = match,</div><div class="line">      let range = tag.range(from: match.range) &#123;</div><div class="line">        filename = tag.substring(with: range)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  //2</div><div class="line">  let settings = CTSettings()</div><div class="line">  var width: CGFloat = settings.columnRect.width</div><div class="line">  var height: CGFloat = 0</div><div class="line"></div><div class="line">  if let image = UIImage(named: filename) &#123;</div><div class="line">    height = width * (image.size.height / image.size.width)</div><div class="line">    // 3</div><div class="line">    if height &gt; settings.columnRect.height - font.lineHeight &#123;</div><div class="line">      height = settings.columnRect.height - font.lineHeight</div><div class="line">      width = height * (image.size.width / image.size.height)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>如果<strong>tag</strong>以”img”开头，使用一个正则表达式来搜索图片的”src”值，也就是文件名。</li>
+<li>设置图片的宽度为列的宽度并设置它的高度来使图片保持宽高比。</li>
+<li>如果图片的高度比列的高度高，重新设置图片的高度来适应列的高度并减少宽度来保持图片的宽高比。由于图像后面的文本将包含空白属性，该包含空白属性的文本必须跟图片在同一列，所以设置图片高度为<strong>settings.columnRect.height - font.lineHeight.</strong>。</li>
+</ol>
+<p>接下来，在<strong>if let image</strong>块下添加下面代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">//1</div><div class="line">images += [[&quot;width&quot;: NSNumber(value: Float(width)),</div><div class="line">            &quot;height&quot;: NSNumber(value: Float(height)),</div><div class="line">            &quot;filename&quot;: filename,</div><div class="line">            &quot;location&quot;: NSNumber(value: attrString.length)]]</div><div class="line">//2</div><div class="line">struct RunStruct &#123;</div><div class="line">  let ascent: CGFloat</div><div class="line">  let descent: CGFloat</div><div class="line">  let width: CGFloat</div><div class="line">&#125;</div><div class="line"></div><div class="line">let extentBuffer = UnsafeMutablePointer&lt;RunStruct&gt;.allocate(capacity: 1)</div><div class="line">extentBuffer.initialize(to: RunStruct(ascent: height, descent: 0, width: width))</div><div class="line">//3</div><div class="line">var callbacks = CTRunDelegateCallbacks(version: kCTRunDelegateVersion1, dealloc: &#123; (pointer) in</div><div class="line">&#125;, getAscent: &#123; (pointer) -&gt; CGFloat in</div><div class="line">  let d = pointer.assumingMemoryBound(to: RunStruct.self)</div><div class="line">  return d.pointee.ascent</div><div class="line">&#125;, getDescent: &#123; (pointer) -&gt; CGFloat in</div><div class="line">  let d = pointer.assumingMemoryBound(to: RunStruct.self)</div><div class="line">  return d.pointee.descent</div><div class="line">&#125;, getWidth: &#123; (pointer) -&gt; CGFloat in</div><div class="line">  let d = pointer.assumingMemoryBound(to: RunStruct.self)</div><div class="line">  return d.pointee.width</div><div class="line">&#125;)</div><div class="line">//4</div><div class="line">let delegate = CTRunDelegateCreate(&amp;callbacks, extentBuffer)</div><div class="line">//5</div><div class="line">let attrDictionaryDelegate = [(kCTRunDelegateAttributeName as NSAttributedStringKey): (delegate as Any)]              </div><div class="line">attrString.append(NSAttributedString(string: &quot; &quot;, attributes: attrDictionaryDelegate))</div></pre></td></tr></table></figure>
+<ol>
+<li>添加一个包含了图片大小，文件名，和文本位置的字典到<strong>images</strong>中。</li>
+<li>定义<strong>RunStruct</strong>来持有一些属性，用来确定空白空间。然后初始化一个指针来包含一个<strong>ascent</strong>等于图片高度，<strong>width</strong>等于图片宽度的<strong>RunStruct</strong>。</li>
+<li>创建一个<strong>CTRunDelegateCallbacks</strong>来返回返回属于<strong>RunStruct</strong>类型的指针的上升，下降和宽度属性。</li>
+<li>使用<strong>CTRunDelegateCreate</strong>来创建一个将回调和数据参数绑定在一起的委托实例。</li>
+<li>创建一个包含委托实例的属性字典，然后将一个空格追加到<strong>attrString</strong>，该空格持有空间的位置和大小信息。</li>
+</ol>
+<p>现在<strong>MarkupParser</strong>正在处理”img”标签，你需要修改<strong>CTColumnView</strong>和<strong>CTView</strong>来渲染它们。</p>
+<p>打开<strong>CTColumnView.swift</strong>。在<strong>var ctFrame:CTFrame!</strong>下面添加代码来持有列的图片和位置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var images: [(image: UIImage, frame: CGRect)] = []</div></pre></td></tr></table></figure>
+<p>接下来，在<strong>draw(_:)</strong>下添加下面代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">for imageData in images &#123;</div><div class="line">  if let image = imageData.image.cgImage &#123;</div><div class="line">    let imgBounds = imageData.frame</div><div class="line">    context.draw(image, in: imgBounds)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里你遍历每个图片并将它相应位置属性上画出来。</p>
+<p>接下来打开<strong>CTView.swift</strong>并在类里添加下面属性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// MARK: - Properties</div><div class="line">var imageIndex: Int!</div></pre></td></tr></table></figure>
+<p><strong>imageIndex</strong>将跟踪你当前画在<strong>CTColumnViews</strong>中的图片索引。</p>
+<p>接下来，在<strong>buildFrames(withAttrString:andImages:)</strong>添加下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">imageIndex = 0</div></pre></td></tr></table></figure>
+<p>这标记了<strong>images</strong>数组里的第一个元素。</p>
+<p>接下来在<strong>buildFrames(withAttrString:andImages:)</strong>下面添加<strong>attachImagesWithFrame(_:ctframe:margin:columnView)</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">func attachImagesWithFrame(_ images: [[String: Any]],</div><div class="line">                           ctframe: CTFrame,</div><div class="line">                           margin: CGFloat,</div><div class="line">                           columnView: CTColumnView) &#123;</div><div class="line">  //1</div><div class="line">  let lines = CTFrameGetLines(ctframe) as NSArray</div><div class="line">  //2</div><div class="line">  var origins = [CGPoint](repeating: .zero, count: lines.count)</div><div class="line">  CTFrameGetLineOrigins(ctframe, CFRangeMake(0, 0), &amp;origins)</div><div class="line">  //3</div><div class="line">  var nextImage = images[imageIndex]</div><div class="line">  guard var imgLocation = nextImage[&quot;location&quot;] as? Int else &#123;</div><div class="line">    return</div><div class="line">  &#125;</div><div class="line">  //4</div><div class="line">  for lineIndex in 0..&lt;lines.count &#123;</div><div class="line">    let line = lines[lineIndex] as! CTLine</div><div class="line">    //5</div><div class="line">    if let glyphRuns = CTLineGetGlyphRuns(line) as? [CTRun], </div><div class="line">      let imageFilename = nextImage[&quot;filename&quot;] as? String, </div><div class="line">      let img = UIImage(named: imageFilename)  &#123; </div><div class="line">        for run in glyphRuns &#123;</div><div class="line"></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>获得<strong>ctframe</strong>的<strong>CTLine</strong>对象的数组。</li>
+<li>使用<strong>CTFrameGetOrigins</strong>来将<strong>ctframe’s</strong>的行原点复制到<strong>origins</strong>数组中。设置范围的长度为0，<strong>CTFrameGetOrigins</strong>就会知道要遍历整个<strong>CTFrame</strong>。</li>
+<li>设置<strong>nextImage</strong>来持有当前图片的图片属性。如果<strong>nextImage</strong>包含了图片的位置，解析它并继续循环，否则就提前退出。</li>
+<li>遍历文本的行。</li>
+<li>如果行的glyphRuns，图片名和图片名对应的图片全部存在，遍历这一行的glyphRun。</li>
+</ol>
+<p>接下来，在遍历gluphrun的代码里添加下面代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">// 1</div><div class="line">let runRange = CTRunGetStringRange(run)    </div><div class="line">if runRange.location &gt; imgLocation || runRange.location + runRange.length &lt;= imgLocation &#123;</div><div class="line">  continue</div><div class="line">&#125;</div><div class="line">//2</div><div class="line">var imgBounds: CGRect = .zero</div><div class="line">var ascent: CGFloat = 0       </div><div class="line">imgBounds.size.width = CGFloat(CTRunGetTypographicBounds(run, CFRangeMake(0, 0), &amp;ascent, nil, nil))</div><div class="line">imgBounds.size.height = ascent</div><div class="line">//3</div><div class="line">let xOffset = CTLineGetOffsetForStringIndex(line, CTRunGetStringRange(run).location, nil)</div><div class="line">imgBounds.origin.x = origins[lineIndex].x + xOffset </div><div class="line">imgBounds.origin.y = origins[lineIndex].y</div><div class="line">//4</div><div class="line">columnView.images += [(image: img, frame: imgBounds)]</div><div class="line">//5</div><div class="line">imageIndex! += 1</div><div class="line">if imageIndex &lt; images.count &#123;</div><div class="line">  nextImage = images[imageIndex]</div><div class="line">  imgLocation = (nextImage[&quot;location&quot;] as AnyObject).intValue</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ol>
+<li>如果当前run的范围不包含下一张图片，跳过下面的循环。否则，在这里渲染图片。</li>
+<li>使用<strong>CTRunGetTypographicBounds</strong>来计算图片的宽度，并设置高度为ascent。</li>
+<li>使用CTLineGetOffsetForStringIndex获得行的x轴偏移量，并将其加上<strong>imgBounds</strong>的起点。</li>
+<li>将该图片和图片的位置添加到当前的<strong>CTColumnView</strong>。</li>
+<li>增加图片的索引。如果images[imageIndex]还存在图片的话，更新<strong>nextImage</strong>和<strong>imgLocation</strong>来指向下一张图片。</li>
+</ol>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2017/04/runBounds.png" alt=""></p>
+<p>好的，现在只差最后一步了。</p>
+<p>在<strong>buildFrames（withAttrString：andImages :)</strong>里的<strong>pageView.addSubview（column）</strong>上面添加以下内容来添加图片（如果存在）：</p>
+<p>在iPhone和iPad上都运行一下app吧！</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2017/06/Screen-Shot-2017-06-08-at-12.51.19-PM.png" alt=""></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/28/storyboard教程：下/" rel="next" title="storyboard教程：下">
+                <i class="fa fa-chevron-left"></i> storyboard教程：下
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="蒋正义" />
+          <p class="site-author-name" itemprop="name">蒋正义</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#开始"><span class="nav-number">1.</span> <span class="nav-text">开始</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加一个Core-Text视图"><span class="nav-number">2.</span> <span class="nav-text">添加一个Core Text视图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Core-Text对象模型"><span class="nav-number">3.</span> <span class="nav-text">Core Text对象模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回到杂志app"><span class="nav-number">4.</span> <span class="nav-text">回到杂志app</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用Core-Text画图"><span class="nav-number">5.</span> <span class="nav-text">使用Core Text画图</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">蒋正义</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
