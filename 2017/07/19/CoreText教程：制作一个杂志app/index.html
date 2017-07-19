@@ -111,7 +111,7 @@
 <meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2011/06/CTRunDelegate.jpg">
 <meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2017/04/runBounds.png">
 <meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2017/06/Screen-Shot-2017-06-08-at-12.51.19-PM.png">
-<meta property="og:updated_time" content="2017-07-18T16:11:54.000Z">
+<meta property="og:updated_time" content="2017-07-19T11:12:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CoreText教程：制作一个杂志app">
 <meta name="twitter:description" content="翻译自:Core Text Tutorial for iOS: Making a Magazine App  Core Text是底层的文字处理引擎，当跟Core Graphics或Quartz一起使用时，可以对文本布局和格式进行细粒度的控制。 苹果在iOS7的时候发布了一个名为Text kit的高级库，它能存储，布局并显示具有各种排版特性的文本。尽管Text Kit很强大，并且布局文本时足够">
@@ -336,11 +336,11 @@
 <p> 翻译自:<a href="https://www.raywenderlich.com/153591/core-text-tutorial-ios-making-magazine-app" target="_blank" rel="external">Core Text Tutorial for iOS: Making a Magazine App</a></p>
 </blockquote>
 <p><strong>Core Text</strong>是底层的文字处理引擎，当跟<strong>Core Graphics</strong>或<strong>Quartz</strong>一起使用时，可以对文本布局和格式进行细粒度的控制。</p>
-<p>苹果在iOS7的时候发布了一个名为<a href="https://www.raywenderlich.com/77092/text-kit-tutorial-swift" target="_blank" rel="external">Text kit</a>的高级库，它能存储，布局并显示具有各种排版特性的文本。尽管Text Kit很强大，并且布局文本时足够用了，但是Core Text能提供跟多控制。例如，如果你需要直接使用Quartz，那就使用Core Text。如果你需要构建你自己的布局引擎，Core Text能帮助你生成<a href="https://developer.apple.com/library/content/documentation/StringsTextFonts/Conceptual/CoreText_Programming/Introduction/Introduction.html#//apple_ref/doc/uid/TP40005533" target="_blank" rel="external">字形并使用优秀的排版功能来将它们相对彼此定位。</a></p>
+<p>苹果在iOS7的时候发布了一个名为<a href="https://www.raywenderlich.com/77092/text-kit-tutorial-swift" target="_blank" rel="external">Text kit</a>的高级库，它能存储，布局并显示具有各种排版特性的文本。尽管Text Kit很强大，并且布局文本时足够用了，但是Core Text能提供更多控制。例如，如果你需要直接使用Quartz，那就使用Core Text。如果你需要构建你自己的布局引擎，Core Text能帮助你生成<a href="https://developer.apple.com/library/content/documentation/StringsTextFonts/Conceptual/CoreText_Programming/Introduction/Introduction.html#//apple_ref/doc/uid/TP40005533" target="_blank" rel="external">字形并使用优秀的排版功能来将它们相对彼此定位。</a></p>
 <p>本教程将引导你使用Core Text来创建一个很简单的杂志程序…为僵尸写的。</p>
 <p>对了，只要你忙着学习本教程，僵尸月刊的读者们就同意不吃掉你的大闹了。所以我们可能需要马上开始了。</p>
 <blockquote>
-<p><strong>注意：</strong>为了重复理解本教程，你需要知道iOS开发的基础知识。如果你刚开始接触iOS开发，那么我推荐你先看一下<a href="https://www.raywenderlich.com/category/ios" target="_blank" rel="external">其他教程</a>。</p>
+<p><strong>注意：</strong>为了理解本教程，你需要了解iOS开发的基础知识。如果你刚开始接触iOS开发，那么我推荐你先看一下<a href="https://www.raywenderlich.com/category/ios" target="_blank" rel="external">其他教程</a>。</p>
 </blockquote>
 <h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>打开Xcode，使用<strong>Single View Application模板</strong>创建新的<strong>Swift universal project</strong>，并命名为<strong>CoreTextMagazine</strong>。</p>
 <p>接下来，添加Core Text framework到你的项目中：</p>
