@@ -122,7 +122,7 @@
 <meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-01.10.35-700x149.png">
 <meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-01.12.35-700x144.png">
 <meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-01.14.55-700x283.png">
-<meta property="og:updated_time" content="2017-09-04T15:05:42.000Z">
+<meta property="og:updated_time" content="2017-09-04T15:10:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Instruments教程：入门">
 <meta name="twitter:description" content="翻译自Instruments Tutorial with Swift: Getting Started  无论你是已经开发过很多app的老鸟，还是刚刚入门的菜鸟。你经常想的是如何实现新功能，或思考如何优化你的app。 但是除了添加新功能外，还有一件事情是所有优秀的开发者都需要做的，那就是调试代码！ 本教程将向你展现如何使用Xcode自带的Instrments来帮你检查代码中存在的性能问题，内存问">
@@ -358,8 +358,7 @@
 <p><strong>注意</strong>:本教程假设你有一定的Swift和iOS编程经验。如果你刚开始接触iOS编程，那你可能需要先学习本网站的其他教程。本教程将会使用storyboards，所以请确保你了解相关知识。你可以在<a href="https://www.raywenderlich.com/81879/storyboards-tutorial-swift-part-1" target="_blank" rel="external">这个网站</a>学习相关知识。</p>
 </blockquote>
 <p>都准备好了吗？让我们准备好进入迷人的Instruments世界吧。</p>
-<p>##开始</p>
-<p>在此教程中你不需要从头创建好一个app。我们已经准备好一个示例项目了。您的任务是仔细检查这个app，并使用”Instruments”来优化它 - 非常类似于你优化自己app的过程！</p>
+<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>在此教程中你不需要从头创建好一个app。我们已经准备好一个示例项目了。您的任务是仔细检查这个app，并使用”Instruments”来优化它 - 非常类似于你优化自己app的过程！</p>
 <p><a href="https://koenig-media.raywenderlich.com/uploads/2015/05/InstrumentsSwift-Starter.zip" target="_blank" rel="external">下载初始项目</a>,解压并打开项目。</p>
 <p>这个示例app使用Flicker Api来搜索图片。为了使用API你需要一个API key。对于demo项目，你可以在Flicker的网站生成一个示例key。只需在<a href="http://www.flickr.com/services/api/explore/?method=flickr.photos.search" target="_blank" rel="external">http://www.flickr.com/services/api/explore/?method=flickr.photos.search</a>执行任意搜索并从URL中复制API密钥，它就在跟在”&amp;api_key=”后面。</p>
 <p>举例来说，如果URL是：<br><strong><a href="http://api.flickr.com/services/rest/?method=flickr.photos.search&amp;api_key=6593783efea8e7f6dfc6b70bc03d2afb&amp;format=rest&amp;api_sig=f24f4e98063a9b8ecc8b522b238d5e2f" target="_blank" rel="external">http://api.flickr.com/services/rest/?method=flickr.photos.search&amp;api_key=6593783efea8e7f6dfc6b70bc03d2afb&amp;format=rest&amp;api_sig=f24f4e98063a9b8ecc8b522b238d5e2f</a></strong>,那么API key就是：6593783efea8e7f6dfc6b70bc03d2afb。</p>
@@ -369,8 +368,7 @@
 <p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/iOS-Simulator-Screen-Shot-21-Mar-2015-00.01.35.png" alt=""></p>
 <p>浏览一下app并查看一下基本功能。你可能会觉得UI看起来不错，应该可以直接提交app store了。<br>但是，你接下来将看到instruments为你的app所带来的价值。</p>
 <p>本教程的剩余内容将会像你展现如何查找并修复app中仍然存在的问题。你将看到<strong>Instruments</strong>如何使debug变得更加简单。</p>
-<p>##分析时间</p>
-<p>第一个介绍的instrument是<strong>Time Profiler</strong>。以测量的间隔，Instruments将停止程序的执行，并对每个正在运行的线程采取堆栈跟踪。就将它想成在Xcode的调试器中按下暂停按钮。</p>
+<h2 id="分析时间"><a href="#分析时间" class="headerlink" title="分析时间"></a>分析时间</h2><p>第一个介绍的instrument是<strong>Time Profiler</strong>。以测量的间隔，Instruments将停止程序的执行，并对每个正在运行的线程采取堆栈跟踪。就将它想成在Xcode的调试器中按下暂停按钮。</p>
 <p>这是<strong>Time Profiler</strong>的预览图：</p>
 <p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-00.07.10-700x393.png" alt=""></p>
 <p>这个屏幕展示了<strong>Call Tree</strong>。<strong>Call Tree</strong>显示了执行app中各种方法所花费的时间。每一行是程序执行时所调用的不同方法。在每个方法中花费的时间可以从每个方法中分析器停止的次数确定。</p>
@@ -398,8 +396,7 @@
 <li>这是检查面板。这里有3个检查器：Record Settings，Display Settings，和Extended Detail。你很快就会了解到有关这些选项的更多信息。</li>
 </ol>
 <p>现在来修复这笨拙的UI。</p>
-<p>##更深入的研究</p>
-<p>执行图像搜索，并或取结果。我个人喜欢搜索”狗”，但你可以搜索任何你想搜索的。</p>
+<h2 id="更深入的研究"><a href="#更深入的研究" class="headerlink" title="更深入的研究"></a>更深入的研究</h2><p>执行图像搜索，并或取结果。我个人喜欢搜索”狗”，但你可以搜索任何你想搜索的。</p>
 <p>现在，上下滑动几次列表，这样就能在<strong>Time Profiler</strong>里获取一定数量的数据。你应该注意到屏幕中间的数字在改变和图形在填充，这告诉你正在使用CPU周期。</p>
 <p>你肯定不会希望任何UI像这样笨拙，为了查明这个问题，你需要设置一些选项。</p>
 <p>在右边，选择<strong>Display Settings</strong>检查器（或者按⌘+2）。在检查器中，在<strong>Call Tree</strong>分区下，选中<strong>Separate by Thread</strong>, <strong>Invert Call Tree</strong>, <strong>Hide Missing Symbols</strong>和<strong>Hide System Libraries</strong>。看上去就像这样：</p>
@@ -683,7 +680,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#卸载工作"><span class="nav-number">1.</span> <span class="nav-text">卸载工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Allocations-Allocations-Allocations"><span class="nav-number">2.</span> <span class="nav-text">Allocations, Allocations, Allocations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#谈谈我的标记"><span class="nav-number">3.</span> <span class="nav-text">谈谈我的标记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#循环引用"><span class="nav-number">4.</span> <span class="nav-text">循环引用</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#开始"><span class="nav-number">1.</span> <span class="nav-text">开始</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分析时间"><span class="nav-number">2.</span> <span class="nav-text">分析时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更深入的研究"><span class="nav-number">3.</span> <span class="nav-text">更深入的研究</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#卸载工作"><span class="nav-number">4.</span> <span class="nav-text">卸载工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Allocations-Allocations-Allocations"><span class="nav-number">5.</span> <span class="nav-text">Allocations, Allocations, Allocations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#谈谈我的标记"><span class="nav-number">6.</span> <span class="nav-text">谈谈我的标记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#循环引用"><span class="nav-number">7.</span> <span class="nav-text">循环引用</span></a></li></ol></div>
             
 
           </div>
