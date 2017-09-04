@@ -93,12 +93,12 @@
 
 
 
-<meta name="description" content="翻译自Instruments Tutorial with Swift: Getting Started  无论你是已经开发过很多app的老鸟还是准备开发你第一个app的菜鸟。你都想做出一些新功能，或思考怎样使你的app更好。 除了添加一些新功能，还有一件事情是所有优秀的开发者需要做的事情，调试代码！ 本教程将向你展现如何使用Xcode搭载的Instrments中最重要的功能。它能帮你检查代码的性">
+<meta name="description" content="翻译自Instruments Tutorial with Swift: Getting Started  无论你是已经开发过很多app的老鸟，还是刚刚入门的菜鸟。你经常想的是如何实现新功能，或思考如何优化你的app。 但是除了添加新功能外，还有一件事情是所有优秀的开发者都需要做的，那就是调试代码！ 本教程将向你展现如何使用Xcode自带的Instrments来帮你检查代码中存在的性能问题，内存问">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Instruments教程：入门">
 <meta property="og:url" content="http://yoursite.com/2017/07/30/Instruments教程：入门/index.html">
 <meta property="og:site_name" content="蒋正义的修炼之路">
-<meta property="og:description" content="翻译自Instruments Tutorial with Swift: Getting Started  无论你是已经开发过很多app的老鸟还是准备开发你第一个app的菜鸟。你都想做出一些新功能，或思考怎样使你的app更好。 除了添加一些新功能，还有一件事情是所有优秀的开发者需要做的事情，调试代码！ 本教程将向你展现如何使用Xcode搭载的Instrments中最重要的功能。它能帮你检查代码的性">
+<meta property="og:description" content="翻译自Instruments Tutorial with Swift: Getting Started  无论你是已经开发过很多app的老鸟，还是刚刚入门的菜鸟。你经常想的是如何实现新功能，或思考如何优化你的app。 但是除了添加新功能外，还有一件事情是所有优秀的开发者都需要做的，那就是调试代码！ 本教程将向你展现如何使用Xcode自带的Instrments来帮你检查代码中存在的性能问题，内存问">
 <meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2015/03/iOS-Simulator-Screen-Shot-21-Mar-2015-00.01.35.png">
 <meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-00.07.10-700x393.png">
 <meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-00.12.32-700x394.png">
@@ -122,10 +122,10 @@
 <meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-01.10.35-700x149.png">
 <meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-01.12.35-700x144.png">
 <meta property="og:image" content="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-01.14.55-700x283.png">
-<meta property="og:updated_time" content="2017-09-04T14:58:37.000Z">
+<meta property="og:updated_time" content="2017-09-04T15:05:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Instruments教程：入门">
-<meta name="twitter:description" content="翻译自Instruments Tutorial with Swift: Getting Started  无论你是已经开发过很多app的老鸟还是准备开发你第一个app的菜鸟。你都想做出一些新功能，或思考怎样使你的app更好。 除了添加一些新功能，还有一件事情是所有优秀的开发者需要做的事情，调试代码！ 本教程将向你展现如何使用Xcode搭载的Instrments中最重要的功能。它能帮你检查代码的性">
+<meta name="twitter:description" content="翻译自Instruments Tutorial with Swift: Getting Started  无论你是已经开发过很多app的老鸟，还是刚刚入门的菜鸟。你经常想的是如何实现新功能，或思考如何优化你的app。 但是除了添加新功能外，还有一件事情是所有优秀的开发者都需要做的，那就是调试代码！ 本教程将向你展现如何使用Xcode自带的Instrments来帮你检查代码中存在的性能问题，内存问">
 <meta name="twitter:image" content="https://koenig-media.raywenderlich.com/uploads/2015/03/iOS-Simulator-Screen-Shot-21-Mar-2015-00.01.35.png">
 
 
@@ -346,20 +346,20 @@
         <blockquote>
 <p>翻译自<a href="https://www.raywenderlich.com/97886/instruments-tutorial-with-swift-getting-started" target="_blank" rel="external">Instruments Tutorial with Swift: Getting Started</a></p>
 </blockquote>
-<p>无论你是已经开发过很多app的老鸟还是准备开发你第一个app的菜鸟。你都想做出一些新功能，或思考怎样使你的app更好。</p>
-<p>除了添加一些新功能，还有一件事情是所有优秀的开发者需要做的事情，调试代码！</p>
-<p>本教程将向你展现如何使用Xcode搭载的Instrments中最重要的功能。它能帮你检查代码的性能问题，内存问题，循环引用和其他问题。</p>
+<p>无论你是已经开发过很多app的老鸟，还是刚刚入门的菜鸟。你经常想的是如何实现新功能，或思考如何优化你的app。</p>
+<p>但是除了添加新功能外，还有一件事情是所有优秀的开发者都需要做的，那就是调试代码！</p>
+<p>本教程将向你展现如何使用Xcode自带的Instrments来帮你检查代码中存在的性能问题，内存问题，循环引用和其他问题。</p>
 <p>在这个教程里，你将学习：</p>
 <ol>
-<li>如何使用<strong>Time Profiler</strong>仪器确定代码中的热点，以使代码更有效率。</li>
-<li>如何使用<strong>Allocations</strong>仪器来查找并修复代码中的内存管理问题，如循环引用问题。</li>
+<li>如何使用<strong>Time Profiler</strong>仪器来定位代码中耗时长的地方，以使代码更有效率。</li>
+<li>如何使用<strong>Allocations</strong>仪器来查找并修复代码中的内存问题，比如循环引用问题。</li>
 </ol>
 <blockquote>
 <p><strong>注意</strong>:本教程假设你有一定的Swift和iOS编程经验。如果你刚开始接触iOS编程，那你可能需要先学习本网站的其他教程。本教程将会使用storyboards，所以请确保你了解相关知识。你可以在<a href="https://www.raywenderlich.com/81879/storyboards-tutorial-swift-part-1" target="_blank" rel="external">这个网站</a>学习相关知识。</p>
 </blockquote>
 <p>都准备好了吗？让我们准备好进入迷人的Instruments世界吧。</p>
 <p>##开始</p>
-<p>在此教程中你不需要从头创建好一个app。我们准备一个示例项目。您的任务是仔细检查这个app，并使用”Instruments”来优化它 - 非常类似于你优化自己的app的过程！</p>
+<p>在此教程中你不需要从头创建好一个app。我们已经准备好一个示例项目了。您的任务是仔细检查这个app，并使用”Instruments”来优化它 - 非常类似于你优化自己app的过程！</p>
 <p><a href="https://koenig-media.raywenderlich.com/uploads/2015/05/InstrumentsSwift-Starter.zip" target="_blank" rel="external">下载初始项目</a>,解压并打开项目。</p>
 <p>这个示例app使用Flicker Api来搜索图片。为了使用API你需要一个API key。对于demo项目，你可以在Flicker的网站生成一个示例key。只需在<a href="http://www.flickr.com/services/api/explore/?method=flickr.photos.search" target="_blank" rel="external">http://www.flickr.com/services/api/explore/?method=flickr.photos.search</a>执行任意搜索并从URL中复制API密钥，它就在跟在”&amp;api_key=”后面。</p>
 <p>举例来说，如果URL是：<br><strong><a href="http://api.flickr.com/services/rest/?method=flickr.photos.search&amp;api_key=6593783efea8e7f6dfc6b70bc03d2afb&amp;format=rest&amp;api_sig=f24f4e98063a9b8ecc8b522b238d5e2f" target="_blank" rel="external">http://api.flickr.com/services/rest/?method=flickr.photos.search&amp;api_key=6593783efea8e7f6dfc6b70bc03d2afb&amp;format=rest&amp;api_sig=f24f4e98063a9b8ecc8b522b238d5e2f</a></strong>,那么API key就是：6593783efea8e7f6dfc6b70bc03d2afb。</p>
