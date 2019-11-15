@@ -323,7 +323,9 @@
           
             <p>最近在使用Sourcetree的时候，遇到Permission denied (publickey,gssapi-keyex,gssapi-with-mic,password)。</p>
 <p>因为我本人有多个ssh密钥，但是Sourcetree貌似只会识别默认的密钥。</p>
-<p>在每次重启电脑后在终端输入下面代码<br><code>ssh-add ~/.ssh/&lt;username&gt;</code><br>Sourcetree就能够识别添加的密钥了，但是每次打开都要重新输入会很麻烦。</p>
+<p>在每次重启电脑后在终端输入下面代码。</p>
+<p><code>ssh-add ~/.ssh/&lt;username&gt;</code></p>
+<p>Sourcetree就能够识别添加的密钥了，但是每次打开都要重新输入会很麻烦。</p>
 <p>所以查阅资料后知道了如何让Sourcetree能读取所有的密钥。</p>
 <p>1.进入ssh目录</p>
 <p><code>cd ~/.ssh</code></p>
@@ -332,6 +334,25 @@
 <p>3.修改config文件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Host *</div><div class="line">    UseKeychain yes</div><div class="line">    AddKeysToAgent yes</div><div class="line">    IdentityFile ~/.ssh/id_rsa</div><div class="line">    IdentityFile ~/.ssh/github_rsa</div></pre></td></tr></table></figure>
 <p>可以在这里输入多个密钥的目录。</p>
+<blockquote>
+<p>补充:</p>
+<p>假如你拿到的是一台全新的机器, 那么你要按照下面的操作步骤进行:</p>
+<ol>
+<li><p>生成sshkey</p>
+</li>
+<li><p>执行ssh-add ~/.ssh/id_rsa 将ss hkey添加到sourceTree</p>
+</li>
+<li><p>执行ssh-add -K ~/.ssh/id_rsa 将sshkey添加到钥匙串。</p>
+</li>
+<li><p>cd 到 .ssh目录下, 用touch config命令创建config文件。</p>
+</li>
+<li><p>执行open config, 打开config文件。</p>
+</li>
+<li><p>输入上面的配置内容, 保存config文件。</p>
+</li>
+</ol>
+</blockquote>
+<p>以后每次启动电脑source tree都会自动加载sshkey.</p>
 
           
         
