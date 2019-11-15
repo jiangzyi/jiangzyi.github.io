@@ -99,7 +99,7 @@
 <meta property="og:url" content="http://yoursite.com/2019/11/15/Sourcetree设置SSH key/index.html">
 <meta property="og:site_name" content="蒋正义的修炼之路">
 <meta property="og:description" content="最近在使用Sourcetree的时候，遇到Permission denied (publickey,gssapi-keyex,gssapi-with-mic,password)。 因为我本人有多个ssh密钥，但是Sourcetree貌似只会识别默认的密钥。 在每次重启电脑后在终端输入下面代码ssh-add ~/.ssh/&amp;lt;username&amp;gt;Sourcetree就能够识别添加的密钥了，但">
-<meta property="og:updated_time" content="2019-11-15T03:06:36.241Z">
+<meta property="og:updated_time" content="2019-11-15T03:15:21.387Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Sourcetree设置SSH key">
 <meta name="twitter:description" content="最近在使用Sourcetree的时候，遇到Permission denied (publickey,gssapi-keyex,gssapi-with-mic,password)。 因为我本人有多个ssh密钥，但是Sourcetree貌似只会识别默认的密钥。 在每次重启电脑后在终端输入下面代码ssh-add ~/.ssh/&amp;lt;username&amp;gt;Sourcetree就能够识别添加的密钥了，但">
@@ -324,7 +324,9 @@
 <p>在每次重启电脑后在终端输入下面代码<br><code>ssh-add ~/.ssh/&lt;username&gt;</code><br>Sourcetree就能够识别添加的密钥了，但是每次打开都要重新输入会很麻烦。</p>
 <p>所以查阅资料后知道了如何让Sourcetree能读取所有的密钥。</p>
 <p>1.进入ssh目录</p>
-<figure class="highlight plain"><figcaption><span>~/.ssh```</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">2.打开config文件</div><div class="line"></div><div class="line">```vim config</div></pre></td></tr></table></figure>
+<p><code>cd ~/.ssh</code></p>
+<p>2.打开config文件</p>
+<p><code>vim config</code></p>
 <p>3.修改config文件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Host *</div><div class="line">    UseKeychain yes</div><div class="line">    AddKeysToAgent yes</div><div class="line">    IdentityFile ~/.ssh/id_rsa</div><div class="line">    IdentityFile ~/.ssh/github_rsa</div></pre></td></tr></table></figure>
 <p>可以在这里输入多个密钥的目录。</p>
