@@ -253,6 +253,133 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/19/工厂模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="蒋正义">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋正义的修炼之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/19/工厂模式/" itemprop="url">工厂模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-19T14:55:40+08:00">
+                2019-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="工厂模式（Factory-Pattern）"><a href="#工厂模式（Factory-Pattern）" class="headerlink" title="工厂模式（Factory Pattern）"></a>工厂模式（Factory Pattern）</h2><p>工厂模式提供了一种不用暴露创建逻辑来创建对象的方法。它包含两个类型：</p>
+<p><img src="/2019/11/19/工厂模式/factory_strategy.png" alt=""></p>
+<ol>
+<li>factory创建对象</li>
+<li>product就是被创建的对象</li>
+</ol>
+<h2 id="使用例子"><a href="#使用例子" class="headerlink" title="使用例子"></a>使用例子</h2><p>根据求职者来生产求职回信对象</p>
+<h3 id="1-定义JobApplicant和Email模型"><a href="#1-定义JobApplicant和Email模型" class="headerlink" title="1.定义JobApplicant和Email模型"></a>1.定义JobApplicant和Email模型</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">public struct JobApplicant &#123;</div><div class="line">  public let name: String</div><div class="line">  public let email: String</div><div class="line">  public var status: Status</div><div class="line">  </div><div class="line">  public enum Status &#123;</div><div class="line">    case new</div><div class="line">    case interview</div><div class="line">    case hired</div><div class="line">    case rejected</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public struct Email &#123;</div><div class="line">  public let subject: String</div><div class="line">  public let messageBody: String</div><div class="line">  public let recipientEmail: String</div><div class="line">  public let senderEmail: String</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="2-创建工厂结构"><a href="#2-创建工厂结构" class="headerlink" title="2.创建工厂结构"></a>2.创建工厂结构</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">public struct EmailFactory &#123;</div><div class="line">  </div><div class="line">  public let senderEmail: String</div><div class="line">  </div><div class="line">  public func createEmail(to recipient: JobApplicant) -&gt; Email &#123;</div><div class="line">    switch recipient.status &#123;</div><div class="line">    case .new:</div><div class="line">      return Email(</div><div class="line">        subject: &quot;We Received Your Application&quot;,</div><div class="line">        messageBody: &quot;Thanks for applying for a job here! &quot; +</div><div class="line">        &quot;You should hear from us in 17-42 business days.&quot;,</div><div class="line">        recipientEmail: recipient.email,</div><div class="line">        senderEmail: senderEmail)</div><div class="line">      </div><div class="line">    case .interview:</div><div class="line">      return Email(</div><div class="line">        subject: &quot;We Want to Interview You&quot;,</div><div class="line">        messageBody: &quot;Thanks for your resume, \(recipient.name)! &quot; +</div><div class="line">        &quot;Can you come in for an interview in 30 minutes?&quot;,</div><div class="line">        recipientEmail: recipient.email,</div><div class="line">        senderEmail: senderEmail)</div><div class="line">      </div><div class="line">    case .hired:</div><div class="line">      return Email(</div><div class="line">        subject: &quot;We Want to Hire You&quot;,</div><div class="line">        messageBody: &quot;Congratulations, \(recipient.name)! &quot; +</div><div class="line">        &quot;We liked your code, and you smelled nice. We want to offer you a position! Cha-ching! $$$&quot;,</div><div class="line">        recipientEmail: recipient.email,</div><div class="line">        senderEmail: senderEmail)</div><div class="line">      </div><div class="line">    case .rejected:</div><div class="line">      return Email(</div><div class="line">        subject: &quot;Thanks for Your Application&quot;,</div><div class="line">        messageBody: &quot;Thank you for applying, \(recipient.name). &quot; +</div><div class="line">          &quot;We have decided to move forward with other candidates. &quot; +</div><div class="line">        &quot;Please remember to wear pants next time!&quot;,</div><div class="line">        recipientEmail: recipient.email,</div><div class="line">        senderEmail: senderEmail)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="3-使用工厂来创建回信"><a href="#3-使用工厂来创建回信" class="headerlink" title="3.使用工厂来创建回信"></a>3.使用工厂来创建回信</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">var jackson = JobApplicant(name: &quot;Jackson Smith&quot;,</div><div class="line">                           email: &quot;jackson.smith@example.com&quot;,</div><div class="line">                           status: .new)</div><div class="line"></div><div class="line">let emailFactory = EmailFactory(senderEmail: &quot;RaysMinions@RaysCoffeeCo.com&quot;)</div><div class="line"></div><div class="line">// New</div><div class="line">print(emailFactory.createEmail(to: jackson), &quot;\n&quot;)</div><div class="line"></div><div class="line">// Interview</div><div class="line">jackson.status = .interview</div><div class="line">print(emailFactory.createEmail(to: jackson), &quot;\n&quot;)</div><div class="line"></div><div class="line">// Hired</div><div class="line">jackson.status = .hired</div><div class="line">print(emailFactory.createEmail(to: jackson), &quot;\n&quot;)</div></pre></td></tr></table></figure>
+<p>如果你的对象非常简单，你就不需要使用工厂模式</p>
+<h2 id="其他例子"><a href="#其他例子" class="headerlink" title="其他例子"></a>其他例子</h2><ol>
+<li>3种工厂模式：<a href="https://www.jianshu.com/p/847af218b1f0" target="_blank" rel="external">https://www.jianshu.com/p/847af218b1f0</a></li>
+<li>Cocoa中的抽象工厂模式（NSNumber，类簇）:<a href="http://ibloodline.com/articles/2016/09/06/factory.html" target="_blank" rel="external">http://ibloodline.com/articles/2016/09/06/factory.html</a></li>
+<li>工厂模式在tableviewCell中的使用：<a href="https://juejin.im/post/5b5c0fe3e51d451989055798" target="_blank" rel="external">https://juejin.im/post/5b5c0fe3e51d451989055798</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/18/建造者模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1897,7 +2024,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
