@@ -253,6 +253,143 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/27/状态模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="蒋正义">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋正义的修炼之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/27/状态模式/" itemprop="url">状态模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-27T15:11:59+08:00">
+                2019-11-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="状态模式（State-Pattern）"><a href="#状态模式（State-Pattern）" class="headerlink" title="状态模式（State Pattern）"></a>状态模式（State Pattern）</h2><p>状态模式是一种行为模式，能让对象通过修改他们的“状态”，在运行时改变自己的行为。“状态”是指描述给定对象在给定时间如何行为的数据集。</p>
+<p>状态模式包含以下三种类型：<br><img src="/2019/11/27/状态模式/状态模式.png" alt=""></p>
+<ol>
+<li>context：具有当前状态且其行为会发生变化的对象。</li>
+<li><p>state protocol：定义了必需的方法和属性。开发人员通常用基类代替协议。这样，他们就可以在基类中定义属性。</p>
+<p> 即使使用了基类，也不能直接实例化它。相反，它的定义仅是为了能够被子类化。</p>
+</li>
+<li><p>concrete state：遵循state protocol或继承自基类。context会持有它的当前状态，但不知道具体的状态类型。context会使用多态来改变行为：concrete state定义了context的行为。如果你想要一个新的行为，定义一个新的concrete state。</p>
+</li>
+</ol>
+<p>应该在哪里修改当前状态呢？是在context里修改？还是在concrete state修改？还是在其他什么地方修改呢？状态模式并没有告诉你应该在哪里写状态修改逻辑，这视实际情况决定。</p>
+<h3 id="什么时候应该使用状态模式"><a href="#什么时候应该使用状态模式" class="headerlink" title="什么时候应该使用状态模式"></a>什么时候应该使用状态模式</h3><p>使用状态模式来创建一个系统，该系统在其生命周期内会在两个或多个状态之间进行更改。状态可以限制数量（“封闭”集），也可以不受限制（“开放”集）。例如，可以使用一组封闭的“交通信号灯状态”来定义交通信号灯。在最简单的情况下，它会从绿色变为黄色，再变成红色，最后变回绿色。</p>
+<p>一个动画引擎可以定义为一组开放的“动画状态”。它具有无限的旋转，平移和其他动画。</p>
+<p>开放式和封闭式的状态模式的都使用多态来更改行为。结果，您通常可以使用此模式来消除switch和if-else语句。</p>
+<p>无需在context中管理复杂的状态，而是将调用传递到当前状态中。如果你有一个包含多个switch或if-else语句的类，请尝试使用状态模式来定义它。这样你就可能会创建一个更灵活，更容易维护的系统。</p>
+<h4 id="状态模式和策略模式的区别"><a href="#状态模式和策略模式的区别" class="headerlink" title="状态模式和策略模式的区别"></a>状态模式和策略模式的区别</h4><p>策略模式更多的是解决不同状态下，单行为的变化；而状态模式则是解决不同状态下多行为的变化。</p>
+<h3 id="使用举例"><a href="#使用举例" class="headerlink" title="使用举例"></a>使用举例</h3><p>实现上文提到过的交通灯系统</p>
+<h4 id="1-定义context"><a href="#1-定义context" class="headerlink" title="1.定义context"></a>1.定义context</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div></pre></td><td class="code"><pre><div class="line">// MARK: - Context</div><div class="line">public class TrafficLight: UIView &#123;</div><div class="line">  </div><div class="line">  // MARK: - Instance Properties</div><div class="line">  public private(set) var canisterLayers: [CAShapeLayer] = []</div><div class="line">  public private(set) var currentState: TrafficLightState</div><div class="line">  public private(set) var states: [TrafficLightState]</div><div class="line">  </div><div class="line">  // MARK: - Object Lifecycle</div><div class="line">  @available(*, unavailable,</div><div class="line">  message: &quot;Use init(canisterCount: frame:) instead&quot;)</div><div class="line">  public required init?(coder aDecoder: NSCoder) &#123;</div><div class="line">    fatalError(&quot;init(coder:) is not supported&quot;)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public init(canisterCount: Int = 3,</div><div class="line">              frame: CGRect =</div><div class="line">    CGRect(x: 0, y: 0, width: 160, height: 420),</div><div class="line">              states: [TrafficLightState]) &#123;</div><div class="line">    </div><div class="line">    guard !states.isEmpty else &#123;</div><div class="line">      fatalError(&quot;states should not be empty&quot;)</div><div class="line">    &#125;</div><div class="line">    self.currentState = states.first!</div><div class="line">    self.states = states</div><div class="line">    </div><div class="line">    super.init(frame: frame)</div><div class="line">    backgroundColor =</div><div class="line">      UIColor(red: 0.86, green: 0.64, blue: 0.25, alpha: 1)</div><div class="line">    createCanisterLayers(count: canisterCount)</div><div class="line">    transition(to: currentState)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  private func createCanisterLayers(count: Int) &#123;</div><div class="line">    let paddingPercentage: CGFloat = 0.2</div><div class="line">    let yTotalPadding = paddingPercentage * bounds.height</div><div class="line">    let yPadding = yTotalPadding / CGFloat(count + 1)</div><div class="line">    </div><div class="line">    let canisterHeight = (bounds.height - yTotalPadding) / CGFloat(count)</div><div class="line">    let xPadding = (bounds.width - canisterHeight) / 2.0</div><div class="line">    var canisterFrame = CGRect(x: xPadding,</div><div class="line">                               y: yPadding,</div><div class="line">                               width: canisterHeight,</div><div class="line">                               height: canisterHeight)</div><div class="line">    </div><div class="line">    for _ in 0 ..&lt; count &#123;</div><div class="line">      let canisterShape = CAShapeLayer()</div><div class="line">      canisterShape.path = UIBezierPath(ovalIn: canisterFrame).cgPath</div><div class="line">      canisterShape.fillColor = UIColor.black.cgColor</div><div class="line">      </div><div class="line">      layer.addSublayer(canisterShape)</div><div class="line">      canisterLayers.append(canisterShape)</div><div class="line">      </div><div class="line">      canisterFrame.origin.y += (canisterFrame.height + yPadding)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func transition(to state: TrafficLightState) &#123;</div><div class="line">    removeCanisterSublayers()</div><div class="line">    currentState = state</div><div class="line">    currentState.apply(to: self)</div><div class="line">    nextState.apply(to: self, after: currentState.delay)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  private func removeCanisterSublayers() &#123;</div><div class="line">    canisterLayers.forEach &#123;</div><div class="line">      $0.sublayers?.forEach &#123;</div><div class="line">        $0.removeFromSuperlayer()</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public var nextState: TrafficLightState &#123;</div><div class="line">    guard let index = states.index(where: &#123; $0 === currentState &#125;),</div><div class="line">      index + 1 &lt; states.count else &#123;</div><div class="line">        return states.first!</div><div class="line">    &#125;</div><div class="line">    return states[index + 1]</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="2-定义state-protocol"><a href="#2-定义state-protocol" class="headerlink" title="2.定义state protocol"></a>2.定义state protocol</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">// MARK: - State Protocol</div><div class="line">public protocol TrafficLightState: class &#123;</div><div class="line">  </div><div class="line">  // MARK: - Properties</div><div class="line">  var delay: TimeInterval &#123; get &#125;</div><div class="line">  </div><div class="line">  // MARK: - Instance Methods</div><div class="line">  func apply(to context: TrafficLight)</div><div class="line">&#125;</div><div class="line"></div><div class="line">extension TrafficLightState &#123;</div><div class="line">  public func apply(to context: TrafficLight, after delay: TimeInterval) &#123;</div><div class="line">    let queue = DispatchQueue.main</div><div class="line">    let dispatchTime = DispatchTime.now() + delay</div><div class="line">    queue.asyncAfter(deadline: dispatchTime) &#123; [weak self, weak context] in</div><div class="line">      guard let self = self, let context = context else &#123; return &#125;</div><div class="line">      context.transition(to: self)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="3-创建concrete-states"><a href="#3-创建concrete-states" class="headerlink" title="3.创建concrete states"></a>3.创建concrete states</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line">// MARK: - Concrete States</div><div class="line">public class SolidTrafficLightState &#123;</div><div class="line">  </div><div class="line">  // MARK: - Properties</div><div class="line">  public let canisterIndex: Int</div><div class="line">  public let color: UIColor</div><div class="line">  public let delay: TimeInterval</div><div class="line">  </div><div class="line">  // MARK: - Object Lifecycle</div><div class="line">  public init(canisterIndex: Int,</div><div class="line">              color: UIColor,</div><div class="line">              delay: TimeInterval) &#123;</div><div class="line">    self.canisterIndex = canisterIndex</div><div class="line">    self.color = color</div><div class="line">    self.delay = delay</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">extension SolidTrafficLightState: TrafficLightState &#123;</div><div class="line">  </div><div class="line">  public func apply(to context: TrafficLight) &#123;</div><div class="line">    let canisterLayer = context.canisterLayers[canisterIndex]</div><div class="line">    let circleShape = CAShapeLayer()</div><div class="line">    circleShape.path = canisterLayer.path!</div><div class="line">    circleShape.fillColor = color.cgColor</div><div class="line">    circleShape.strokeColor = color.cgColor</div><div class="line">    canisterLayer.addSublayer(circleShape)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">extension SolidTrafficLightState &#123;</div><div class="line">  public class func greenLight(</div><div class="line">    color: UIColor =</div><div class="line">      UIColor(red: 0.21, green: 0.78, blue: 0.35, alpha: 1),</div><div class="line">    canisterIndex: Int = 2,</div><div class="line">    delay: TimeInterval = 1.0) -&gt; SolidTrafficLightState &#123;</div><div class="line">    return SolidTrafficLightState(canisterIndex: canisterIndex,</div><div class="line">                                  color: color,</div><div class="line">                                  delay: delay)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public class func yellowLight(</div><div class="line">    color: UIColor =</div><div class="line">      UIColor(red: 0.98, green: 0.91, blue: 0.07, alpha: 1),</div><div class="line">    canisterIndex: Int = 1,</div><div class="line">    delay: TimeInterval = 0.5) -&gt; SolidTrafficLightState &#123;</div><div class="line">    return SolidTrafficLightState(canisterIndex: canisterIndex,</div><div class="line">                                  color: color,</div><div class="line">                                  delay: delay)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public class func redLight(</div><div class="line">    color: UIColor =</div><div class="line">      UIColor(red: 0.88, green: 0, blue: 0.04, alpha: 1),</div><div class="line">    canisterIndex: Int = 0,</div><div class="line">    delay: TimeInterval = 2.0) -&gt; SolidTrafficLightState &#123;</div><div class="line">    return SolidTrafficLightState(canisterIndex: canisterIndex,</div><div class="line">                                  color: color,</div><div class="line">                                  delay: delay)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="4-使用状态模式"><a href="#4-使用状态模式" class="headerlink" title="4.使用状态模式"></a>4.使用状态模式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let greenYellowRed: [SolidTrafficLightState] =</div><div class="line">  [.greenLight(), .yellowLight(), .redLight()]</div><div class="line">let trafficLight = TrafficLight(states: greenYellowRed)</div><div class="line">PlaygroundPage.current.liveView = trafficLight</div></pre></td></tr></table></figure>
+<h3 id="其他例子"><a href="#其他例子" class="headerlink" title="其他例子"></a>其他例子</h3><ol>
+<li>oc中的状态模式:<a href="https://juejin.im/post/5a3ca75551882515945ac5ff" target="_blank" rel="external">https://juejin.im/post/5a3ca75551882515945ac5ff</a></li>
+<li>售卖机例子：<a href="https://www.cnblogs.com/xiaofeixiang/p/5135479.html" target="_blank" rel="external">https://www.cnblogs.com/xiaofeixiang/p/5135479.html</a></li>
+<li>在工程中试玩状态模式:<a href="https://www.cnblogs.com/R0SS/p/5408544.html" target="_blank" rel="external">https://www.cnblogs.com/R0SS/p/5408544.html</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/26/适配者模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2171,7 +2308,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
