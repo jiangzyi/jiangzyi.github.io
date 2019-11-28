@@ -253,6 +253,293 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/28/storyboard教程：下/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="蒋正义">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋正义的修炼之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/06/28/storyboard教程：下/" itemprop="url">storyboard教程：下</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-28T23:06:59+08:00">
+                2017-06-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>翻译自:<a href="https://www.raywenderlich.com/113394/storyboards-tutorial-in-ios-9-part-2" target="_blank" rel="external">Storyboards Tutorial in iOS 9: Part 2</a></p>
+</blockquote>
+<p>如果你想了解更多关于storyboards的内容，那么你来对地方了！</p>
+<p>在<a href="https://www.raywenderlich.com/?p=113388" target="_blank" rel="external">上部分的教程里</a>,你已经了解了如何使用Interface Builder来创建和连接view controllers，以及如何直接通过stoaryboad编辑器设计table view cells。</p>
+<p>在下半部分的storyboard系列教程里，我们会覆盖segues，static table view cells,添加选手的页面和选择比赛的页面等内容。</p>
+<p>我们将接着上部分的内容继续本教程，所以打开你之前创建的项目，或者在<a href="https://koenig-media.raywenderlich.com/uploads/2015/09/Storyboards-Part1.zip" target="_blank" rel="external">example code from the previous tutorial</a>下载。</p>
+<p>好了，让我们继续学习storyboards中其他很酷的功能吧。</p>
+<h2 id="介绍Segues"><a href="#介绍Segues" class="headerlink" title="介绍Segues"></a>介绍Segues</h2><p>是时候在storyboard中添加更多的view controller了。你将要先创建一个页面可以让用户增加选手。</p>
+<p>打开<strong>Main.storyboard</strong>并拉取一个<strong>Bar Button Item</strong>到<strong>Player</strong>table view导航栏的右侧插槽中。在<strong>Attributes inspector</strong>里设置<strong>Identifier</strong>为<strong>Add</strong>来使他变成一个标准+按钮。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/PlayersAddButton.png" alt=""></p>
+<p>当用户点击这个按钮时，会弹出一个可以输入新选手的详细信息的新页面。</p>
+<p>在页面中拉取一个新的<strong>Table View Controller</strong>，放在Palyers场景的右边。记住你可以双击页面来缩小页面，这样你就有更多的空间方便拉取。选择这个新的Table View Controller，依次选择<strong>Editor\Embed in\Navigation Controller</strong>。</p>
+<p>这里有个小诀窍：选中刚才添加进Player场景的+按钮，然后按住ctrl的同时拖动鼠标到新的Navigation Controller上，松开鼠标，在弹出的小菜单中选择<strong>present modally</strong>。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/PresentModally2.gif" alt=""></p>
+<blockquote>
+<p><strong>提醒</strong>：你不能在页面缩放的时候在stroayboard中添加或修改内容。如果你在创建segue的时候碰到了问题，试着双击恢复页面尺寸吧。</p>
+</blockquote>
+<p>在Payers场景和Navigation Controller中间出现一个新的箭头：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2014/09/03_sb2_modalrelation.png" alt=""></p>
+<p>你之前所看到的storyboard中的连接都表示的是一个view controller包含了另一个。而上图这种类型的连接称为<strong>segue</strong>，它表示了一个场景到另一个场景的跳转。也就是说segue改变了当前场景上的页面。按钮的点击，table view cells，手势等等都可以触发一个segue。</p>
+<p>使用segue的好处是你不需要再写代码来实现页面的跳转了，也不需要捕捉按钮的<strong>IBAction</strong>方法。你刚才做的，直接用鼠标从bar Button连接到下一个场景就创建了这种跳转。（注意：如果你的控件已经有了一个<strong>IBAction</strong>连接，segue会覆盖它。）</p>
+<p>运行app并点击+按钮。一个新的tableview会滑上来。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/AppPresentModally1.gif" alt=""></p>
+<p>这被称为”modal”segue。这个新的场景完全遮住了之前的场景。用户不能跟底下的场景交互，除非先把这个modal场景关了。后面你还将看到在导航控制器的导航栈上push新场景的”show”segue。</p>
+<p>这个新的场景现在没什么功能，你甚至不能关闭它然后回到原来的主场景。这是因为segue只能单向走，所以它只能从Player场景到新的场景，却不能往回走。</p>
+<p>Storyboard可以通过unwind segue功能来实现返回。下面实现unwind segue的三个步骤：</p>
+<ol>
+<li>创建一个对象供用户选择，一般都是一个按钮。</li>
+<li>在你要返回的controller中创建一个unwind方法。</li>
+<li>在storyboard中关联这个方法和对象。</li>
+</ol>
+<p>首先，打开<strong>Main.storyboard</strong>,选中这个新的Table View Controller场景。双击导航栏，改变场景的标题为<strong>Add Player</strong>。然后添加两个<strong>Bar Button Items</strong>，分别放在导航栏的两边。在<strong>Attributes inspector</strong>中，设置左边按钮的<strong>System Item</strong>属性为<strong>Cancel</strong>，右边的设置为<strong>Done</strong>。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/AddPlayerButtons-468x500.png" alt=""></p>
+<p>接下来，使用<strong>Cocoa Touch Class</strong>模板在项目中创建新的文件，命名为<strong>PlayeDetailsViewController</strong>，选择为<strong>UITableViewController</strong>的子类。为了将这个类跟storyboard关联起来，回到<strong>Main.storyboard</strong>选择Add Player场景。在<strong>Identity inspectro</strong>中设置它了<strong>Class</strong>属性为<strong>PlayerDetailsViewController</strong>。我总是忘记这非常重要的一步，所以请确保你别忘了。我还会继续指出这一点的。</p>
+<p>现在你终于能实现unwind segue了。在<strong>PlayersViewController.swift</strong>（不是detail cotroller）中，增加unwind方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@IBAction func cancelToPlayersViewController(segue:UIStoryboardSegue) &#123;</div><div class="line">&#125;</div><div class="line">  </div><div class="line">@IBAction func savePlayerDetail(segue:UIStoryboardSegue) &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>cancelToPlayersViewController(_:)</strong>是为unwind segue实现的简单标记。等下你会在<strong>savePlayerDetail(_:)</strong>中增加代码来获取它的名字。</p>
+<p>最后，切换回<strong>Main.storyboard</strong>然后关联Cancel和Done按钮到它们各自的方法上。按住ctrl的拖动bar button到view controller上方的exit对象上然后在弹出菜单中选择正确的方法名字:</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2014/09/06_sb2_connectdone2.gif" alt=""></p>
+<p>注意你取消方法的名字。当你创建一个unwind segue，这个列表会展示整个app中所有的unwind方法（也就是<strong>@IBAction func methodname(segue:UIStoryboardSegue)</strong>样式的方法），所以一定要确保创建你能识别的名字。</p>
+<p>运行app，点击+按钮，然后测试Cancel和Done按钮。我们只用一点代码就实现了很多功能。</p>
+<h2 id="Static-Cells"><a href="#Static-Cells" class="headerlink" title="Static Cells"></a>Static Cells</h2><p>当你完成这一章节内容的时候，Add Player场景看上去会是下面这个样子：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/AppAddPlayer1.png" alt=""></p>
+<p>这是一个分组的table view，但是你还没为这个表格创建数据源。对于这个table view来说，你可以直接在storyboard中设计，不需要在<strong>cellForRowAtIndexPath(_:)</strong>写代码。使这件事成为可能的功能称为<strong>static cells</strong>。</p>
+<p>在Add Palyer场景中选中table view，在<strong>Attributes inspector</strong>中设置<strong>Content</strong>属性为<strong>Static Cells</strong>。将<strong>Style</strong>属性从Plain设置为<strong>Grouped</strong>，<strong>Sections</strong>设为2。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/StaticCells1.png" alt=""></p>
+<blockquote>
+<p><strong>注意</strong>：当你改变Sections属性时，编辑器会复制当前存在的section。（你也可以在Document Outline选中指定的section来复制它。）</p>
+</blockquote>
+<p>完成后的场景应该在每个section中只有1行，所以删除每个section中多余的两个cell。</p>
+<p>选中最上面的Table View Section（在Document Outline）中。在它的<strong>Attributes inspecrot</strong>中，在<strong>Header</strong>栏里设置值为<strong>Player Name</strong>。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/09/PlayerName1.png" alt=""></p>
+<p>在这个cell中拉取一个新的Text Field。拉伸它的宽度，移除它的边框，这样你就看不到他的开始位置和结束位置。设置Font为<strong>System 17.0</strong>并去掉<strong>Adjust to Fit</strong>前面的勾。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/09/FormatPlayerName.png" alt=""></p>
+<p>你将使用Xcode中的Assistant Editor功能在<strong>PlayerDetailsViewController</strong>中为这个text field创建一个outlet。仍然在storyboard中，通过点击toolbar中的按钮来打开<strong>Assistant Editor</strong>（右上角显示两个连着的环的按钮）。它应该自动打开<strong>PlayerDetailsViewController.swift</strong>（如果没有，请使用右边拆分窗口中的跳转条来选择.swift文件）。</p>
+<p>选中新的text field然后按住ctrl键拖动它到.swift文件中的上方位置，就在class定义的下面。当弹框出现，命名这个新的outlet为<strong>nameTextField</strong>，点击Connect。点击Connect之后，Xcode会在PlayersDetailViewController类中增加这个连接至storyboard的属性：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/09/NameTextField.gif" alt=""></p>
+<p>为table cells上的视图创建outles正是那种我说过的不应该用在prototype cell上的东西，但是在tatic cell中可以使用。每个static cell只会有一个实例，所以将它的子视图连接到view controller上的outlet是可以接受的。</p>
+<p>将第二个section的static cell的<strong>Style</strong>设置为<strong>Right Detail</strong>。这样你就在一个标准样式的cell上操作了。双击label，修改字符为<strong>Game</strong>，设置cell的accessory为<strong>Disclosure Indicator</strong>。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/PlayerGame.png" alt=""></p>
+<p>就跟你在Name文本框中的操作一样，在右边的文件中为这个新的label创建一个outlet，命名为<strong>detailLabel</strong>。这个label就是普通的<strong>UILabel</strong>对象。在将label拖到<strong>PlayerDetailsViewController.swift</strong>前你可能需要多点几次”Detail”来选中这个label（不是选中整个cell）。完成之后，看上去应该像这样：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/DetailLabel.png" alt=""></p>
+<p>Add Player场景最终看上去应该像这样：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/AddPlayer.png" alt=""></p>
+<blockquote>
+<p><strong>注意</strong>：你至今在storyboard中创建的场景都有iPhone6的4.7英寸屏幕的宽度和高度，也就是677像素的高度。很显然，你的app应该在所有不同大小屏幕的设备上都能使用，你可以在storyboard中预览所有大小的屏幕。<br>打开工具条中的<strong>Assistant Editor</strong>，使用跳转栏来选择<strong>Preview</strong>。在assistant的左下角点击<strong>+</strong>符号来添加一个新的屏幕尺寸来预览。可以通过点击Delete键来删除一个屏幕尺寸。<br><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/Preview.png" alt=""><br>对于这个app，你不需要做任何花哨的事情。它只使用table view controller并且会自动调整大小来适应屏幕空间。当你需要在不同大小的设备上支持不同的布局时，你将会使用Auto Layout和Size Classes。</p>
+</blockquote>
+<p>编译运行app，你会看到Add Player场景仍然是空白的！</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/AppAddPlayerBlank-281x500.png" alt=""></p>
+<p>当你使用static cell时，你的table view controller中不需要写数据源代码。因为你使用使用Xcode模板来创建<strong>PlayerDetailViewController</strong>类，类中仍然会有一些数据源的占位代码，这将阻碍static cell正常工作。这也是内容空白的原因。是时候来修复它了。</p>
+<p>打开<strong>PlayerDetailsViewController.swift</strong>删除这一行下面的所有东西（除了类定义的闭括号）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">// MARK: - Table view data source</div></pre></td></tr></table></figure>
+<p>运行app检查下这个带有static cell的场景。没有写一行代码，实际上，你扔掉了大量的代码。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/AppAddPlayer-281x500.png" alt=""></p>
+<p>还有一件关于static cell的事：它只能在UITableViewController上使用。尽管Interface Builder会让你在普通的<strong>UIViewController</strong>中的Table View对象中加入它们，但是在运行时不会有效果。原因是<strong>UITableViewController</strong>提供了额外的操作来处理static cell的数据源。Xcode甚至会阻止在编译这样一个项目时会报错：”Illegal Configuration: Static table views are only valid when embedded in UITableViewController instances”。另一方面，prototype cell在普通view controller中的table view里能正常运行。</p>
+<blockquote>
+<p><strong>注意</strong>：如果你创建一个带有很多static cell的场景，超过了可见尺寸的大小。那么你可以使用鼠标或触控板上的滚动手势（2根手指滑动）在Interface Builder中滚动浏览它们。这可能不是很明显，但确实是有效的。</p>
+</blockquote>
+<p>即使是使用static cell，你也不能总是避免编写代码。当你在第一个cell中拉取了一个text field，你可能注意到它并不是完全适配。text field距离两边有很小的空白空间。用户看不到text field的开头和结尾，所以如果用户点击在页面的空白上然后键盘没有出现，他们会很疑惑。</p>
+<p>为了避免这发生，你应该使在这一行的任何点击都能唤起键盘。这很简单就能实现，只需要打开<strong>PlayerDetailsViewControlelr.swift</strong>并加入<strong>tableView(_:didSelectRowAtIndexPath:)</strong>方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) &#123;</div><div class="line">  if indexPath.section == 0 &#123;</div><div class="line">    nameTextField.becomeFirstResponder()</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>它的意思是如果用户点击了第一个cell，这个app应该唤起text field。在这个section中只有一个cell所以你只需要检验section索引。使text field变成第一响应者会自带唤起键盘。这只是一点调整，却能解决用户可能的困扰。</p>
+<blockquote>
+<p><strong>提示</strong>：当你加入代理方法，或者覆盖view controller的方法时，只需要输入方法名字（不需要前缀”func”），然后你就能在可用列表中选择你想要的方法了。</p>
+</blockquote>
+<p>你也应该设置cell的Selection Style为<strong>None</strong>（而不是Default），否则当用户点击空白处时这一整行会高亮。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/SelectionNone.png" alt=""></p>
+<p>好了，Add Player场景的显示设计就完成了。现在来实现它的功能吧。</p>
+<h2 id="使Add-Player场景工作"><a href="#使Add-Player场景工作" class="headerlink" title="使Add Player场景工作"></a>使Add Player场景工作</h2><p>现在你将忽略Game行，只要让用户能输入运动员的名字就行了。</p>
+<p>当用户点击Cancel按钮时，这个场景应该关闭，所有输入的数据都会被丢掉。这一部分早就通过unwind segue完成了。</p>
+<p>当用户点击Done按钮时，你应该创建一个新的Player对象给它的属性赋值，最后更新我们的运动员列表。</p>
+<p>当一个segue发生时将会调用<strong>prepareForSegue(_:sender:)</strong>。你将覆盖这个方法来使页面消失前来存储输入的数据。</p>
+<blockquote>
+<p><strong>注意</strong>：你永远不能自己调用<strong>prepareForSegue(_:sender:)</strong>。这个UIKit用来让你知道segue将要被触发的消息。</p>
+</blockquote>
+<p>在<strong>PlayerDetailsViewController.swift</strong>中，首先在类的上面加入一个属性来持有你将要添加的player数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var player:Player?</div></pre></td></tr></table></figure>
+<p>接着添加如下方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) &#123;</div><div class="line">  if segue.identifier == &quot;SavePlayerDetail&quot; &#123;</div><div class="line">    player = Player(name: nameTextField.text!, game: &quot;Chess&quot;, rating: 1)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>prepareForSegue(_:sender:)</strong>方法里创建了game和rating都为默认值的<strong>Palyer</strong>对象。它只会在带有<strong>SavePlayerDetail</strong>标识的segue下运行。</p>
+<p>在<strong>Main.storyboard</strong>中，在Document Outline中找到Add Player场景并选择绑定<strong>savePlayerDetail</strong>动作的unwind segue。改变<strong>Identifier</strong>为<strong>SavePlayerDetail</strong>：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/SavePlayerDetail.png" alt=""></p>
+<p>到<strong>PlayerViewController</strong>中修改unwind segue方法<strong>savePlayerDetail(segue:)</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">@IBAction func savePlayerDetail(segue:UIStoryboardSegue) &#123;</div><div class="line">  if let playerDetailsViewController = segue.sourceViewController as? PlayerDetailsViewController &#123;</div><div class="line">      </div><div class="line">    //add the new player to the players array</div><div class="line">    if let player = playerDetailsViewController.player &#123;</div><div class="line">      players.append(player)</div><div class="line">      </div><div class="line">      //update the tableView</div><div class="line">      let indexPath = NSIndexPath(forRow: players.count-1, inSection: 0)</div><div class="line">      tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这通过传递给该方法的segue引用获得对<strong>PlayerDetailsViewController</strong>的引用。它使用这个引用来添加新<strong>Player</strong>对象到数据源players列表中。然后它告诉table view添加了一个新行（在底部），因为table view和它的数据源必须保持同步。</p>
+<p>你可以直接使用<strong>tableView.reloadData()</strong>来完成但是一个带动画的插入看上去更好一点。<strong>UITableViewRowAnimation.Automatic</strong>自动选择适当的动画，具体取决于你插入的新行的位置。很方便。</p>
+<p>试一下吧，你现在应该能添加新player对象到列表中了！</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/AppWithNewPlayers.png" alt=""></p>
+<p>##性能</p>
+<p>现在你已经在storyboard中有了一些view controller了，你可能想知道性能如何。一次加载一整个storyboard不是一件大事。Storyboard不会马上初始化所有的view controller，只有初始view controller是马上加载的。因为你的初始view controller是一个Tab Bar Controller，所以它包含的两个view controller也被加载了。</p>
+<p>其他的view controller不会实例化直到你跳转到它们。当你关闭这些view controller时它们会马上释放，所以内存中只有正在使用的view controller。</p>
+<p>让我们在实际例子中看看吧。在<strong>PlayerDetailsViewController</strong>中加入初始化器和析构器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">required init?(coder aDecoder: NSCoder) &#123;</div><div class="line">  print(&quot;init PlayerDetailsViewController&quot;)</div><div class="line">  super.init(coder: aDecoder)</div><div class="line">&#125;</div><div class="line">  </div><div class="line">deinit &#123;</div><div class="line">  print(&quot;deinit PlayerDetailsViewController&quot;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>你覆写了<strong>init?(coder:)</strong>和<strong>deinit</strong>，并让它们在Xcode调试窗口打印信息。现在再次运行app并打开Add Player场景。你应该看到这个view controller直到使用到时才被分配。</p>
+<p>当你关闭Add Player场景，不论是点击Cancel还是Done，你应该看到<strong>print()</strong>的释放日志信息。如果你再次打开这个场景，你应该也能再看到<strong>init?(coder:)</strong>中的信息。这应该能确保view controller能按需加载。</p>
+<h2 id="比赛选择场景"><a href="#比赛选择场景" class="headerlink" title="比赛选择场景"></a>比赛选择场景</h2><p>点击Add Player场景中的Game行应该打开一个新的场景，可以让用户在一个列表中选择比赛。这意味着你将添加另一个table view controller，尽管这时你应该将它push到导航栈中而不是用之前的modal展示它。</p>
+<p>拉取一个新的<strong>Table View Controllr</strong>到<strong>Main.storyboard</strong>中。在Add Player场景中选择Game table view cell（确保选择的是整个cell，而不是其中的一个label），按住ctrl键，拖动到新的Table View Controller来创建它们之间的segue。设置它为<strong>Show</strong>segue（在弹出框<strong>Selection Segue</strong>分组下的，不是Accessory下的）。</p>
+<p>选择这个新的segue并在它的Attributes Inspector中设置标识为<strong>PickGame</strong>。</p>
+<p>在<strong>Document Outline</strong>中选择这个新的Table View Controller，命名这个场景为<strong>Choose Game</strong>。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/ChooseGame.png" alt=""></p>
+<p>设置prototype的<strong>Style</strong>为<strong>Basic</strong>，并设置reuse identifier为<strong>GameCell</strong>。这就是场景需要做的设计了：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/GameCell.png" alt=""></p>
+<p>在这个新的项目中加入新的Swift文件，使用<strong>Cocoa Touch Class</strong>模板并命名它为<strong>GamePickerViewController</strong>，是<strong>UITableViewController</strong>。</p>
+<p>回到<strong>Main.storyboard</strong>中的<strong>Choose Game</strong>场景，并在Identity Inspector设置它的Custom Class为<strong>GamePickerViewController</strong>。</p>
+<p>现在让我们给这个新的场景一些数据来显示吧。在<strong>GamePickerViewController.swift</strong>，加入一个名为<strong>games</strong>的填充了一些固定值的数组属性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var games:[String] = [</div><div class="line">    &quot;Angry Birds&quot;,</div><div class="line">    &quot;Chess&quot;,</div><div class="line">    &quot;Russian Roulette&quot;,</div><div class="line">    &quot;Spin the Bottle&quot;,</div><div class="line">    &quot;Texas Hold&apos;em Poker&quot;,</div><div class="line">    &quot;Tic-Tac-Toe&quot;]</div></pre></td></tr></table></figure>
+<p>现在再模板中替换数据源方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">override func numberOfSectionsInTableView(tableView: UITableView) -&gt; Int &#123;</div><div class="line">  return 1</div><div class="line">&#125;</div><div class="line">  </div><div class="line">override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -&gt; Int &#123;</div><div class="line">  return games.count</div><div class="line">&#125;</div><div class="line">  </div><div class="line">override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -&gt; UITableViewCell &#123;</div><div class="line">  let cell = tableView.dequeueReusableCellWithIdentifier(&quot;GameCell&quot;, forIndexPath: indexPath) </div><div class="line">  cell.textLabel?.text = games[indexPath.row]</div><div class="line">  return cell</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>你只是设置数据源为<strong>games</strong>数组并替换cell的textLabel中的值。</p>
+<p>就数据源而言应该这样做。运行app并点击Game行。选择比赛的新场景将会滑入到当前视图。现在点击新场景里的cell不会做任何事情，但是因为这个场景是在导航栈中呈现的，你总是可以点击返回按钮回到Add Player场景。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/AppChooseGame.png" alt=""></p>
+<p>这很酷。你不需要写任何代码来调用这个新场景。你只是按住ctrl，从static table view cell拖动到新的场景而已。唯一你写代码的地方是填充tableView的内容，这通常是更动态的而不是写死的列表。</p>
+<p>当然，如果新场景没有传递任何数据回来，它就没什么用处，所以你还是为它需要添加一个新的unwind segue。</p>
+<p>在<strong>GamePickerViewController</strong>类里，添加属性来持有当前选择比赛的名字和索引：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var selectedGame:String? &#123;</div><div class="line">  didSet &#123;</div><div class="line">    if let game = selectedGame &#123;</div><div class="line">      selectedGameIndex = games.indexOf(game)!</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">var selectedGameIndex:Int?</div></pre></td></tr></table></figure>
+<p>每当<strong>selectedGame</strong>被更新的时候，<strong>didSet</strong>将依据正确的索引在<strong>games</strong>中找到game字符串并更新<strong>selectedGameIndex</strong>。</p>
+<p>接下来，改变<strong>tableView(_:cellForRowAtIndexPath:)</strong>为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -&gt; UITableViewCell &#123;</div><div class="line">  let cell = tableView.dequeueReusableCellWithIdentifier(&quot;GameCell&quot;, forIndexPath: indexPath)</div><div class="line">  cell.textLabel?.text = games[indexPath.row]</div><div class="line">  </div><div class="line">  if indexPath.row == selectedGameIndex &#123;</div><div class="line">    cell.accessoryType = .Checkmark</div><div class="line">  &#125; else &#123;</div><div class="line">    cell.accessoryType = .None</div><div class="line">  &#125;</div><div class="line">  return cell</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这将在包含当前选中game的cell设置复选标记。这样的小动作会得到用户的赞赏。</p>
+<p>现在添加代理方法<strong>tableview(_:didSelectRowAtIndexPath:)</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) &#123;</div><div class="line">  tableView.deselectRowAtIndexPath(indexPath, animated: true)</div><div class="line">    </div><div class="line">  //Other row is selected - need to deselect it</div><div class="line">  if let index = selectedGameIndex &#123;</div><div class="line">    let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: index, inSection: 0))</div><div class="line">    cell?.accessoryType = .None</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  selectedGame = games[indexPath.row]</div><div class="line"></div><div class="line">  //update the checkmark for the current row</div><div class="line">  let cell = tableView.cellForRowAtIndexPath(indexPath)</div><div class="line">  cell?.accessoryType = .Checkmark</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当用户点击cell时，Table View代理会调用这个方法。</p>
+<p>首先这个方法在用户点击cell之后取消选择状态。这使得它从灰色高亮颜色回到常规的白色。然后它移除之前选中cell的复选标记，将它放在刚刚点击的行上。</p>
+<p>运行app来测试一下。点击比赛的名字然后相应的行会得到一个复选标记。点击另一个比赛的名字这样复选标记也会随之改变。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/AppGameCheckmark.png" alt=""></p>
+<p>这个场景应该在你点击一行后就关闭，然后现在并没有发生。因为你没有绑定unwind segue。这就是我们下一步应该做的。</p>
+<p>在<strong>PlayerDetailsViewController.swift</strong>中，添加一个属性来持有选中的比赛，这样你等下就能在Player对象中保存它。给它一个默认值”Chess”，这样新的player总会有一个比赛属性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var game:String = &quot;Chess&quot; &#123;</div><div class="line">  didSet &#123;</div><div class="line">    detailLabel.text? = game</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>didSet</strong>会在比赛名字改变时在static cell中显示比赛的名字。</p>
+<p>还是在<strong>PlayerDetailsViewController.swift</strong>中，加入unwind segue方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@IBAction func unwindWithSelectedGame(segue:UIStoryboardSegue) &#123;</div><div class="line">  if let gamePickerViewController = segue.sourceViewController as? GamePickerViewController,</div><div class="line">    selectedGame = gamePickerViewController.selectedGame &#123;</div><div class="line">      game = selectedGame</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>一旦用户在Choose Game场景选中比赛上面的代码就会执行。这个方法同时更新屏幕上的label和game属性。unwind segue也会在导航控制栈中推出GamePickerViewController。</p>
+<p>在<strong>Main.storyboard</strong>，跟之前一样，按住ctrl拉取cell到<strong>Exit</strong>，然后在弹出列表中选择<strong>unwindWithSelectedGame</strong>。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/09/UnwindWithSelectedGame.gif" alt=""></p>
+<p>在<strong>Attributes Inspector</strong>中设置unwind segue的Identifier为<strong>SaveSelectedGame</strong>。</p>
+<p>运行app，创建一个新的player，选择player的比赛行来选择一个比赛。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2014/09/19_sb2_selectedGame.jpg" alt=""></p>
+<p>Add Player场景的比赛并没有更新！</p>
+<p>unwind segue方法在<strong>tableView(_:didSelectRowAtIndexPath:)</strong>之前执行了，所以<strong>SelectedGameIndex</strong>没有及时更新。你可以覆写<strong>prepareForSegue(_:sender:)</strong>，在unwind发生前更新数据。</p>
+<p>在<strong>GamePickerViewController</strong>，覆写<strong>prepareForSegue(_:sender:)</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) &#123;</div><div class="line">  if segue.identifier == &quot;SaveSelectedGame&quot; &#123;</div><div class="line">    if let cell = sender as? UITableViewCell &#123;</div><div class="line">      let indexPath = tableView.indexPathForCell(cell)</div><div class="line">      if let index = indexPath?.row &#123;</div><div class="line">        selectedGame = games[index]</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>prepareForSegue(_:sender:)</strong>的参数sender就是初始化这个segue的对象，在这个例子中就是你选中的比赛cell。所以你可以使用cell的indexPath来找到<strong>games</strong>数组中的对应的game来设置<strong>selectedGame</strong>，这样你就能在unwind segue中获得这个参数了。</p>
+<p>现在当你运行app，并选中比赛时，它会更新palyer的比赛信息！</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/AppItWorks.png" alt=""></p>
+<p>接下来，你需要修改PlayerDetailsViewController中的<strong>prepareForSegue(_:sender:)</strong>来返回选中的比赛，而不是默认写死的”Chess”。这样，当你成功添加新player对象的时候，Players场景就会展现真实的比赛。</p>
+<p>在<strong>PlayerDetailsViewController.swift</strong>，修改<strong>prepareForSegue(_:sender:)</strong>为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) &#123;</div><div class="line">  if segue.identifier == &quot;SavePlayerDetail&quot; &#123;</div><div class="line">    player = Player(name: nameTextField.text, game:game, rating: 1)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当你完成添加新选手，点击Done，players列表会更新成正确的比赛。</p>
+<p>还有一件事，当你选择一个比赛，回到Add Player场景，然后试着再选择比赛，你之前选的比赛前面应该有个复选框。实现手的方案是传递PlayerDetailsViewController里存储的选中比赛到GamePickerViewContr中。</p>
+<p>还是在<strong>PlayerDetailsViewController.swift</strong>中，在<strong>prepareForSegue(_:sender:)</strong>在结尾处添加如下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">if segue.identifier == &quot;PickGame&quot; &#123;</div><div class="line">  if let gamePickerViewController = segue.destinationViewController as? GamePickerViewController &#123;</div><div class="line">    gamePickerViewController.selectedGame = game</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>现在你有两个<strong>if</strong>语句来检查<strong>segue.identifier</strong>。<strong>SavePlayerDetail</strong>是回到选手列表的unwind segue，<strong>PickGame</strong>是前往Game Pick场景的展示segue。你添加的代码能够在视图加载前设置GamePickerViewController的<strong>selectedGame</strong>。设置<strong>selectedGame</strong>会自动更新<strong>selectedGameIndex</strong>，table view就是用这个属性来设置复选框的。</p>
+<p>太棒了！你现在有一个添加比赛的场景了。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/08/AppFinalGameScene.png" alt=""></p>
+<p>您可以在<a href="https://koenig-media.raywenderlich.com/uploads/2015/09/Storyboards-Part2.zip" target="_blank" rel="external">Ratings iOS 9 example project</a>里下载本教程所有的代码。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/27/storyboard教程：上/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -584,7 +871,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
