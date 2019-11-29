@@ -253,6 +253,299 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/30/Instruments教程：入门/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="蒋正义">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋正义的修炼之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/30/Instruments教程：入门/" itemprop="url">Instruments教程：入门</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-30T21:35:59+08:00">
+                2017-07-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>翻译自<a href="https://www.raywenderlich.com/97886/instruments-tutorial-with-swift-getting-started" target="_blank" rel="external">Instruments Tutorial with Swift: Getting Started</a></p>
+</blockquote>
+<p>无论你是已经开发过很多app的老鸟，还是刚刚入门的菜鸟。你经常想的是如何实现新功能，或思考如何优化你的app。</p>
+<p>但是除了添加新功能外，还有一件事情是所有优秀的开发者都需要做的，那就是调试代码！</p>
+<p>本教程将向你展现如何使用Xcode自带的Instrments来帮你检查代码中存在的性能问题，内存问题，循环引用和其他问题。</p>
+<p>在这个教程里，你将学习：</p>
+<ol>
+<li>如何使用<strong>Time Profiler</strong>仪器来定位代码中耗时长的地方，以使代码更有效率。</li>
+<li>如何使用<strong>Allocations</strong>仪器来查找并修复代码中的内存问题，比如循环引用问题。</li>
+</ol>
+<blockquote>
+<p><strong>注意</strong>:本教程假设你有一定的Swift和iOS编程经验。如果你刚开始接触iOS编程，那你可能需要先学习本网站的其他教程。本教程将会使用storyboards，所以请确保你了解相关知识。你可以在<a href="https://www.raywenderlich.com/81879/storyboards-tutorial-swift-part-1" target="_blank" rel="external">这个网站</a>学习相关知识。</p>
+</blockquote>
+<p>都准备好了吗？让我们准备好进入迷人的Instruments世界吧。</p>
+<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>在此教程中你不需要从头创建好一个app。我们已经准备好一个示例项目了。您的任务是仔细检查这个app，并使用”Instruments”来优化它 - 非常类似于你优化自己app的过程！</p>
+<p><a href="https://koenig-media.raywenderlich.com/uploads/2015/05/InstrumentsSwift-Starter.zip" target="_blank" rel="external">下载初始项目</a>,解压并打开项目。</p>
+<p>这个示例app使用Flicker Api来搜索图片。为了使用API你需要一个API key。对于demo项目，你可以在Flicker的网站生成一个示例key。只需在<a href="http://www.flickr.com/services/api/explore/?method=flickr.photos.search" target="_blank" rel="external">http://www.flickr.com/services/api/explore/?method=flickr.photos.search</a>执行任意搜索并从URL中复制API密钥，它就在跟在”&amp;api_key=”后面。</p>
+<p>举例来说，如果URL是：<br><strong><a href="http://api.flickr.com/services/rest/?method=flickr.photos.search&amp;api_key=6593783efea8e7f6dfc6b70bc03d2afb&amp;format=rest&amp;api_sig=f24f4e98063a9b8ecc8b522b238d5e2f" target="_blank" rel="external">http://api.flickr.com/services/rest/?method=flickr.photos.search&amp;api_key=6593783efea8e7f6dfc6b70bc03d2afb&amp;format=rest&amp;api_sig=f24f4e98063a9b8ecc8b522b238d5e2f</a></strong>,那么API key就是：6593783efea8e7f6dfc6b70bc03d2afb。</p>
+<p>将它复制到<strong>FlickrSearcher.swift</strong>文件的最上面，将API key替换掉。</p>
+<p>请注意，此示例API密钥每天都会更改，因此你偶尔需要重新生成一个新key。当key不再有效时，app将会提醒你。</p>
+<p>编译运行app，执行一下搜索，点击结果，你会看到类似下面的情况：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/iOS-Simulator-Screen-Shot-21-Mar-2015-00.01.35.png" alt=""></p>
+<p>浏览一下app并查看一下基本功能。你可能会觉得UI看起来不错，应该可以直接提交app store了。<br>但是，你接下来将看到instruments为你的app所带来的价值。</p>
+<p>本教程的剩余内容将会像你展现如何查找并修复app中仍然存在的问题。你将看到<strong>Instruments</strong>如何使debug变得更加简单。</p>
+<h2 id="分析时间"><a href="#分析时间" class="headerlink" title="分析时间"></a>分析时间</h2><p>第一个介绍的instrument是<strong>Time Profiler</strong>。以测量的间隔，Instruments将停止程序的执行，并对每个正在运行的线程采取堆栈跟踪。就将它想成在Xcode的调试器中按下暂停按钮。</p>
+<p>这是<strong>Time Profiler</strong>的预览图：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-00.07.10-700x393.png" alt=""></p>
+<p>这个屏幕展示了<strong>Call Tree</strong>。<strong>Call Tree</strong>显示了执行app中各种方法所花费的时间。每一行是程序执行时所调用的不同方法。在每个方法中花费的时间可以从每个方法中分析器停止的次数确定。</p>
+<p>例如，如果以1毫秒的间隔完成100个样本，并且有个方法在堆栈中出现了10次，则可以推断出大约总执行时间的10％被花费在那个方法。这是一个相当粗略的近似值，但确实有效。</p>
+<blockquote>
+<p><strong>注意</strong>：一般来说，你应该始终在真实设备中测量应用，而不是在模拟器中。iOS模拟器具有Mac背后的所有马力，但真实设备却有移动硬件的限制。您的应用程序可能在模拟器中运行良好，但是一旦在真实设备上运行后，就会出现性能问题。</p>
+</blockquote>
+<p>所以还等什么，让我们马上拿到这个设备吧。</p>
+<p>在Xcode的菜单栏，选择<strong>Product\Profile</strong>,或者按⌘I。这将会编译app并打开Instruments。你将会看到类似如下的选择窗口：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-00.12.32-700x394.png" alt=""></p>
+<p>这里都是Instruments的不同模板。</p>
+<p>选择<strong>Time Profiler</strong>仪器并点击<strong>Choose</strong>。这将会打开一个新的Instruments文件。点击左上方的红色记录按钮来开始记录并打开app。可能会要求你输入密码以授权仪器来分析其他流程 - 不要害怕，在这里提供密码是安全的！</p>
+<p>在仪器窗口，您可以看到计时的时间，以及在屏幕中心的图形中从左向右移动的小箭头。这表示该应用正在运行。</p>
+<p>现在，开始使用app。搜索一些图片，并了解更多一个或多个搜索结果。你可能注意到进入搜索结果非常慢。并且滑动搜索结果列表也是异常缓慢–这是一个非常笨拙的应用！</p>
+<p>我们现在就要来修复它。不过你需要首先快速了解一下你在Instruments中看到的内容。</p>
+<p>首先，确保工具栏右侧的视图选择器已选中两个选项，如下所示：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-00.14.53.png" alt=""></p>
+<p>这将会确保全部的面板都是展开的，现在我们来研究一下下面的截图和每个分区的解释：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Pasted_Image_21_03_2015_00_17-700x497.png" alt=""></p>
+<ol>
+<li>这些是记录控制器。当这个红色记录按钮按下的时候，可以停止或启动正在被测量的app。这个停止按钮会终止正在运行的app。</li>
+<li>这是运行计时器。计时器计算被测量的app已运行的时间，以及运行的次数。如果你停止，然后又重新启动app，就会开始一个新的运行，然后显示器将显示<strong>Run 2 of 2</strong>。</li>
+<li>这叫做轨道。在<strong>Time Profiler</strong>模板中，只有一个仪器，所以这里只有一个轨道。你将在本教程稍后部分中详细了解该图形的具体细节。</li>
+<li>这是细节面板。它显示了这个仪器的主要信息。在本例中，它显示了”最热”的方法–也就是那些占用了CPU最多时间的那些方法。如果你点击顶部的<strong>Call Tree</strong>（左边的那个）栏并选择<strong>Sample List</strong>，那它就会显示不同的数据视图。这个视图显示了每一个样本。点击一些样本，你就会在<strong>Extended Detail</strong>检查器看到捕捉到的调用栈。</li>
+<li>这是检查面板。这里有3个检查器：Record Settings，Display Settings，和Extended Detail。你很快就会了解到有关这些选项的更多信息。</li>
+</ol>
+<p>现在来修复这笨拙的UI。</p>
+<h2 id="更深入的研究"><a href="#更深入的研究" class="headerlink" title="更深入的研究"></a>更深入的研究</h2><p>执行图像搜索，并或取结果。我个人喜欢搜索”狗”，但你可以搜索任何你想搜索的。</p>
+<p>现在，上下滑动几次列表，这样就能在<strong>Time Profiler</strong>里获取一定数量的数据。你应该注意到屏幕中间的数字在改变和图形在填充，这告诉你正在使用CPU周期。</p>
+<p>你肯定不会希望任何UI像这样笨拙，为了查明这个问题，你需要设置一些选项。</p>
+<p>在右边，选择<strong>Display Settings</strong>检查器（或者按⌘+2）。在检查器中，在<strong>Call Tree</strong>分区下，选中<strong>Separate by Thread</strong>, <strong>Invert Call Tree</strong>, <strong>Hide Missing Symbols</strong>和<strong>Hide System Libraries</strong>。看上去就像这样：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-00.22.21.png" alt=""></p>
+<p>以下是每个选项对左侧表格中显示的数据的具体操作：</p>
+<ul>
+<li><strong>Separate by Thread</strong>：每个线程应该被分开考虑。这使你能够了解哪些线程负责最大量的CPU使用。</li>
+<li><strong>Invert Call Tree</strong>：使用此选项，从上到下考虑堆栈跟踪。这通常是你想要的，因为你想要看到CPU花费时间的最深层次的方法。</li>
+<li><strong>Hide Missing Symbols</strong>：如果您的应用程序或系统框架无法找到dSYM文件，那么你就不能在表中看到方法名称（符号），你将只能看到与二进制文件中的地址对应的十六进制值。如果选择此选项，则仅显示完全解析的符号，并且未解析的十六进制值被隐藏。这有助于减少所呈现的数据。</li>
+<li><strong>Hide System Libraries</strong>：当这个选项选中的时候，只有你自己app里的符号会显示。选中这个选项非常有用，因为通常你只需要关心CPU在自己的代码中花费的时间。您不能对系统库使用多少CPU做很多事情！</li>
+<li><strong>Flatten Recursion</strong>：此选项将递归函数（调用自身的函数）视为每个堆栈跟踪中的一个条目，而不是多个。</li>
+<li><strong>Top Functions</strong>：启用此功能使得仪器将函数中花费的时间视为该函数内部时间的总和，以及由该函数调用的函数所花费的时间。因此，如果函数A调用B，那么A的时间会被记录为在A中花费的时间加上在B中花费的时间。这可以是非常有用的，因为它可以让您每次在调用堆栈时选择最大的时间数，调整你最耗时的方法。</li>
+<li>如果你正在运行一个Objective-C程序，这里也有一个<strong>Show Obj-C Only</strong>选项：如果这个选中的话，那么仪器只会显示Objective-C方法，而不显示任何C或C++方法。这里没有这些方法，但是如果你正在查看一个OpenGL程序，那就可能会有一些C++代码。</li>
+</ul>
+<p>当你选中上面的选项后，尽管可能有一些数值会不一样，但整体的顺序应该跟下图很相似：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-00.24.07.png" alt=""></p>
+<p>这看上去并不怎么好。绝大多数时间花在将”色调”滤镜应用到缩略图的方法中。你应该不会觉得太震惊，因为table view加载和滚动是这个UI的最卡的部分，也就是table cell在不断更新的时候。</p>
+<p>要了解该方法中更多的信息，请双击表中的行。这样做就会出来下面的视图：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-00.25.39-700x377.png" alt=""></p>
+<p>这很有趣，不是吗？<strong>applyTonalFilter()</strong>是一个<strong>UIImage</strong>扩展添加的方法，并且这里面将近100%的时间都是用在应用image filter后创建<strong>CGImage</strong>上面。</p>
+<p>这里其实不能做什么优化来提升它的速度。因为创建图片是一个集中的过程，该花多少时间就会花多少时间。让我们试着回退来看看是哪里调用<strong>applyTonalFilter()</strong>的。点击<strong>Call Tree</strong>来回到之前屏幕：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-00.27.59-700x28.png" alt=""></p>
+<p>现在点击<strong>applyTonalFilter</strong>行左边的小箭头。这会展开<strong>Call Tree</strong>来展现<strong>applyTonalFilter</strong>的调用者。你可能还需要展开更下一级。在分析Swift时，<strong>Call Tree</strong>中可能会有以<strong>@objc</strong>开头的重复的行。你应该只关注以你app名字（<strong>InstrumentsTutorial</strong>）命名的第一行：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-00.33.15-700x102.png" alt=""></p>
+<p>在这个例子中，这一行指向了collectionView的<strong>cellForItemAtIndexPath</strong>方法。双击这一行来查看相关联的代码。</p>
+<p>现在你可以看到问题的所在了。这个方法花了太多时间来执行滤镜方法了，并且是直接在<strong>cellForItemAtIndexPath</strong>中调用的，所以每次获得加滤镜的照片的时候都会堵塞主线程。</p>
+<h2 id="卸载工作"><a href="#卸载工作" class="headerlink" title="卸载工作"></a>卸载工作</h2><p>你将进行两个步骤来解决这个问题：第一步，通过<strong>dispatch_async</strong>将滤镜效果移到子线程中，并且在每张图片创建之后缓存图片。初始项目里有一个很小，很简单的图片缓存类（名字为<strong>ImageCache</strong>），能将图片简单的存放在内存里并可以通过给定的key来进行检索。</p>
+<p>你现在可以切换到Xcode并手动找到目标文件。但是在代码右上放有个很便利的<strong>在Xcode打开</strong>按钮。找到这个按钮并点击。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen_Shot_2015-03-21_at_00_36_58.png" alt=""></p>
+<p>哈哈！Xcode直接打开这段代码了。</p>
+<p>现在，在<strong>collectionView(_:cellForItemAtIndexPath:)</strong>，将调用<strong>loadThumbnail()</strong>的地方替换成：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">flickrPhoto.loadThumbnail &#123; image, error in</div><div class="line">  if cell.flickrPhoto == flickrPhoto &#123;</div><div class="line">    if flickrPhoto.isFavourite &#123;</div><div class="line">      cell.imageView.image = image</div><div class="line">    &#125; else &#123;</div><div class="line">      if let cachedImage = ImageCache.sharedCache.imageForKey(&quot;\(flickrPhoto.photoID)-filtered&quot;) &#123;</div><div class="line">        cell.imageView.image = cachedImage</div><div class="line">      &#125; else &#123;</div><div class="line">      	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), &#123;</div><div class="line">          if let filteredImage = image?.applyTonalFilter() &#123;</div><div class="line">            ImageCache.sharedCache.setImage(filteredImage, forKey: &quot;\(flickrPhoto.photoID)-filtered&quot;)</div><div class="line">            dispatch_async(dispatch_get_main_queue(), &#123;</div><div class="line">              cell.imageView.image = filteredImage</div><div class="line">            &#125;)</div><div class="line">	        &#125;</div><div class="line">        &#125;)</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这段代码的第一部分跟之前一样，从网络加载Flickr照片的缩略图。如果这张照片被设为喜欢了，cell展现这张缩略图，如果不是的话，就调用色调滤镜。</p>
+<p>接下来就是代码有变化的地方了：首先，这段代码检查加了滤镜后的图片是否存在在缓存中，如果存在的话，直接将这张图片展现在imageView中。如果不是，在子线程中调用添加滤镜方法。这能使UI在图像添加滤镜时保持响应。当滤镜调用完之后，将这张图片添加到缓存中，最后在主线程中更新imageView。</p>
+<p>这就是给图片添加滤镜所考虑的事情，但是在原始的调用方法上也有事情要考虑。打开<strong>FlickrSearcher.swift</strong>并找到<strong>loadThumbnail(_:)</strong>。替换成以下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">func loadThumbnail(completion: ImageLoadCompletion) &#123;</div><div class="line">  if let image = ImageCache.sharedCache.imageForKey(photoID) &#123;</div><div class="line">    completion(image: image, error: nil)</div><div class="line">  &#125; else &#123;</div><div class="line">    loadImageFromURL(URL: flickrImageURL(size: &quot;m&quot;)) &#123; image, error in</div><div class="line">      if let image = image &#123;</div><div class="line">        ImageCache.sharedCache.setImage(image, forKey: self.photoID)</div><div class="line">      &#125;</div><div class="line">      completion(image: image, error: error)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>跟添加滤镜的方法很相似。如果缓存中已经有图片了，那么直接调用完成闭包，返回存在的图片。否则，在Flickr加载图片并存储在缓存中。</p>
+<p>通过在<strong>Product\Profile</strong>(或者⌘I)重新在Instruments中运行app。</p>
+<p>请注意这次你讲不再被询问使用哪个instrument了。这是因为你仍然开着一个窗口，然后instruments假设你想用同样的选项再次运行。</p>
+<p>执行几次搜索操作，然后你会发现这次UI不像之前那样卡顿。添加滤镜的操作现在是异步执行了并且缓存了图片，所以图片只需要被添加一次滤镜。你可以在<strong>Call Tree</strong>中看到一些<strong>dispatch_worker_threads</strong>，添加滤镜的繁重工作都交给它们来处理了。</p>
+<h2 id="Allocations-Allocations-Allocations"><a href="#Allocations-Allocations-Allocations" class="headerlink" title="Allocations, Allocations, Allocations"></a>Allocations, Allocations, Allocations</h2><p>本教程下一个要介绍的instrument就是<strong>Allocations</strong>。它将为你提供正在创建的所有对象和它们内存的详细信息，它还显示每个对象的retain count。</p>
+<p>要重新开始使用一个新的instrument profile，先退出instrument程序。这一次，编译并运行app，并在Navigators area中打开Debug Navigator。然后单击<strong>Memory</strong>，在主窗口中显示内存使用情况的图表：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-00.44.08-700x466.png" alt=""></p>
+<p>这些图形可以帮助你快速了解app的性能表现。但是你需要更多的功能。点击<strong>Profile in Instruments</strong>按钮，然后点击<strong>Transfer</strong>将此会话传输到Instruments中。<strong>Allocations</strong> instrument会自动启动。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-00.47.56-700x460.png" alt=""></p>
+<p>这次你会发现有两个轨道。一个叫做<strong>Allocations</strong>，另一个叫做<strong>Leaks</strong>。我们会在接下来的教程中讨论<strong>Allocation</strong>轨道。Leaks轨道通常在Objective-C中比较有用，本教程将不再讨论。</p>
+<p>那么你接下来要跟踪的是什么bug呢？</p>
+<p>这个项目中隐藏这一些你可能不知道的内容。你可能听说过内存泄漏。但是你可能不知道的是存在着两种泄漏：</p>
+<ol>
+<li><strong>True memory leaks</strong>是指一个对象不再被任何东西引用却依然被分配内存，也就是说这块内存永远不能被重用。即使Swift和ARC帮助管理内存，最常见的内存泄漏是<strong>ratain cycle</strong>或<strong>strong reference cycle</strong>。这是当两个对象互相强引用另一个对象时，使每个对象就会保证另一个对象不被释放。也就是说它们的内存空间永远不会被释放。</li>
+<li><strong>Unbounded memory growth</strong>是指内存在持续增长并没有机会释放。如果这种情况一直持续，那么在某个时刻系统内存就会被填满。在iOS中意味着你的app会被系统杀死。</li>
+</ol>
+<p>在<strong>Allocations</strong> instrument运行app时，在app中做5次不同的搜索但不要深入了解结果。保证每次搜索都有一些结果。现在让app等待几秒钟。</p>
+<p>你应该会注意到<strong>Alloactions</strong>轨道上的图形在增长。这是在告诉你正在分配内容。它是帮你找到<strong>unbounded memory growth</strong>的功能。</p>
+<p>通得过点击<strong>Mark Generation</strong>来进行”generation analysis”。你能在<strong>Display Settings</strong>检查器的上方找到这个按钮：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-00.49.11.png" alt=""></p>
+<p>点击它你会在轨道中看到一个红色的小旗子：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-00.49.51.png" alt=""></p>
+<p>generation analysis的目的是多次执行一个动作，看看内存是否以无限制的方式发展。进行搜索，等待几秒钟来加载图片，然后返回主页面。然后再次点击mark generation。在不同的搜索上重复这些动作。</p>
+<p>在执行几次搜索之后，Instruments看上去应该就像这样：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-00.53.19-700x403.png" alt=""></p>
+<p>在这时，你应该会觉得疑惑。每次你搜索之后，蓝色的图形都会增加。这肯定是不太好的。但是什么是内存警告呢？内存警告是一种iOS告诉app内存使用越来越紧张，需要清除一些内存的方式。</p>
+<p>这种增长可能不仅仅是由你的app造成的，它可能是UIKit的底层占据内存。给系统框架和你的app一个机会来清除他们内存。</p>
+<p>通过选中Instrument菜单栏里的<strong>Instrument\Simulate Memory Warning</strong>或者模拟器菜单栏里的<strong>Hardware\Simulate Memory Warning</strong>来模拟内存警告。你会注意到内存使用量有所下降，或者根本就没有。当然不会回到它合理的地方。所以在某个地方仍然存在无限的内存增长。</p>
+<p>在进行搜索的每次搜索之后标记的原因是你可以看到在每此标记之间分配了哪些内存。查看细节面板，你会看到一堆标记。</p>
+<h2 id="谈谈我的标记"><a href="#谈谈我的标记" class="headerlink" title="谈谈我的标记"></a>谈谈我的标记</h2><p>在每次标记区间中，你会看到所有对象被分配并持续存在。后续的标记区间中依然存在上一个标记区间中存在的对象。</p>
+<p>查看一下<strong>Growth</strong>列，你会看到确实在某处存在着增长。打开其中一个区间你看到这个：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-00.55.18-700x394.png" alt=""></p>
+<p>哇！这里有好多对象。我们应该从哪里开始呢？</p>
+<p>不幸的是，Swift的页面比Objective-C的页面更加杂乱，这里填满了很多你不需要知道的数据类型。你可一通关切换<strong>Allocation Type</strong>到<strong>All Heap Allocation</strong>来稍微清理一下。同时，点击<strong>Growth</strong>头来通过大小来排序。</p>
+<p>靠近顶部的是<strong>ImageIO_jpeg_Data</strong>，这里肯定存在着一些你app的处理。点击<strong>ImageIO_jpeg_Data</strong>左边的箭头来显示完整的列表。选中一个并选择<strong>Extended Detail</strong>检查器（或按住⌘+3）。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-00.56.53-700x462.png" alt=""></p>
+<p>这里显示了创建指定对象时的堆栈轨迹。灰色的堆栈轨迹是系统库的。黑色的才是你自己的代码。为了获得这个估计的上下文信息，双击倒数第几个帧，只有它是以”InstrumentsTutorial”为前缀的，表示他是来自Swift代码的。双击它就会带你来到你的老朋友–<strong>collectionView(_:cellForItemAtIndexPath:)</strong>方法中了。</p>
+<p>Instrument非常有用，但在这个例子中它能帮到你更多。您现在将需要自己编写代码，来了解发生了什么。</p>
+<p>看一下这个方法，你会看到它调用了<strong>setImage(_:forKey:)</strong>。当你看<strong>Time Profiler</strong>的时候，这个方法缓存了图片以防在app中再次用到这张图片。好吧，听起来好像有些问题。</p>
+<p>再次点击<strong>Open in Xcode</strong>按钮来跳转到Xcode。打开<strong>ImageUtilities.swift</strong>并看一下<strong>setImage(_:forKey:)</strong>的实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">func setImage(image: UIImage, forKey key: String) &#123;</div><div class="line">  images[key] = image</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>它将图片添加到一个以Flickr图片的图片ID作为key的字典中。但是如果你检查一下代码，你就会注意到字典中的图片从来没有清理过。</p>
+<p>这就是你的无限增长内存的来源：一切正常工作，但app从来没有从缓存中删除任何东西 - 它只会添加它们。</p>
+<p>为了修正这个问题，你所需要做的是让<strong>ImageCache</strong>监听<strong>UIApplication</strong>触发的内存警告通知。当<strong>ImageCache</strong>接收消息时，他必须清空它的内存。</p>
+<p>为了让<strong>ImageCache</strong>监听这个通知，添加下面的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">init() &#123;</div><div class="line">  NSNotificationCenter.defaultCenter().addObserverForName(</div><div class="line">    UIApplicationDidReceiveMemoryWarningNotification,</div><div class="line">    object: nil, queue: NSOperationQueue.mainQueue()) &#123; notification in</div><div class="line">      self.images.removeAll(keepCapacity: false)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">  </div><div class="line">deinit &#123;</div><div class="line">  NSNotificationCenter.defaultCenter().removeObserver(self,</div><div class="line">    name: UIApplicationDidReceiveMemoryWarningNotification,</div><div class="line">    object: nil)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里为<strong>UIApplicationDidReceiveMemoryWarningNotification</strong>注册了一个观察者来执行清除图片的闭包。</p>
+<p>闭包里所做的事情就是清除缓存里的全部对象。这将确保images没有持有任何东西，他们都将被释放。</p>
+<p>为了验证一下结果，再次打开instruments（在Xcode中按⌘I）并重复你之前的步骤。不要忘记在最后模拟内存警告。</p>
+<blockquote>
+<p><strong>注意</strong>:为了确保使用的是最新的代码，请确保在Xcode中打开，而不是只是按Instruments中的红色按钮。您可能还需要在分析之前进行编译和运行，因为如果你直接分析的话，有时Xcode似乎没有将模拟器中的app的版本更新为最新版本。</p>
+</blockquote>
+<p>这次生成的分析看上去应该像这样：</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-01.06.38-700x466.png" alt=""></p>
+<p>你会注意到在内存警告之后内存使用率下降。总体来说仍然有一些内存增长，但是与之前相比少了很多。</p>
+<p>还在增长是系统库造成的，而且对此你也无能为力。这出现在系统库不能释放所有的内存的时候，这可能是设计的或是一个bug。你能做的就是释放尽可能多的内存。</p>
+<p>太棒了！又有一个问题修复了！现在应该可以上架了吧！哦，等等，还有一种泄漏的问题你还没有解决。</p>
+<h2 id="循环引用"><a href="#循环引用" class="headerlink" title="循环引用"></a>循环引用</h2><p>最终，你需要找到Flickr Search app中循环引用。就像之前提到的，当两个对象相互持有另一个对象的时候，就会出现循环引用，不能被释放，就会占用内存。你可以使用<strong>Allocations</strong> instrument来检测这种循环引用。</p>
+<blockquote>
+<p><strong>注意</strong>：要跟着本教程的这一章节继续走，你必须在真实设备上配置你的app。因为在写到这里时，如果在模拟器上运行<strong>Allocations</strong> instrument会出现一个bug，就是该项目中使用的大多数类不会显示在instrumets中。</p>
+</blockquote>
+<p>关闭Instruments，回到Xcode，确保在build target for the app中选的是你的设备。再次选择<strong>Product\Profile</strong>，并选择<strong>Allocations</strong>模板。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-01.08.52-700x394.png" alt=""></p>
+<p>这一次，我们不再使用生成分析了。相应的，你将看到在内存中的不同类型的对象数。你应该已经看到细节面板中有大量的的对象了。</p>
+<p>为了帮助我们缩小目标对象，在<strong>Allocations Summary</strong>中输入<strong>Instruments</strong>来过滤。这将只显示在其类型名称中具有单词”Instruments”的对象。因为这个app的名字是”InstrumentsTutorial”，这个<strong>Allocations</strong>列表将仅显示在此项目定义中的类型。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-01.10.35-700x149.png" alt=""></p>
+<p>Instruments中值得注意的两列是<strong>Persistent</strong>和<strong>Transient</strong>。Persistent列中保留了内存中当前存在的每种类型的对象的数量。Transient列中显示了曾经存在但被释放的对象数量。Persistent对象正在使用内存，transient对象的内存已经释放掉了。</p>
+<p>你应该看到一个<strong>ViewController</strong>的persistent实例，这是有道理的，因为这正是你在看的屏幕。这里还有<strong>AppDelegate</strong>，和一个Flickr API客户端的实例。</p>
+<p>回到app中。执行一次搜索并进到结果中。注意到一些额外的对象已经出现在Instruments中：当解析搜索结果的时候创建了<strong>FlickrPhotos</strong>，<strong>SearchResultsViewController</strong>和<strong>ImageCache</strong>。<strong>ViewController</strong>依然存在，因为navigation controller需要它，这是ok的。</p>
+<p>现在点击app中的返回按钮。<strong>SearchResultsViewController</strong>已经在导航堆栈中弹出了，所以它应该被释放。但是它依然在# Persistent中显示数量为1。为什么它还在呢？</p>
+<p>试着执行另两次搜索并点击返回按钮。现在有3个<strong>SearchResultsViewController</strong>了。这些view controller依然能存在在内存中说明有东西对它们强引用了。看来代码中存在循环引用了。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-01.12.35-700x144.png" alt=""></p>
+<p>在这种情况下，你的主要线索不仅是SearchResultsViewController持续存在，而且所有的<strong>SearchResultsCollectionViewCells</strong>也是如此。好像循环引用就是在这两个类之间产生的。</p>
+<p>不幸的是，在写这篇文章的时候，Instruments的Swift输出在某些情况下不是很有用。Instruments只能给你关于问题在哪里的提示，并显示对象是在哪创建的。你的任务就是找出问题所在。</p>
+<p>让我们深入代码，将你的鼠标放在<strong>Category</strong>列中的<strong>InstrumentsTutorial.SearchResultsCollectionViewCell</strong>上，并点击右边的小箭头。旁边的页面显示了在app运行期间所有<strong>SearchResultsCollectionViewCells</strong>的创建。每次产生搜索结果的时候都会有很多。</p>
+<p><img src="https://koenig-media.raywenderlich.com/uploads/2015/03/Screen-Shot-2015-03-21-at-01.14.55-700x283.png" alt=""></p>
+<p>通过点击顶部栏第三个按钮来切换检查器到<strong>Extended Detail</strong>检查器。这个检查器显示了选中分配的堆栈追踪。跟之前的堆栈跟踪一样，黑色部分是您的代码。双击最上面的黑色行（以”InstrumentTutorial”开头），以查看cell分配的位置。</p>
+<p>cell实在<strong>collectionView(cellForRowAtIndexPath:)</strong>最上面分配内存的。如果你浏览几行，你就会发现这个：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cell.heartToggleHandler = &#123; isStarred in</div><div class="line">  self.collectionView.reloadItemsAtIndexPaths([ indexPath ])</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这是处理在点击collection viiew cell上心形按钮时的闭包。这里就是出现循环引用的地方。除非你以前遇到过，否则很难发现。</p>
+<p>cell使用<strong>self</strong>指向<strong>SearchResultsViewController</strong>，这创建了一个强应用。闭包捕捉了self。Swift实际上强制你明确地使用闭包中的self（而通常可以在引用当前对象的方法和属性时可以丢弃它）。这有助于你更加了解你捕获它的事实。<strong>SearchResultsViewController</strong>也通过他们的collection view对cell有强引用。</p>
+<p>为了打破循环引用，你可以定义一个<strong>capture list</strong>作为闭包定义的一部分。capture list可以用来将被闭包捕获的实例声明为<strong>weak</strong>或<strong>unowned</strong>：</p>
+<ul>
+<li><strong>Weak</strong>应该在捕获引用可能未来会为nil的情况下使用。如果他们引用的对象被释放，则引用将变为nil。因此，它们是可选类型。</li>
+<li><strong>Unowned</strong>应该在闭包和它的引用拥有相同的声明周期时，并且会同时释放时使用。一个unowned引用永远不可能为nil。</li>
+</ul>
+<p>为了修正循环引用，再次点击<strong>Open in Xcode</strong>并在<strong>SearchResultsViewController.swift</strong>的<strong>heartToggleHandler</strong>中加入capture list:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">cell.heartToggleHandler = &#123; [weak self] isStarred in</div><div class="line">  if let strongSelf = self &#123;</div><div class="line">    strongSelf.collectionView.reloadItemsAtIndexPaths([ indexPath ])</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>声明self为weak意味着即使collection view cell持有对<strong>SearchResultsViewController</strong>的引用，它也可以释放，因为它们现在只是弱引用。释放<strong>SearchResultsViewController</strong>将释放其collection view，接着就是cell了。</p>
+<p>在Xcode内，再次使用<strong>⌘+I</strong>在Instruments中编译和运行app。</p>
+<p>再次使用<strong>Allocations</strong>仪器查看app，就跟之前一样（请记住将结果过滤，仅显示本项目中的类）。执行搜索，导航到结果，然后返回。您应该看到当导航回来时，SearchResultsViewController及其cell现在都被释放。它们显示在transient实例中，而不是在persistent中。</p>
+<p>循环被打破了！</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/19/CoreText教程：制作一个杂志app/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1205,7 +1498,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
