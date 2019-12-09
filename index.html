@@ -253,6 +253,136 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/组合模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="蒋正义">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋正义的修炼之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/09/组合模式/" itemprop="url">组合模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T13:49:10+08:00">
+                2019-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="组合模式（Composite-Pattern）"><a href="#组合模式（Composite-Pattern）" class="headerlink" title="组合模式（Composite Pattern）"></a>组合模式（Composite Pattern）</h2><p>组合模式是一种结构型设计模式，将一组对象组合成树状结构，以便可以像对待一个对象一样来对其进行操作，它包含以下三个类型：</p>
+<p><img src="/2019/12/09/组合模式/组合模式.png" alt=""></p>
+<ol>
+<li>component protocol：确保树中的所有构造都可以以相同的方式处理</li>
+<li>leaf：树的组成部分，没有子元素</li>
+<li>composite：持有leaf对象和composites的容器</li>
+</ol>
+<p>UIView就使用到了组合模式</p>
+<h3 id="使用举例"><a href="#使用举例" class="headerlink" title="使用举例"></a>使用举例</h3><p>使用组合模式做一个文件系统</p>
+<h4 id="1-创建component-protocol"><a href="#1-创建component-protocol" class="headerlink" title="1.创建component protocol"></a>1.创建component protocol</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">protocol File &#123;</div><div class="line">  var name: String &#123; get set &#125;</div><div class="line">  func open()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="2-创建leaf-objects"><a href="#2-创建leaf-objects" class="headerlink" title="2.创建leaf objects"></a>2.创建leaf objects</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">final class eBook: File &#123;</div><div class="line">  var name: String</div><div class="line">  var author: String</div><div class="line">  </div><div class="line">  init(name: String, author: String) &#123;</div><div class="line">    self.name = name</div><div class="line">    self.author = author</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  func open() &#123;</div><div class="line">    print(&quot;Opening \(name) by \(author) in iBooks...\n&quot;)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">final class Music: File &#123;</div><div class="line">  var name: String</div><div class="line">  var artist: String</div><div class="line">  </div><div class="line">  init(name: String, artist: String) &#123;</div><div class="line">    self.name = name</div><div class="line">    self.artist = artist</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  func open() &#123;</div><div class="line">    print(&quot;Playing \(name) by \(artist) in iTunes...\n&quot;)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="3-创建composite对象"><a href="#3-创建composite对象" class="headerlink" title="3.创建composite对象"></a>3.创建composite对象</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">final class Folder: File &#123;</div><div class="line">  var name: String</div><div class="line">  lazy var files: [File] = []</div><div class="line">  </div><div class="line">  init(name: String) &#123;</div><div class="line">    self.name = name</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  func addFile(file: File) &#123;</div><div class="line">    self.files.append(file)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  func open() &#123;</div><div class="line">    print(&quot;Displaying the following files in \(name)...&quot;)</div><div class="line">    for file in files &#123;</div><div class="line">      print(file.name)</div><div class="line">    &#125;</div><div class="line">    print(&quot;\n&quot;)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="4-使用组合模式"><a href="#4-使用组合模式" class="headerlink" title="4.使用组合模式"></a>4.使用组合模式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">let psychoKiller = Music(name: &quot;Psycho Killer&quot;, artist: &quot;The Talking Heads&quot;)</div><div class="line">let rebelRebel = Music(name: &quot;Rebel Rebel&quot;, artist: &quot;David Bowie&quot;)</div><div class="line">let blisterInTheSun = Music(name: &quot;Blister in the Sun&quot;, artist: &quot;Violent Femmes&quot;)</div><div class="line"></div><div class="line">let justKids = eBook(name: &quot;Just Kids&quot;, author: &quot;Patti Smith&quot;)</div><div class="line"></div><div class="line">let documents = Folder(name: &quot;Documents&quot;)</div><div class="line">let musicFolder = Folder(name: &quot;Great 70s Music&quot;)</div><div class="line"></div><div class="line">documents.addFile(file: musicFolder)</div><div class="line">documents.addFile(file: justKids)</div><div class="line"></div><div class="line">musicFolder.addFile(file: psychoKiller)</div><div class="line">musicFolder.addFile(file: rebelRebel)</div><div class="line"></div><div class="line">blisterInTheSun.open()</div><div class="line">justKids.open()</div><div class="line"></div><div class="line">documents.open()</div><div class="line">musicFolder.open()</div></pre></td></tr></table></figure>
+<h3 id="其他例子"><a href="#其他例子" class="headerlink" title="其他例子"></a>其他例子</h3><ol>
+<li>公司结构：<a href="https://segmentfault.com/a/1190000008151403" target="_blank" rel="external">https://segmentfault.com/a/1190000008151403</a></li>
+<li>菜单：<a href="http://www.cocoachina.com/articles/18319" target="_blank" rel="external">http://www.cocoachina.com/articles/18319</a></li>
+<li>树状结构和文件系统:<a href="https://www.cnblogs.com/goodboy-heyang/p/5226090.html" target="_blank" rel="external">https://www.cnblogs.com/goodboy-heyang/p/5226090.html</a></li>
+<li></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/29/中介者模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1410,149 +1540,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/15/Sourcetree设置SSH key/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="蒋正义">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋正义的修炼之路">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/15/Sourcetree设置SSH key/" itemprop="url">Sourcetree设置SSH key</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-15T10:57:59+08:00">
-                2019-11-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>最近在使用Sourcetree的时候，遇到Permission denied (publickey,gssapi-keyex,gssapi-with-mic,password)。</p>
-<p>因为我本人有多个ssh密钥，但是Sourcetree貌似只会识别默认的密钥。</p>
-<p>在每次重启电脑后在终端输入下面代码。</p>
-<p><code>ssh-add ~/.ssh/&lt;username&gt;</code></p>
-<p>Sourcetree就能够识别添加的密钥了，但是每次打开都要重新输入会很麻烦。</p>
-<p>所以查阅资料后知道了如何让Sourcetree能读取所有的密钥。</p>
-<p>1.进入ssh目录</p>
-<p><code>cd ~/.ssh</code></p>
-<p>2.打开config文件</p>
-<p><code>vim config</code></p>
-<p>3.修改config文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Host *</div><div class="line">    UseKeychain yes</div><div class="line">    AddKeysToAgent yes</div><div class="line">    IdentityFile ~/.ssh/id_rsa</div><div class="line">    IdentityFile ~/.ssh/github_rsa</div></pre></td></tr></table></figure>
-<p>可以在这里输入多个密钥的目录。</p>
-<blockquote>
-<p>补充:</p>
-<p>假如你拿到的是一台全新的机器, 那么你要按照下面的操作步骤进行:</p>
-<ol>
-<li><p>生成sshkey</p>
-</li>
-<li><p>执行ssh-add ~/.ssh/id_rsa 将ss hkey添加到sourceTree</p>
-</li>
-<li><p>执行ssh-add -K ~/.ssh/id_rsa 将sshkey添加到钥匙串。</p>
-</li>
-<li><p>cd 到 .ssh目录下, 用touch config命令创建config文件。</p>
-</li>
-<li><p>执行open config, 打开config文件。</p>
-</li>
-<li><p>输入上面的配置内容, 保存config文件。</p>
-</li>
-</ol>
-</blockquote>
-<p>以后每次启动电脑source tree都会自动加载sshkey.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1602,7 +1589,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
