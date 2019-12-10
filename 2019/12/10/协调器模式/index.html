@@ -1,0 +1,724 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="设计模式," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="协调器模式（Coordinator Pattern）协调器模式是一种结构型设计模式，用来组织viewcontroller之间的跳转逻辑。它包含以下部分   coordinator：定义了所有concrete coordinators必须实现的方法和属性。具体来说，它定义关系属性，子级和router。它还定义了呈现方法，present和dismiss。通过持有coordinator protocol">
+<meta name="keywords" content="设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="协调器模式">
+<meta property="og:url" content="http://yoursite.com/2019/12/10/协调器模式/index.html">
+<meta property="og:site_name" content="蒋正义的修炼之路">
+<meta property="og:description" content="协调器模式（Coordinator Pattern）协调器模式是一种结构型设计模式，用来组织viewcontroller之间的跳转逻辑。它包含以下部分   coordinator：定义了所有concrete coordinators必须实现的方法和属性。具体来说，它定义关系属性，子级和router。它还定义了呈现方法，present和dismiss。通过持有coordinator protocol">
+<meta property="og:image" content="http://yoursite.com/2019/12/10/协调器模式/协调器模式.png">
+<meta property="og:updated_time" content="2019-12-10T08:14:23.937Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="协调器模式">
+<meta name="twitter:description" content="协调器模式（Coordinator Pattern）协调器模式是一种结构型设计模式，用来组织viewcontroller之间的跳转逻辑。它包含以下部分   coordinator：定义了所有concrete coordinators必须实现的方法和属性。具体来说，它定义关系属性，子级和router。它还定义了呈现方法，present和dismiss。通过持有coordinator protocol">
+<meta name="twitter:image" content="http://yoursite.com/2019/12/10/协调器模式/协调器模式.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/12/10/协调器模式/"/>
+
+
+
+
+
+  <title>协调器模式 | 蒋正义的修炼之路</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">蒋正义的修炼之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/协调器模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="蒋正义">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋正义的修炼之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">协调器模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T14:50:59+08:00">
+                2019-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 阅读数
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="协调器模式（Coordinator-Pattern）"><a href="#协调器模式（Coordinator-Pattern）" class="headerlink" title="协调器模式（Coordinator Pattern）"></a>协调器模式（Coordinator Pattern）</h2><p>协调器模式是一种结构型设计模式，用来组织viewcontroller之间的跳转逻辑。它包含以下部分</p>
+<p><img src="/2019/12/10/协调器模式/协调器模式.png" alt=""></p>
+<ol>
+<li>coordinator：定义了所有concrete coordinators必须实现的方法和属性。具体来说，它定义关系属性，子级和router。它还定义了呈现方法，present和dismiss。通过持有coordinator protocol而不是直接持有concrete coordinators，你可以将父协调器与其子协调器解耦。这也使父协调员可以在单个属性中保留各种具体的子协调员，即children</li>
+<li>concrete coordinator：实现了coordinator protocol。它知道如何创建具体的view controller以及view controller的显示顺序。</li>
+<li>router：一种协议，定义了所有 concrete router必须实现的方法。具体来说，它定义了用于显示和关闭视图控制器的present和dismiss方法</li>
+<li>concrete router：知道如何显示view controller，但不知道在显示什么或接下来将显示哪个view controller。相反，coordinator告诉router要显示哪个view controller</li>
+<li>concrete view controllers：mvc中的view controller，他们不知道其他的view controller。他们是coordinator的代理。</li>
+</ol>
+<h3 id="使用举例"><a href="#使用举例" class="headerlink" title="使用举例"></a>使用举例</h3><h4 id="1-创建Router-protocol"><a href="#1-创建Router-protocol" class="headerlink" title="1.创建Router protocol"></a>1.创建Router protocol</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public protocol Router: class &#123;</div><div class="line">  func present(_ viewController: UIViewController, animated: Bool)</div><div class="line">  func present(_ viewController: UIViewController,</div><div class="line">               animated: Bool,</div><div class="line">               onDismissed: (()-&gt;Void)?)</div><div class="line">  func dismiss(animated: Bool)</div><div class="line">&#125;</div><div class="line"></div><div class="line">extension Router &#123;</div><div class="line">  public func present(_ viewController: UIViewController,</div><div class="line">                      animated: Bool) &#123;</div><div class="line">    present(viewController, animated: animated, onDismissed: nil)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="2-创建Concrete-Router"><a href="#2-创建Concrete-Router" class="headerlink" title="2.创建Concrete Router"></a>2.创建Concrete Router</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">public class NavigationRouter: NSObject &#123;</div><div class="line">  </div><div class="line">  private let navigationController: UINavigationController</div><div class="line">  private let routerRootController: UIViewController?</div><div class="line">  private var onDismissForViewController:</div><div class="line">    [UIViewController: (() -&gt; Void)] = [:]</div><div class="line">  </div><div class="line">  public init(navigationController: UINavigationController) &#123;</div><div class="line">    self.navigationController = navigationController</div><div class="line">    self.routerRootController = navigationController.viewControllers.first</div><div class="line">    super.init()</div><div class="line">    navigationController.delegate = self</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// MARK: - Router</div><div class="line">extension NavigationRouter: Router &#123;</div><div class="line">  </div><div class="line">  public func present(_ viewController: UIViewController,</div><div class="line">                      animated: Bool,</div><div class="line">                      onDismissed: (() -&gt; Void)?) &#123;</div><div class="line">    onDismissForViewController[viewController] = onDismissed</div><div class="line">    navigationController.pushViewController(viewController,</div><div class="line">                                            animated: animated)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func dismiss(animated: Bool) &#123;</div><div class="line">    guard let routerRootController = routerRootController else &#123;</div><div class="line">      navigationController.popToRootViewController(animated: animated)</div><div class="line">      return</div><div class="line">    &#125;</div><div class="line">    performOnDismissed(for: routerRootController)</div><div class="line">    navigationController.popToViewController(routerRootController,</div><div class="line">                                             animated: animated)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  private func performOnDismissed(for viewController: UIViewController) &#123;</div><div class="line">    guard let onDismiss = onDismissForViewController[viewController]</div><div class="line">      else &#123;</div><div class="line">        return</div><div class="line">    &#125;</div><div class="line">    onDismiss()</div><div class="line">    onDismissForViewController[viewController] = nil</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// MARK: - UINavigationControllerDelegate</div><div class="line">extension NavigationRouter: UINavigationControllerDelegate &#123;</div><div class="line">  </div><div class="line">  public func navigationController(_ navigationController: UINavigationController,</div><div class="line">                                   didShow viewController: UIViewController,</div><div class="line">                                   animated: Bool) &#123;</div><div class="line">    </div><div class="line">    guard let dismissedViewController = navigationController.transitionCoordinator?.viewController(forKey: .from),</div><div class="line">      !navigationController.viewControllers.contains(dismissedViewController) else &#123; return &#125;</div><div class="line">    performOnDismissed(for: dismissedViewController)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="3-创建Coordinator-protocol"><a href="#3-创建Coordinator-protocol" class="headerlink" title="3.创建Coordinator protocol"></a>3.创建Coordinator protocol</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">public protocol Coordinator: class &#123;</div><div class="line">  </div><div class="line">  var children: [Coordinator] &#123; get set &#125;</div><div class="line">  var router: Router &#123; get &#125;</div><div class="line">  </div><div class="line">  func present(animated: Bool, onDismissed: (() -&gt; Void)?)</div><div class="line">  func dismiss(animated: Bool)</div><div class="line">  func presentChild(_ child: Coordinator,</div><div class="line">                    animated: Bool,</div><div class="line">                    onDismissed: (() -&gt; Void)?)</div><div class="line">&#125;</div><div class="line"></div><div class="line">extension Coordinator &#123;</div><div class="line">  </div><div class="line">  public func dismiss(animated: Bool) &#123;</div><div class="line">    router.dismiss(animated: true)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func presentChild(_ child: Coordinator,</div><div class="line">                           animated: Bool,</div><div class="line">                           onDismissed: (() -&gt; Void)? = nil) &#123;</div><div class="line">    children.append(child)</div><div class="line">    child.present(animated: animated, onDismissed: &#123; [weak self, weak child] in</div><div class="line">      guard let self = self, let child = child else &#123; return &#125;</div><div class="line">      self.removeChild(child)</div><div class="line">      onDismissed?()</div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  private func removeChild(_ child: Coordinator) &#123;</div><div class="line">    guard let index = children.firstIndex(where:  &#123; $0 === child &#125;)</div><div class="line">      else &#123;</div><div class="line">        return</div><div class="line">    &#125;</div><div class="line">    children.remove(at: index)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="4-创建Concrete-Coordinator"><a href="#4-创建Concrete-Coordinator" class="headerlink" title="4.创建Concrete Coordinator"></a>4.创建Concrete Coordinator</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div></pre></td><td class="code"><pre><div class="line">public class HowToCodeCoordinator: Coordinator &#123;</div><div class="line">  </div><div class="line">  // MARK: - Instance Properties</div><div class="line">  public var children: [Coordinator] = []</div><div class="line">  public let router: Router</div><div class="line">  </div><div class="line">  private lazy var stepViewControllers = [</div><div class="line">    StepViewController.instantiate(</div><div class="line">      delegate: self,</div><div class="line">      buttonColor: UIColor(red: 0.96, green: 0, blue: 0.11, alpha: 1),</div><div class="line">      text: &quot;When I wake up, well, I&apos;m sure I&apos;m gonna be\n\n&quot; +</div><div class="line">      &quot;I&apos;m gonna be the one writin&apos; code for you&quot;,</div><div class="line">      title: &quot;I wake up&quot;),</div><div class="line">    </div><div class="line">    StepViewController.instantiate(</div><div class="line">      delegate: self,</div><div class="line">      buttonColor: UIColor(red: 0.93, green: 0.51, blue: 0.07, alpha: 1),</div><div class="line">      text: &quot;When I go out, well, I&apos;m sure I&apos;m gonna be\n\n&quot; +</div><div class="line">      &quot;I&apos;m gonna be the one thinkin&apos; bout code for you&quot;,</div><div class="line">      title: &quot;I go out&quot;),</div><div class="line">    </div><div class="line">    StepViewController.instantiate(</div><div class="line">      delegate: self,</div><div class="line">      buttonColor: UIColor(red: 0.23, green: 0.72, blue: 0.11, alpha: 1.0),</div><div class="line">      text: &quot;Cause&apos; I would code five hundred lines\n\n&quot; +</div><div class="line">      &quot;And I would code five hundred more&quot;,</div><div class="line">      title: &quot;500 lines&quot;),</div><div class="line">    </div><div class="line">    StepViewController.instantiate(</div><div class="line">      delegate: self,</div><div class="line">      buttonColor: UIColor(red: 0.18, green: 0.29, blue: 0.80, alpha: 1.0),</div><div class="line">      text: &quot;To be the one that wrote a thousand lines\n\n&quot; +</div><div class="line">      &quot;To get this code shipped out the door!&quot;,</div><div class="line">      title: &quot;Ship it!&quot;)</div><div class="line">  ]</div><div class="line">  </div><div class="line">  private lazy var startOverViewController =</div><div class="line">    StartOverViewController.instantiate(delegate: self)</div><div class="line">  </div><div class="line">  // MARK: - Object Lifecycle</div><div class="line">  public init(router: Router) &#123;</div><div class="line">    self.router = router</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  // MARK: - Coordinator</div><div class="line">  public func present(animated: Bool, onDismissed: (() -&gt; Void)?) &#123;</div><div class="line">    let viewController = stepViewControllers.first!</div><div class="line">    router.present(viewController, animated: animated, onDismissed: onDismissed)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// MARK: - StepViewControllerDelegate</div><div class="line">extension HowToCodeCoordinator: StepViewControllerDelegate &#123;</div><div class="line">  </div><div class="line">  public func stepViewControllerDidPressNext(_ controller: StepViewController) &#123;</div><div class="line">    if let viewController = stepViewController(after: controller) &#123;</div><div class="line">      router.present(viewController, animated: true)</div><div class="line">    &#125; else &#123;</div><div class="line">      router.present(startOverViewController, animated: true)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  private func stepViewController(after controller: StepViewController) -&gt; StepViewController? &#123;</div><div class="line">    guard let index = stepViewControllers.firstIndex(where: &#123; $0 === controller &#125;),</div><div class="line">      index &lt; stepViewControllers.count - 1 else &#123; return nil &#125;</div><div class="line">    return stepViewControllers[index + 1]</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// MARK: - StartOverViewControllerDelegate</div><div class="line">extension HowToCodeCoordinator: StartOverViewControllerDelegate &#123;</div><div class="line">  </div><div class="line">  public func startOverViewControllerDidPressStartOver(_ controller: StartOverViewController) &#123;</div><div class="line">    router.dismiss(animated: true)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="5-使用协调者模式"><a href="#5-使用协调者模式" class="headerlink" title="5.使用协调者模式"></a>5.使用协调者模式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">let homeViewController = HomeViewController.instantiate()</div><div class="line">let navigationController = UINavigationController(rootViewController: homeViewController)</div><div class="line"></div><div class="line">let router = NavigationRouter(navigationController: navigationController)</div><div class="line">let coordinator = HowToCodeCoordinator(router: router)</div><div class="line"></div><div class="line">homeViewController.onButtonPressed = &#123; [weak coordinator] in</div><div class="line">  coordinator?.present(animated: true, onDismissed: nil)</div><div class="line">&#125;</div><div class="line"></div><div class="line">PlaygroundPage.current.liveView = navigationController</div></pre></td></tr></table></figure>
+<h3 id="其他例子"><a href="#其他例子" class="headerlink" title="其他例子"></a>其他例子</h3><ol>
+<li>在tableview中使用:<a href="https://blog.csdn.net/weixin_33768481/article/details/87940599" target="_blank" rel="external">https://blog.csdn.net/weixin_33768481/article/details/87940599</a></li>
+<li>学习日本汉字的app:<a href="https://blog.csdn.net/kmyhy/article/details/80770184" target="_blank" rel="external">https://blog.csdn.net/kmyhy/article/details/80770184</a></li>
+<li>使用Coordinator提高VC/ViewModel复用性:<a href="https://www.jianshu.com/p/e8fc65bcf1c8" target="_blank" rel="external">https://www.jianshu.com/p/e8fc65bcf1c8</a></li>
+<li>视频学习地址:<a href="https://www.jianshu.com/p/cdd96b462ffb" target="_blank" rel="external">https://www.jianshu.com/p/cdd96b462ffb</a></li>
+<li>基于ReSwift和App Coordinator的iOS架构:<a href="https://www.jianshu.com/p/42766da9578e" target="_blank" rel="external">https://www.jianshu.com/p/42766da9578e</a></li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/09/责任链模式/" rel="next" title="责任链模式">
+                <i class="fa fa-chevron-left"></i> 责任链模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="蒋正义" />
+          <p class="site-author-name" itemprop="name">蒋正义</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#协调器模式（Coordinator-Pattern）"><span class="nav-number">1.</span> <span class="nav-text">协调器模式（Coordinator Pattern）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用举例"><span class="nav-number">1.1.</span> <span class="nav-text">使用举例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-创建Router-protocol"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.创建Router protocol</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-创建Concrete-Router"><span class="nav-number">1.1.2.</span> <span class="nav-text">2.创建Concrete Router</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-创建Coordinator-protocol"><span class="nav-number">1.1.3.</span> <span class="nav-text">3.创建Coordinator protocol</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-创建Concrete-Coordinator"><span class="nav-number">1.1.4.</span> <span class="nav-text">4.创建Concrete Coordinator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-使用协调者模式"><span class="nav-number">1.1.5.</span> <span class="nav-text">5.使用协调者模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他例子"><span class="nav-number">1.2.</span> <span class="nav-text">其他例子</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">蒋正义</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      访客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

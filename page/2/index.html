@@ -253,6 +253,393 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/19/工厂模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="蒋正义">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋正义的修炼之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/19/工厂模式/" itemprop="url">工厂模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-19T14:55:40+08:00">
+                2019-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="工厂模式（Factory-Pattern）"><a href="#工厂模式（Factory-Pattern）" class="headerlink" title="工厂模式（Factory Pattern）"></a>工厂模式（Factory Pattern）</h2><p>工厂模式提供了一种不用暴露创建逻辑来创建对象的方法。它包含两个类型：</p>
+<p><img src="/2019/11/19/工厂模式/factory_strategy.png" alt=""></p>
+<ol>
+<li>factory创建对象</li>
+<li>product就是被创建的对象</li>
+</ol>
+<h2 id="使用例子"><a href="#使用例子" class="headerlink" title="使用例子"></a>使用例子</h2><p>根据求职者来生产求职回信对象</p>
+<h3 id="1-定义JobApplicant和Email模型"><a href="#1-定义JobApplicant和Email模型" class="headerlink" title="1.定义JobApplicant和Email模型"></a>1.定义JobApplicant和Email模型</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">public struct JobApplicant &#123;</div><div class="line">  public let name: String</div><div class="line">  public let email: String</div><div class="line">  public var status: Status</div><div class="line">  </div><div class="line">  public enum Status &#123;</div><div class="line">    case new</div><div class="line">    case interview</div><div class="line">    case hired</div><div class="line">    case rejected</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public struct Email &#123;</div><div class="line">  public let subject: String</div><div class="line">  public let messageBody: String</div><div class="line">  public let recipientEmail: String</div><div class="line">  public let senderEmail: String</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="2-创建工厂结构"><a href="#2-创建工厂结构" class="headerlink" title="2.创建工厂结构"></a>2.创建工厂结构</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">public struct EmailFactory &#123;</div><div class="line">  </div><div class="line">  public let senderEmail: String</div><div class="line">  </div><div class="line">  public func createEmail(to recipient: JobApplicant) -&gt; Email &#123;</div><div class="line">    switch recipient.status &#123;</div><div class="line">    case .new:</div><div class="line">      return Email(</div><div class="line">        subject: &quot;We Received Your Application&quot;,</div><div class="line">        messageBody: &quot;Thanks for applying for a job here! &quot; +</div><div class="line">        &quot;You should hear from us in 17-42 business days.&quot;,</div><div class="line">        recipientEmail: recipient.email,</div><div class="line">        senderEmail: senderEmail)</div><div class="line">      </div><div class="line">    case .interview:</div><div class="line">      return Email(</div><div class="line">        subject: &quot;We Want to Interview You&quot;,</div><div class="line">        messageBody: &quot;Thanks for your resume, \(recipient.name)! &quot; +</div><div class="line">        &quot;Can you come in for an interview in 30 minutes?&quot;,</div><div class="line">        recipientEmail: recipient.email,</div><div class="line">        senderEmail: senderEmail)</div><div class="line">      </div><div class="line">    case .hired:</div><div class="line">      return Email(</div><div class="line">        subject: &quot;We Want to Hire You&quot;,</div><div class="line">        messageBody: &quot;Congratulations, \(recipient.name)! &quot; +</div><div class="line">        &quot;We liked your code, and you smelled nice. We want to offer you a position! Cha-ching! $$$&quot;,</div><div class="line">        recipientEmail: recipient.email,</div><div class="line">        senderEmail: senderEmail)</div><div class="line">      </div><div class="line">    case .rejected:</div><div class="line">      return Email(</div><div class="line">        subject: &quot;Thanks for Your Application&quot;,</div><div class="line">        messageBody: &quot;Thank you for applying, \(recipient.name). &quot; +</div><div class="line">          &quot;We have decided to move forward with other candidates. &quot; +</div><div class="line">        &quot;Please remember to wear pants next time!&quot;,</div><div class="line">        recipientEmail: recipient.email,</div><div class="line">        senderEmail: senderEmail)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="3-使用工厂来创建回信"><a href="#3-使用工厂来创建回信" class="headerlink" title="3.使用工厂来创建回信"></a>3.使用工厂来创建回信</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">var jackson = JobApplicant(name: &quot;Jackson Smith&quot;,</div><div class="line">                           email: &quot;jackson.smith@example.com&quot;,</div><div class="line">                           status: .new)</div><div class="line"></div><div class="line">let emailFactory = EmailFactory(senderEmail: &quot;RaysMinions@RaysCoffeeCo.com&quot;)</div><div class="line"></div><div class="line">// New</div><div class="line">print(emailFactory.createEmail(to: jackson), &quot;\n&quot;)</div><div class="line"></div><div class="line">// Interview</div><div class="line">jackson.status = .interview</div><div class="line">print(emailFactory.createEmail(to: jackson), &quot;\n&quot;)</div><div class="line"></div><div class="line">// Hired</div><div class="line">jackson.status = .hired</div><div class="line">print(emailFactory.createEmail(to: jackson), &quot;\n&quot;)</div></pre></td></tr></table></figure>
+<p>如果你的对象非常简单，你就不需要使用工厂模式</p>
+<h2 id="其他例子"><a href="#其他例子" class="headerlink" title="其他例子"></a>其他例子</h2><ol>
+<li>3种工厂模式：<a href="https://www.jianshu.com/p/847af218b1f0" target="_blank" rel="external">https://www.jianshu.com/p/847af218b1f0</a></li>
+<li>Cocoa中的抽象工厂模式（NSNumber，类簇）:<a href="http://ibloodline.com/articles/2016/09/06/factory.html" target="_blank" rel="external">http://ibloodline.com/articles/2016/09/06/factory.html</a></li>
+<li>工厂模式在tableviewCell中的使用：<a href="https://juejin.im/post/5b5c0fe3e51d451989055798" target="_blank" rel="external">https://juejin.im/post/5b5c0fe3e51d451989055798</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/18/建造者模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="蒋正义">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋正义的修炼之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/18/建造者模式/" itemprop="url">建造者模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-18T16:56:59+08:00">
+                2019-11-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="建造者模式（Builder-Pattern）"><a href="#建造者模式（Builder-Pattern）" class="headerlink" title="建造者模式（Builder Pattern）"></a>建造者模式（Builder Pattern）</h2><p>建造者模式通过一步步的提供输入来创建复杂的对象，而不需要在初始化的时候提供所有的输入。</p>
+<p>这个模式包含以下三个方面：</p>
+<p><img src="/2019/11/18/建造者模式/build_strategy.png" alt=""></p>
+<ol>
+<li>director接受输入并和builder配合。这通常是view controller或view controller使用的工具类。</li>
+<li>product是将要被创建的复杂对象。根据所需的引用语义，它可以是结构体或类。它根据你的使用需要可以是任何类型，但通常是模型。</li>
+<li>builder接收一步步的输入并负责product的创建。它通常是一个类。</li>
+</ol>
+<p>当你想要通过一系列的步骤来创建一个复杂对象时，你就可以考虑使用创造者模式。</p>
+<h2 id="使用例子"><a href="#使用例子" class="headerlink" title="使用例子"></a>使用例子</h2><p>使用这个模式来实现一个汉堡构造者</p>
+<h3 id="1-定义product"><a href="#1-定义product" class="headerlink" title="1.定义product"></a>1.定义product</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">// MARK: - Product</div><div class="line">public struct Hamburger &#123;</div><div class="line">  public let meat: Meat</div><div class="line">  public let sauce: Sauces</div><div class="line">  public let toppings: Toppings</div><div class="line">&#125;</div><div class="line"></div><div class="line">extension Hamburger: CustomStringConvertible &#123;</div><div class="line">  public var description: String &#123;</div><div class="line">    return meat.rawValue + &quot; burger&quot;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public enum Meat: String &#123;</div><div class="line">  case beef</div><div class="line">  case chicken</div><div class="line">  case kitten</div><div class="line">  case tofu</div><div class="line">&#125;</div><div class="line"></div><div class="line">public struct Sauces: OptionSet &#123;</div><div class="line">  public static let mayonnaise = Sauces(rawValue: 1 &lt;&lt; 0)</div><div class="line">  public static let mustard = Sauces(rawValue: 1 &lt;&lt; 1)</div><div class="line">  public static let ketchup = Sauces(rawValue: 1 &lt;&lt; 2)</div><div class="line">  public static let secret = Sauces(rawValue: 1 &lt;&lt; 3)</div><div class="line">  </div><div class="line">  public let rawValue: Int</div><div class="line">  public init(rawValue: Int) &#123;</div><div class="line">    self.rawValue = rawValue</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public struct Toppings: OptionSet &#123;</div><div class="line">  public static let cheese = Toppings(rawValue: 1 &lt;&lt; 0)</div><div class="line">  public static let lettuce = Toppings(rawValue: 1 &lt;&lt; 1)</div><div class="line">  public static let pickles = Toppings(rawValue: 1 &lt;&lt; 2)</div><div class="line">  public static let tomatoes = Toppings(rawValue: 1 &lt;&lt; 3)</div><div class="line">  </div><div class="line">  public let rawValue: Int</div><div class="line">  public init(rawValue: Int) &#123;</div><div class="line">    self.rawValue = rawValue</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="2-定义builder"><a href="#2-定义builder" class="headerlink" title="2.定义builder"></a>2.定义builder</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">// MARK: - Builder</div><div class="line">public class HamburgerBuilder &#123;</div><div class="line">  </div><div class="line">  public enum Error: Swift.Error &#123;</div><div class="line">    case soldOut</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public private(set) var meat: Meat = .beef</div><div class="line">  public private(set) var sauces: Sauces = []</div><div class="line">  public private(set) var toppings: Toppings = []</div><div class="line">  </div><div class="line">  private var soldOutMeats: [Meat] = [.kitten]</div><div class="line">  </div><div class="line">  public func addSauces(_ sauce: Sauces) &#123;</div><div class="line">    sauces.insert(sauce)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func removeSauces(_ sauce: Sauces) &#123;</div><div class="line">    sauces.remove(sauce)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func addToppings(_ topping: Toppings) &#123;</div><div class="line">    toppings.insert(topping)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func removeToppings(_ topping: Toppings) &#123;</div><div class="line">    toppings.remove(topping)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func setMeat(_ meat: Meat) throws &#123;</div><div class="line">    guard isAvailable(meat) else &#123; throw Error.soldOut &#125;</div><div class="line">    self.meat = meat</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func isAvailable(_ meat: Meat) -&gt; Bool &#123;</div><div class="line">    return !soldOutMeats.contains(meat)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func build() -&gt; Hamburger &#123;</div><div class="line">    return Hamburger(meat: meat,</div><div class="line">                     sauce: sauces,</div><div class="line">                     toppings: toppings)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="3-定义director"><a href="#3-定义director" class="headerlink" title="3.定义director"></a>3.定义director</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">// MARK: - Director</div><div class="line">public class Employee &#123;</div><div class="line">  </div><div class="line">  public func createCombo1() throws -&gt; Hamburger &#123;</div><div class="line">    let builder = HamburgerBuilder()</div><div class="line">    try builder.setMeat(.beef)</div><div class="line">    builder.addSauces(.secret)</div><div class="line">    builder.addToppings([.lettuce, .tomatoes, .pickles])</div><div class="line">    return builder.build()</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func createKittenSpecial() throws -&gt; Hamburger &#123;</div><div class="line">    let builder = HamburgerBuilder()</div><div class="line">    try builder.setMeat(.kitten)</div><div class="line">    builder.addSauces(.mustard)</div><div class="line">    builder.addToppings([.lettuce, .tomatoes])</div><div class="line">    return builder.build()</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="4-使用举例"><a href="#4-使用举例" class="headerlink" title="4.使用举例"></a>4.使用举例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// MARK: - Example</div><div class="line">let burgerFlipper = Employee()</div><div class="line"></div><div class="line">if let combo1 = try? burgerFlipper.createCombo1() &#123;</div><div class="line">  print(&quot;Nom nom &quot; + combo1.description)</div><div class="line">&#125;</div><div class="line"></div><div class="line">if let kittenBurger = try?</div><div class="line">  burgerFlipper.createKittenSpecial() &#123;</div><div class="line">  print(&quot;Nom nom nom &quot; + kittenBurger.description)</div><div class="line">  </div><div class="line">&#125; else &#123;</div><div class="line">  print(&quot;Sorry, no kitten burgers here... :[&quot;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="其他例子"><a href="#其他例子" class="headerlink" title="其他例子"></a>其他例子</h2><p>可以在一个表单页面使用创造者模式，当用户在表单输入的时候给builder输入，最后在点击完成的时候建造完成的product。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/15/策略模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="蒋正义">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋正义的修炼之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/11/15/策略模式/" itemprop="url">策略模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-15T14:46:59+08:00">
+                2019-11-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="策略模式（Strategy-Pattern）"><a href="#策略模式（Strategy-Pattern）" class="headerlink" title="策略模式（Strategy Pattern）"></a>策略模式（Strategy Pattern）</h2><p>策略模式定义了一系列可互换的对象，这些对象在运行时可以互相更换。</p>
+<p>策略这个词应该怎么理解，打个比方说，我们出门的时候会选择不同的出行方式，比如骑自行车、坐公交、坐火车、坐飞机、坐火箭等等，这些出行方式，每一种都是一个策略。</p>
+<p>再比如我们去逛商场，商场现在正在搞活动，有打折的、有满减的、有返利的等等，其实不管商场如何进行促销，说到底都是一些算法，这些算法本身只是一种策略，并且这些算法是随时都可能互相替换的，比如针对同一件商品，今天打八折、明天满100减30，这些策略间是可以互换的。</p>
+<p>策略模式定义了一组算法，将每个算法都封装起来，并且使它们之间可以互换。</p>
+<p>策略模式包含3部分:</p>
+<p><img src="/2019/11/15/策略模式/strategy_overall.png" alt=""></p>
+<ul>
+<li>The object using a strategy：它经常是view controller，但在技术上也可以是任何需要可替换行为的对象。</li>
+<li>strategy protocol：定义了每个策略都需要实现的方法</li>
+<li>strategies：遵循strategy protocol协议的对象</li>
+</ul>
+<h2 id="使用例子：电影评分app"><a href="#使用例子：电影评分app" class="headerlink" title="使用例子：电影评分app"></a>使用例子：电影评分app</h2><p>这是一个使用多个电影评分服务的app，比如烂番茄，IMDb和Metacritic。我们可以使用策略模式为每个电影评分服务定义一些公共的api，而不是直接在view controller中为每个服务编写代码，并可能在代码里包含复杂的if-else语句。</p>
+<h3 id="创建一个策略协议"><a href="#创建一个策略协议" class="headerlink" title="创建一个策略协议:"></a>创建一个策略协议:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public protocol MovieRatingStrategy &#123;</div><div class="line">    var ratingServiceName: String &#123; get &#125;</div><div class="line">    func fetchRating(for movieTitle: String,success: (_ rating: String, _ review: String) -&gt; ())</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>ratingServiceName表示服务的名字，比如返回“豆瓣”。</p>
+<p>使用fetchRatingForMovieTitle(_:success:)来异步获取电影评分。</p>
+<h3 id="实现多个服务"><a href="#实现多个服务" class="headerlink" title="实现多个服务"></a>实现多个服务</h3><p>首先实现烂番茄的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class RottenTomatoesClient: MovieRatingStrategy &#123;</div><div class="line">  public let ratingServiceName = &quot;Rotten Tomatoes&quot;</div><div class="line">  public func fetchRating(</div><div class="line">    for movieTitle: String,</div><div class="line">    success: (_ rating: String, _ review: String) -&gt; ()) &#123;</div><div class="line">    let rating = &quot;95%&quot;</div><div class="line">    let review = &quot;It rocked!&quot;</div><div class="line">    success(rating, review)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接着实现IMBD服务:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">public class IMDbClient: MovieRatingStrategy &#123;</div><div class="line">  public let ratingServiceName = &quot;IMDb&quot;</div><div class="line">  public func fetchRating(</div><div class="line">    for movieTitle: String,</div><div class="line">    success: (_ rating: String, _ review: String) -&gt; ()) &#123;</div><div class="line">    let rating = &quot;3 / 10&quot;</div><div class="line">    let review = &quot;&quot;&quot;</div><div class="line">      It was terrible! The audience was throwing rotten</div><div class="line">      tomatoes!</div><div class="line">      &quot;&quot;&quot;</div><div class="line">    success(rating, review)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="使用策略"><a href="#使用策略" class="headerlink" title="使用策略"></a>使用策略</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">public class MoviewRatingViewController: UIViewController &#123;</div><div class="line">  </div><div class="line">  // MARK: - Properties</div><div class="line">  public var movieRatingClient: MovieRatingStrategy!</div><div class="line">  </div><div class="line">  // MARK: - Outlets</div><div class="line">  @IBOutlet public var movieTitleTextField: UITextField!</div><div class="line">  @IBOutlet public var ratingServiceNameLabel: UILabel!</div><div class="line">  @IBOutlet public var ratingLabel: UILabel!</div><div class="line">  @IBOutlet public var reviewLabel: UILabel!</div><div class="line">  </div><div class="line">  // MARK: - View Lifecycle</div><div class="line">  public override func viewDidLoad() &#123;</div><div class="line">    super.viewDidLoad()</div><div class="line">    ratingServiceNameLabel.text =</div><div class="line">      movieRatingClient.ratingServiceName</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  // MARK: - Actions</div><div class="line">  @IBAction public func searchButtonPressed(sender: Any) &#123;</div><div class="line">    guard let movieTitle = movieTitleTextField.text</div><div class="line">      else &#123; return &#125;</div><div class="line">    </div><div class="line">    movieRatingClient.fetchRating(for: movieTitle) &#123;</div><div class="line">      (rating, review) in</div><div class="line">      self.ratingLabel.text = rating</div><div class="line">      self.reviewLabel.text = review</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>view controller不需要知道他在使用哪个策略，它只用依赖一个协议就够了。</p>
+<p>view controller初始化的时候必定会传入一个策略，而它并不需要知道这个策略的具体实现。</p>
+<h2 id="其他例子"><a href="#其他例子" class="headerlink" title="其他例子"></a>其他例子</h2><p>还有一个oc的使用例子：<a href="https://www.jianshu.com/p/014df9e21c35" target="_blank" rel="external">https://www.jianshu.com/p/014df9e21c35</a><br>还有一个验证textfield输入的例子：<a href="https://blog.csdn.net/wtdask/article/details/80454852" target="_blank" rel="external">https://blog.csdn.net/wtdask/article/details/80454852</a><br>如果代码理由有很多的if else的话，可以考虑用策略模式来优化。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/15/Sourcetree设置SSH key/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1641,7 +2028,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

@@ -253,6 +253,396 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/10/协调器模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="蒋正义">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋正义的修炼之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/10/协调器模式/" itemprop="url">协调器模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-10T14:50:59+08:00">
+                2019-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="协调器模式（Coordinator-Pattern）"><a href="#协调器模式（Coordinator-Pattern）" class="headerlink" title="协调器模式（Coordinator Pattern）"></a>协调器模式（Coordinator Pattern）</h2><p>协调器模式是一种结构型设计模式，用来组织viewcontroller之间的跳转逻辑。它包含以下部分</p>
+<p><img src="/2019/12/10/协调器模式/协调器模式.png" alt=""></p>
+<ol>
+<li>coordinator：定义了所有concrete coordinators必须实现的方法和属性。具体来说，它定义关系属性，子级和router。它还定义了呈现方法，present和dismiss。通过持有coordinator protocol而不是直接持有concrete coordinators，你可以将父协调器与其子协调器解耦。这也使父协调员可以在单个属性中保留各种具体的子协调员，即children</li>
+<li>concrete coordinator：实现了coordinator protocol。它知道如何创建具体的view controller以及view controller的显示顺序。</li>
+<li>router：一种协议，定义了所有 concrete router必须实现的方法。具体来说，它定义了用于显示和关闭视图控制器的present和dismiss方法</li>
+<li>concrete router：知道如何显示view controller，但不知道在显示什么或接下来将显示哪个view controller。相反，coordinator告诉router要显示哪个view controller</li>
+<li>concrete view controllers：mvc中的view controller，他们不知道其他的view controller。他们是coordinator的代理。</li>
+</ol>
+<h3 id="使用举例"><a href="#使用举例" class="headerlink" title="使用举例"></a>使用举例</h3><h4 id="1-创建Router-protocol"><a href="#1-创建Router-protocol" class="headerlink" title="1.创建Router protocol"></a>1.创建Router protocol</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public protocol Router: class &#123;</div><div class="line">  func present(_ viewController: UIViewController, animated: Bool)</div><div class="line">  func present(_ viewController: UIViewController,</div><div class="line">               animated: Bool,</div><div class="line">               onDismissed: (()-&gt;Void)?)</div><div class="line">  func dismiss(animated: Bool)</div><div class="line">&#125;</div><div class="line"></div><div class="line">extension Router &#123;</div><div class="line">  public func present(_ viewController: UIViewController,</div><div class="line">                      animated: Bool) &#123;</div><div class="line">    present(viewController, animated: animated, onDismissed: nil)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="2-创建Concrete-Router"><a href="#2-创建Concrete-Router" class="headerlink" title="2.创建Concrete Router"></a>2.创建Concrete Router</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line">public class NavigationRouter: NSObject &#123;</div><div class="line">  </div><div class="line">  private let navigationController: UINavigationController</div><div class="line">  private let routerRootController: UIViewController?</div><div class="line">  private var onDismissForViewController:</div><div class="line">    [UIViewController: (() -&gt; Void)] = [:]</div><div class="line">  </div><div class="line">  public init(navigationController: UINavigationController) &#123;</div><div class="line">    self.navigationController = navigationController</div><div class="line">    self.routerRootController = navigationController.viewControllers.first</div><div class="line">    super.init()</div><div class="line">    navigationController.delegate = self</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// MARK: - Router</div><div class="line">extension NavigationRouter: Router &#123;</div><div class="line">  </div><div class="line">  public func present(_ viewController: UIViewController,</div><div class="line">                      animated: Bool,</div><div class="line">                      onDismissed: (() -&gt; Void)?) &#123;</div><div class="line">    onDismissForViewController[viewController] = onDismissed</div><div class="line">    navigationController.pushViewController(viewController,</div><div class="line">                                            animated: animated)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func dismiss(animated: Bool) &#123;</div><div class="line">    guard let routerRootController = routerRootController else &#123;</div><div class="line">      navigationController.popToRootViewController(animated: animated)</div><div class="line">      return</div><div class="line">    &#125;</div><div class="line">    performOnDismissed(for: routerRootController)</div><div class="line">    navigationController.popToViewController(routerRootController,</div><div class="line">                                             animated: animated)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  private func performOnDismissed(for viewController: UIViewController) &#123;</div><div class="line">    guard let onDismiss = onDismissForViewController[viewController]</div><div class="line">      else &#123;</div><div class="line">        return</div><div class="line">    &#125;</div><div class="line">    onDismiss()</div><div class="line">    onDismissForViewController[viewController] = nil</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// MARK: - UINavigationControllerDelegate</div><div class="line">extension NavigationRouter: UINavigationControllerDelegate &#123;</div><div class="line">  </div><div class="line">  public func navigationController(_ navigationController: UINavigationController,</div><div class="line">                                   didShow viewController: UIViewController,</div><div class="line">                                   animated: Bool) &#123;</div><div class="line">    </div><div class="line">    guard let dismissedViewController = navigationController.transitionCoordinator?.viewController(forKey: .from),</div><div class="line">      !navigationController.viewControllers.contains(dismissedViewController) else &#123; return &#125;</div><div class="line">    performOnDismissed(for: dismissedViewController)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="3-创建Coordinator-protocol"><a href="#3-创建Coordinator-protocol" class="headerlink" title="3.创建Coordinator protocol"></a>3.创建Coordinator protocol</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">public protocol Coordinator: class &#123;</div><div class="line">  </div><div class="line">  var children: [Coordinator] &#123; get set &#125;</div><div class="line">  var router: Router &#123; get &#125;</div><div class="line">  </div><div class="line">  func present(animated: Bool, onDismissed: (() -&gt; Void)?)</div><div class="line">  func dismiss(animated: Bool)</div><div class="line">  func presentChild(_ child: Coordinator,</div><div class="line">                    animated: Bool,</div><div class="line">                    onDismissed: (() -&gt; Void)?)</div><div class="line">&#125;</div><div class="line"></div><div class="line">extension Coordinator &#123;</div><div class="line">  </div><div class="line">  public func dismiss(animated: Bool) &#123;</div><div class="line">    router.dismiss(animated: true)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func presentChild(_ child: Coordinator,</div><div class="line">                           animated: Bool,</div><div class="line">                           onDismissed: (() -&gt; Void)? = nil) &#123;</div><div class="line">    children.append(child)</div><div class="line">    child.present(animated: animated, onDismissed: &#123; [weak self, weak child] in</div><div class="line">      guard let self = self, let child = child else &#123; return &#125;</div><div class="line">      self.removeChild(child)</div><div class="line">      onDismissed?()</div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  private func removeChild(_ child: Coordinator) &#123;</div><div class="line">    guard let index = children.firstIndex(where:  &#123; $0 === child &#125;)</div><div class="line">      else &#123;</div><div class="line">        return</div><div class="line">    &#125;</div><div class="line">    children.remove(at: index)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="4-创建Concrete-Coordinator"><a href="#4-创建Concrete-Coordinator" class="headerlink" title="4.创建Concrete Coordinator"></a>4.创建Concrete Coordinator</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div></pre></td><td class="code"><pre><div class="line">public class HowToCodeCoordinator: Coordinator &#123;</div><div class="line">  </div><div class="line">  // MARK: - Instance Properties</div><div class="line">  public var children: [Coordinator] = []</div><div class="line">  public let router: Router</div><div class="line">  </div><div class="line">  private lazy var stepViewControllers = [</div><div class="line">    StepViewController.instantiate(</div><div class="line">      delegate: self,</div><div class="line">      buttonColor: UIColor(red: 0.96, green: 0, blue: 0.11, alpha: 1),</div><div class="line">      text: &quot;When I wake up, well, I&apos;m sure I&apos;m gonna be\n\n&quot; +</div><div class="line">      &quot;I&apos;m gonna be the one writin&apos; code for you&quot;,</div><div class="line">      title: &quot;I wake up&quot;),</div><div class="line">    </div><div class="line">    StepViewController.instantiate(</div><div class="line">      delegate: self,</div><div class="line">      buttonColor: UIColor(red: 0.93, green: 0.51, blue: 0.07, alpha: 1),</div><div class="line">      text: &quot;When I go out, well, I&apos;m sure I&apos;m gonna be\n\n&quot; +</div><div class="line">      &quot;I&apos;m gonna be the one thinkin&apos; bout code for you&quot;,</div><div class="line">      title: &quot;I go out&quot;),</div><div class="line">    </div><div class="line">    StepViewController.instantiate(</div><div class="line">      delegate: self,</div><div class="line">      buttonColor: UIColor(red: 0.23, green: 0.72, blue: 0.11, alpha: 1.0),</div><div class="line">      text: &quot;Cause&apos; I would code five hundred lines\n\n&quot; +</div><div class="line">      &quot;And I would code five hundred more&quot;,</div><div class="line">      title: &quot;500 lines&quot;),</div><div class="line">    </div><div class="line">    StepViewController.instantiate(</div><div class="line">      delegate: self,</div><div class="line">      buttonColor: UIColor(red: 0.18, green: 0.29, blue: 0.80, alpha: 1.0),</div><div class="line">      text: &quot;To be the one that wrote a thousand lines\n\n&quot; +</div><div class="line">      &quot;To get this code shipped out the door!&quot;,</div><div class="line">      title: &quot;Ship it!&quot;)</div><div class="line">  ]</div><div class="line">  </div><div class="line">  private lazy var startOverViewController =</div><div class="line">    StartOverViewController.instantiate(delegate: self)</div><div class="line">  </div><div class="line">  // MARK: - Object Lifecycle</div><div class="line">  public init(router: Router) &#123;</div><div class="line">    self.router = router</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  // MARK: - Coordinator</div><div class="line">  public func present(animated: Bool, onDismissed: (() -&gt; Void)?) &#123;</div><div class="line">    let viewController = stepViewControllers.first!</div><div class="line">    router.present(viewController, animated: animated, onDismissed: onDismissed)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// MARK: - StepViewControllerDelegate</div><div class="line">extension HowToCodeCoordinator: StepViewControllerDelegate &#123;</div><div class="line">  </div><div class="line">  public func stepViewControllerDidPressNext(_ controller: StepViewController) &#123;</div><div class="line">    if let viewController = stepViewController(after: controller) &#123;</div><div class="line">      router.present(viewController, animated: true)</div><div class="line">    &#125; else &#123;</div><div class="line">      router.present(startOverViewController, animated: true)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  private func stepViewController(after controller: StepViewController) -&gt; StepViewController? &#123;</div><div class="line">    guard let index = stepViewControllers.firstIndex(where: &#123; $0 === controller &#125;),</div><div class="line">      index &lt; stepViewControllers.count - 1 else &#123; return nil &#125;</div><div class="line">    return stepViewControllers[index + 1]</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// MARK: - StartOverViewControllerDelegate</div><div class="line">extension HowToCodeCoordinator: StartOverViewControllerDelegate &#123;</div><div class="line">  </div><div class="line">  public func startOverViewControllerDidPressStartOver(_ controller: StartOverViewController) &#123;</div><div class="line">    router.dismiss(animated: true)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="5-使用协调者模式"><a href="#5-使用协调者模式" class="headerlink" title="5.使用协调者模式"></a>5.使用协调者模式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">let homeViewController = HomeViewController.instantiate()</div><div class="line">let navigationController = UINavigationController(rootViewController: homeViewController)</div><div class="line"></div><div class="line">let router = NavigationRouter(navigationController: navigationController)</div><div class="line">let coordinator = HowToCodeCoordinator(router: router)</div><div class="line"></div><div class="line">homeViewController.onButtonPressed = &#123; [weak coordinator] in</div><div class="line">  coordinator?.present(animated: true, onDismissed: nil)</div><div class="line">&#125;</div><div class="line"></div><div class="line">PlaygroundPage.current.liveView = navigationController</div></pre></td></tr></table></figure>
+<h3 id="其他例子"><a href="#其他例子" class="headerlink" title="其他例子"></a>其他例子</h3><ol>
+<li>在tableview中使用:<a href="https://blog.csdn.net/weixin_33768481/article/details/87940599" target="_blank" rel="external">https://blog.csdn.net/weixin_33768481/article/details/87940599</a></li>
+<li>学习日本汉字的app:<a href="https://blog.csdn.net/kmyhy/article/details/80770184" target="_blank" rel="external">https://blog.csdn.net/kmyhy/article/details/80770184</a></li>
+<li>使用Coordinator提高VC/ViewModel复用性:<a href="https://www.jianshu.com/p/e8fc65bcf1c8" target="_blank" rel="external">https://www.jianshu.com/p/e8fc65bcf1c8</a></li>
+<li>视频学习地址:<a href="https://www.jianshu.com/p/cdd96b462ffb" target="_blank" rel="external">https://www.jianshu.com/p/cdd96b462ffb</a></li>
+<li>基于ReSwift和App Coordinator的iOS架构:<a href="https://www.jianshu.com/p/42766da9578e" target="_blank" rel="external">https://www.jianshu.com/p/42766da9578e</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/责任链模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="蒋正义">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋正义的修炼之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/09/责任链模式/" itemprop="url">责任链模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T16:31:10+08:00">
+                2019-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="责任链模式（Chain-of-Responsibility-Pattern）"><a href="#责任链模式（Chain-of-Responsibility-Pattern）" class="headerlink" title="责任链模式（Chain-of-Responsibility Pattern）"></a>责任链模式（Chain-of-Responsibility Pattern）</h2><p>责任链模式是一种行为模式，它让事件被多个处理器中其中一个处理。包含以下3部分：</p>
+<p><img src="/2019/12/09/责任链模式/责任链模式.png" alt=""></p>
+<ol>
+<li>client：接受事件并将事件传递给处理 handler protocol的实例。事件可以是简单的，仅具有属性的结构，也可以是复杂的对象，例如复杂的用户操作。</li>
+<li>handler protocol：定义了handler必须实现的属性和方法。也可以使用基类</li>
+<li>concrete handler：实现handler protocol中的方法，被client直接持有。收到事件后，它首先尝试处理它。如果无法执行此操作，则将事件传递给下一个handler</li>
+</ol>
+<h3 id="使用举例"><a href="#使用举例" class="headerlink" title="使用举例"></a>使用举例</h3><p>使用此模式实现一个自动售货机</p>
+<h4 id="1-声明模型"><a href="#1-声明模型" class="headerlink" title="1.声明模型"></a>1.声明模型</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div></pre></td><td class="code"><pre><div class="line">// MARK: - Models</div><div class="line">public class Coin &#123;</div><div class="line">  </div><div class="line">  public class var standardDiameter: Double &#123;</div><div class="line">    return 0</div><div class="line">  &#125;</div><div class="line">  public class var standardWeight: Double &#123;</div><div class="line">    return 0</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public var centValue: Int &#123; return 0 &#125;</div><div class="line">  public final var dollarValue: Double &#123; return Double(centValue) / 100 &#125;</div><div class="line">  </div><div class="line">  public final let diameter: Double</div><div class="line">  public final let weight: Double</div><div class="line">  </div><div class="line">  public required init(diameter: Double, weight: Double) &#123;</div><div class="line">    self.diameter = diameter</div><div class="line">    self.weight = weight</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public convenience init() &#123;</div><div class="line">    let diameter = type(of: self).standardDiameter</div><div class="line">    let weight = type(of: self).standardWeight</div><div class="line">    self.init(diameter: diameter, weight: weight)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">extension Coin: CustomStringConvertible &#123;</div><div class="line">  public var description: String &#123;</div><div class="line">    return String(format:</div><div class="line">      &quot;%@ &#123;diameter: %0.3f, dollarValue: $%0.2f, weight: %0.3f&#125;&quot;,</div><div class="line">                  &quot;\(type(of: self))&quot;, diameter, dollarValue, weight)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Penny: Coin &#123;</div><div class="line">  </div><div class="line">  public override class var standardDiameter: Double &#123;</div><div class="line">    return 0.75</div><div class="line">  &#125;</div><div class="line">  public override class var standardWeight: Double &#123;</div><div class="line">    return 2.5</div><div class="line">  &#125;</div><div class="line">  public override var centValue: Int &#123; return 1 &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Nickel: Coin &#123;</div><div class="line">  </div><div class="line">  public override class var standardDiameter: Double &#123;</div><div class="line">    return 0.835</div><div class="line">  &#125;</div><div class="line">  public override class var standardWeight: Double &#123;</div><div class="line">    return 5.0</div><div class="line">  &#125;</div><div class="line">  public override  var centValue: Int &#123; return 5 &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Dime: Coin &#123;</div><div class="line">  public override class var standardDiameter: Double &#123;</div><div class="line">    return 0.705</div><div class="line">  &#125;</div><div class="line">  public override class var standardWeight: Double &#123;</div><div class="line">    return 2.268</div><div class="line">  &#125;</div><div class="line">  public override  var centValue: Int &#123; return 10 &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class Quarter: Coin &#123;</div><div class="line">  </div><div class="line">  public override class var standardDiameter: Double &#123;</div><div class="line">    return 0.955</div><div class="line">  &#125;</div><div class="line">  public override class var standardWeight: Double &#123;</div><div class="line">    return 5.670</div><div class="line">  &#125;</div><div class="line">  public override  var centValue: Int &#123; return 25 &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="2-声明HandlerProtocol"><a href="#2-声明HandlerProtocol" class="headerlink" title="2.声明HandlerProtocol"></a>2.声明HandlerProtocol</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// MARK: - HandlerProtocol</div><div class="line">public protocol CoinHandlerProtocol &#123;</div><div class="line">  var next: CoinHandlerProtocol? &#123; get &#125;</div><div class="line">  func handleCoinValidation(_ unknownCoin: Coin) -&gt; Coin?</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="3-声明Concrete-Handler"><a href="#3-声明Concrete-Handler" class="headerlink" title="3.声明Concrete Handler"></a>3.声明Concrete Handler</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line">public class CoinHandler &#123;</div><div class="line">  </div><div class="line">  public var next: CoinHandlerProtocol?</div><div class="line">  public let coinType: Coin.Type</div><div class="line">  public let diameterRange: ClosedRange&lt;Double&gt;</div><div class="line">  public let weightRange: ClosedRange&lt;Double&gt;</div><div class="line">  </div><div class="line">  public init(coinType: Coin.Type,</div><div class="line">              diameterVariation: Double = 0.01,</div><div class="line">              weightVariation: Double = 0.05) &#123;</div><div class="line">    self.coinType = coinType</div><div class="line">    </div><div class="line">    let standardDiameter = coinType.standardDiameter</div><div class="line">    self.diameterRange =</div><div class="line">      (1-diameterVariation)*standardDiameter ...</div><div class="line">      (1+diameterVariation)*standardDiameter</div><div class="line">    </div><div class="line">    let standardWeight = coinType.standardWeight</div><div class="line">    self.weightRange =</div><div class="line">      (1-weightVariation)*standardWeight ...</div><div class="line">      (1+weightVariation)*standardWeight</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">extension CoinHandler: CoinHandlerProtocol &#123;</div><div class="line">  </div><div class="line">  public func handleCoinValidation(_ unknownCoin: Coin) -&gt;</div><div class="line">    Coin? &#123;</div><div class="line">      guard let coin = createCoin(from: unknownCoin) else &#123;</div><div class="line">        return next?.handleCoinValidation(unknownCoin)</div><div class="line">      &#125;</div><div class="line">      return coin</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  private func createCoin(from unknownCoin: Coin) -&gt; Coin? &#123;</div><div class="line">    print(&quot;Attempt to create \(coinType)&quot;)</div><div class="line">    guard diameterRange.contains(unknownCoin.diameter) else &#123;</div><div class="line">      print(&quot;Invalid diameter&quot;)</div><div class="line">      return nil</div><div class="line">    &#125;</div><div class="line">    guard weightRange.contains(unknownCoin.weight) else &#123;</div><div class="line">      print(&quot;Invalid weight&quot;)</div><div class="line">      return nil</div><div class="line">    &#125;</div><div class="line">    let coin = coinType.init(diameter: unknownCoin.diameter,</div><div class="line">                             weight: unknownCoin.weight)</div><div class="line">    print(&quot;Created \(coin)&quot;)</div><div class="line">    return coin</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="4-声明Client"><a href="#4-声明Client" class="headerlink" title="4.声明Client"></a>4.声明Client</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">public class VendingMachine &#123;</div><div class="line">  </div><div class="line">  public let coinHandler: CoinHandler</div><div class="line">  public var coins: [Coin] = []</div><div class="line">  </div><div class="line">  public init(coinHandler: CoinHandler) &#123;</div><div class="line">    self.coinHandler = coinHandler</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func insertCoin(_ unknownCoin: Coin) &#123;</div><div class="line">    guard let coin = coinHandler.handleCoinValidation(unknownCoin)</div><div class="line">      else &#123;</div><div class="line">        print(&quot;Coin rejected: \(unknownCoin)&quot;)</div><div class="line">        return</div><div class="line">    &#125;</div><div class="line">    print(&quot;Coin Accepted: \(coin)&quot;)</div><div class="line">    coins.append(coin)</div><div class="line">    </div><div class="line">    let dollarValue = coins.reduce(0, &#123; $0 + $1.dollarValue &#125;)</div><div class="line">    print(&quot;Coins Total Value: $\(dollarValue)&quot;)</div><div class="line">    </div><div class="line">    let weight = coins.reduce(0, &#123; $0 + $1.weight &#125;)</div><div class="line">    print(&quot;Coins Total Weight: \(weight) g&quot;)</div><div class="line">    print(&quot;&quot;)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="5-使用责任链模式"><a href="#5-使用责任链模式" class="headerlink" title="5.使用责任链模式"></a>5.使用责任链模式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">// MARK: - Example</div><div class="line">let pennyHandler = CoinHandler(coinType: Penny.self)</div><div class="line">let nickleHandler = CoinHandler(coinType: Nickel.self)</div><div class="line">let dimeHandler = CoinHandler(coinType: Dime.self)</div><div class="line">let quarterHandler = CoinHandler(coinType: Quarter.self)</div><div class="line"></div><div class="line">pennyHandler.next = nickleHandler</div><div class="line">nickleHandler.next = dimeHandler</div><div class="line">dimeHandler.next = quarterHandler</div><div class="line"></div><div class="line">let vendingMachine = VendingMachine(coinHandler: pennyHandler)</div><div class="line"></div><div class="line">let penny = Penny()</div><div class="line">vendingMachine.insertCoin(penny)</div><div class="line"></div><div class="line">let quarter = Coin(diameter: Quarter.standardDiameter,</div><div class="line">                   weight: Quarter.standardWeight)</div><div class="line">vendingMachine.insertCoin(quarter)</div><div class="line"></div><div class="line">let invalidDime = Coin(diameter: Quarter.standardDiameter,</div><div class="line">                       weight: Dime.standardWeight)</div><div class="line">vendingMachine.insertCoin(invalidDime)</div></pre></td></tr></table></figure>
+<h3 id="其他例子"><a href="#其他例子" class="headerlink" title="其他例子"></a>其他例子</h3><ol>
+<li>OC使用部门管理权限：<a href="https://segmentfault.com/a/1190000011449768" target="_blank" rel="external">https://segmentfault.com/a/1190000011449768</a></li>
+<li>游戏中抵抗攻击:<a href="https://my.oschina.net/daguoshi/blog/495573" target="_blank" rel="external">https://my.oschina.net/daguoshi/blog/495573</a></li>
+<li>快递：<a href="http://jackliu17.github.io/2016/06/06/iOS%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%B4%A3%E4%BB%BB%E9%93%BE/" target="_blank" rel="external">http://jackliu17.github.io/2016/06/06/iOS%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E8%B4%A3%E4%BB%BB%E9%93%BE/</a></li>
+<li>责任链模式在 iOS 中的应用：<a href="https://blog.csdn.net/kuyeluofan/article/details/80467441" target="_blank" rel="external">https://blog.csdn.net/kuyeluofan/article/details/80467441</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/命令模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="蒋正义">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蒋正义的修炼之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/09/命令模式/" itemprop="url">命令模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-09T14:52:59+08:00">
+                2019-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="命令模式（Command-Pattern）"><a href="#命令模式（Command-Pattern）" class="headerlink" title="命令模式（Command Pattern）"></a>命令模式（Command Pattern）</h2><p>命令模式是一种行为模式，将执行操作的信息封装到命令对象中。它包含以下3个类型：</p>
+<p><img src="/2019/12/09/命令模式/命令模式.png" alt=""></p>
+<ol>
+<li>invoker：储存和执行命令</li>
+<li>command：将行为封装成对象</li>
+<li>receiver：command所作用的对象</li>
+</ol>
+<h3 id="使用举例"><a href="#使用举例" class="headerlink" title="使用举例"></a>使用举例</h3><h4 id="1-创建Receiver"><a href="#1-创建Receiver" class="headerlink" title="1.创建Receiver"></a>1.创建Receiver</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// MARK: - Receiver</div><div class="line">public class Door &#123;</div><div class="line">  public var isOpen = false</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="2-创建Command"><a href="#2-创建Command" class="headerlink" title="2.创建Command"></a>2.创建Command</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">public class DoorCommand &#123;</div><div class="line">  public let door: Door</div><div class="line">  public init(_ door: Door) &#123;</div><div class="line">    self.door = door</div><div class="line">  &#125;</div><div class="line">  public func execute() &#123; &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class OpenCommand: DoorCommand &#123;</div><div class="line">  public override func execute() &#123;</div><div class="line">    print(&quot;opening the door...&quot;)</div><div class="line">    door.isOpen = true</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public class CloseCommand: DoorCommand &#123;</div><div class="line">  public override func execute() &#123;</div><div class="line">    print(&quot;closing the door...&quot;)</div><div class="line">    door.isOpen = false</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="3-创建invoker"><a href="#3-创建invoker" class="headerlink" title="3.创建invoker"></a>3.创建invoker</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">// MARK: - Invoker</div><div class="line">public class Doorman &#123;</div><div class="line">  </div><div class="line">  public let commands: [DoorCommand]</div><div class="line">  public let door: Door</div><div class="line">  </div><div class="line">  public init(door: Door) &#123;</div><div class="line">    let commandCount = arc4random_uniform(10) + 1</div><div class="line">    self.commands = (0 ..&lt; commandCount).map &#123; index in</div><div class="line">      return index % 2 == 0 ?</div><div class="line">        OpenCommand(door) : CloseCommand(door)</div><div class="line">    &#125;</div><div class="line">    self.door = door</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func execute() &#123;</div><div class="line">    print(&quot;Doorman is...&quot;)</div><div class="line">    commands.forEach &#123; $0.execute() &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="4-使用命令模式"><a href="#4-使用命令模式" class="headerlink" title="4.使用命令模式"></a>4.使用命令模式</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">// MARK: - Example</div><div class="line">public let isOpen = true</div><div class="line">print(&quot;You predict the door will be &quot; +</div><div class="line">  &quot;\(isOpen ? &quot;open&quot; : &quot;closed&quot;).&quot;)</div><div class="line">print(&quot;&quot;)</div><div class="line"></div><div class="line">let door = Door()</div><div class="line">let doorman = Doorman(door: door)</div><div class="line">doorman.execute()</div><div class="line">print(&quot;&quot;)</div><div class="line"></div><div class="line">if door.isOpen == isOpen &#123;</div><div class="line">  print(&quot;You were right! :]&quot;)</div><div class="line">&#125; else &#123;</div><div class="line">  print(&quot;You were wrong :[&quot;)</div><div class="line">&#125;</div><div class="line">print(&quot;The door is \(door.isOpen ? &quot;open&quot; : &quot;closed&quot;).&quot;)</div></pre></td></tr></table></figure>
+<h3 id="其他例子"><a href="#其他例子" class="headerlink" title="其他例子"></a>其他例子</h3><ol>
+<li>改变一个视图的明亮程度：<a href="http://jackliu17.github.io/2016/06/03/iOS%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%91%BD%E4%BB%A4/" target="_blank" rel="external">http://jackliu17.github.io/2016/06/03/iOS%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%91%BD%E4%BB%A4/</a></li>
+<li>与普通写法的比较：<a href="https://yq.aliyun.com/articles/37261" target="_blank" rel="external">https://yq.aliyun.com/articles/37261</a></li>
+<li>撤销操作：<a href="https://juejin.im/post/5844c329ac502e006ba97570" target="_blank" rel="external">https://juejin.im/post/5844c329ac502e006ba97570</a></li>
+<li>屏幕变量和撤销：<a href="https://www.jianshu.com/p/c62e1bc04bf1" target="_blank" rel="external">https://www.jianshu.com/p/c62e1bc04bf1</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/09/组合模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -338,7 +728,6 @@
 <li>公司结构：<a href="https://segmentfault.com/a/1190000008151403" target="_blank" rel="external">https://segmentfault.com/a/1190000008151403</a></li>
 <li>菜单：<a href="http://www.cocoachina.com/articles/18319" target="_blank" rel="external">http://www.cocoachina.com/articles/18319</a></li>
 <li>树状结构和文件系统:<a href="https://www.cnblogs.com/goodboy-heyang/p/5226090.html" target="_blank" rel="external">https://www.cnblogs.com/goodboy-heyang/p/5226090.html</a></li>
-<li></li>
 </ol>
 
           
@@ -1153,393 +1542,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/19/工厂模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="蒋正义">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋正义的修炼之路">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/19/工厂模式/" itemprop="url">工厂模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-19T14:55:40+08:00">
-                2019-11-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="工厂模式（Factory-Pattern）"><a href="#工厂模式（Factory-Pattern）" class="headerlink" title="工厂模式（Factory Pattern）"></a>工厂模式（Factory Pattern）</h2><p>工厂模式提供了一种不用暴露创建逻辑来创建对象的方法。它包含两个类型：</p>
-<p><img src="/2019/11/19/工厂模式/factory_strategy.png" alt=""></p>
-<ol>
-<li>factory创建对象</li>
-<li>product就是被创建的对象</li>
-</ol>
-<h2 id="使用例子"><a href="#使用例子" class="headerlink" title="使用例子"></a>使用例子</h2><p>根据求职者来生产求职回信对象</p>
-<h3 id="1-定义JobApplicant和Email模型"><a href="#1-定义JobApplicant和Email模型" class="headerlink" title="1.定义JobApplicant和Email模型"></a>1.定义JobApplicant和Email模型</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">public struct JobApplicant &#123;</div><div class="line">  public let name: String</div><div class="line">  public let email: String</div><div class="line">  public var status: Status</div><div class="line">  </div><div class="line">  public enum Status &#123;</div><div class="line">    case new</div><div class="line">    case interview</div><div class="line">    case hired</div><div class="line">    case rejected</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public struct Email &#123;</div><div class="line">  public let subject: String</div><div class="line">  public let messageBody: String</div><div class="line">  public let recipientEmail: String</div><div class="line">  public let senderEmail: String</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="2-创建工厂结构"><a href="#2-创建工厂结构" class="headerlink" title="2.创建工厂结构"></a>2.创建工厂结构</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">public struct EmailFactory &#123;</div><div class="line">  </div><div class="line">  public let senderEmail: String</div><div class="line">  </div><div class="line">  public func createEmail(to recipient: JobApplicant) -&gt; Email &#123;</div><div class="line">    switch recipient.status &#123;</div><div class="line">    case .new:</div><div class="line">      return Email(</div><div class="line">        subject: &quot;We Received Your Application&quot;,</div><div class="line">        messageBody: &quot;Thanks for applying for a job here! &quot; +</div><div class="line">        &quot;You should hear from us in 17-42 business days.&quot;,</div><div class="line">        recipientEmail: recipient.email,</div><div class="line">        senderEmail: senderEmail)</div><div class="line">      </div><div class="line">    case .interview:</div><div class="line">      return Email(</div><div class="line">        subject: &quot;We Want to Interview You&quot;,</div><div class="line">        messageBody: &quot;Thanks for your resume, \(recipient.name)! &quot; +</div><div class="line">        &quot;Can you come in for an interview in 30 minutes?&quot;,</div><div class="line">        recipientEmail: recipient.email,</div><div class="line">        senderEmail: senderEmail)</div><div class="line">      </div><div class="line">    case .hired:</div><div class="line">      return Email(</div><div class="line">        subject: &quot;We Want to Hire You&quot;,</div><div class="line">        messageBody: &quot;Congratulations, \(recipient.name)! &quot; +</div><div class="line">        &quot;We liked your code, and you smelled nice. We want to offer you a position! Cha-ching! $$$&quot;,</div><div class="line">        recipientEmail: recipient.email,</div><div class="line">        senderEmail: senderEmail)</div><div class="line">      </div><div class="line">    case .rejected:</div><div class="line">      return Email(</div><div class="line">        subject: &quot;Thanks for Your Application&quot;,</div><div class="line">        messageBody: &quot;Thank you for applying, \(recipient.name). &quot; +</div><div class="line">          &quot;We have decided to move forward with other candidates. &quot; +</div><div class="line">        &quot;Please remember to wear pants next time!&quot;,</div><div class="line">        recipientEmail: recipient.email,</div><div class="line">        senderEmail: senderEmail)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="3-使用工厂来创建回信"><a href="#3-使用工厂来创建回信" class="headerlink" title="3.使用工厂来创建回信"></a>3.使用工厂来创建回信</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">var jackson = JobApplicant(name: &quot;Jackson Smith&quot;,</div><div class="line">                           email: &quot;jackson.smith@example.com&quot;,</div><div class="line">                           status: .new)</div><div class="line"></div><div class="line">let emailFactory = EmailFactory(senderEmail: &quot;RaysMinions@RaysCoffeeCo.com&quot;)</div><div class="line"></div><div class="line">// New</div><div class="line">print(emailFactory.createEmail(to: jackson), &quot;\n&quot;)</div><div class="line"></div><div class="line">// Interview</div><div class="line">jackson.status = .interview</div><div class="line">print(emailFactory.createEmail(to: jackson), &quot;\n&quot;)</div><div class="line"></div><div class="line">// Hired</div><div class="line">jackson.status = .hired</div><div class="line">print(emailFactory.createEmail(to: jackson), &quot;\n&quot;)</div></pre></td></tr></table></figure>
-<p>如果你的对象非常简单，你就不需要使用工厂模式</p>
-<h2 id="其他例子"><a href="#其他例子" class="headerlink" title="其他例子"></a>其他例子</h2><ol>
-<li>3种工厂模式：<a href="https://www.jianshu.com/p/847af218b1f0" target="_blank" rel="external">https://www.jianshu.com/p/847af218b1f0</a></li>
-<li>Cocoa中的抽象工厂模式（NSNumber，类簇）:<a href="http://ibloodline.com/articles/2016/09/06/factory.html" target="_blank" rel="external">http://ibloodline.com/articles/2016/09/06/factory.html</a></li>
-<li>工厂模式在tableviewCell中的使用：<a href="https://juejin.im/post/5b5c0fe3e51d451989055798" target="_blank" rel="external">https://juejin.im/post/5b5c0fe3e51d451989055798</a></li>
-</ol>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/18/建造者模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="蒋正义">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋正义的修炼之路">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/18/建造者模式/" itemprop="url">建造者模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-18T16:56:59+08:00">
-                2019-11-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="建造者模式（Builder-Pattern）"><a href="#建造者模式（Builder-Pattern）" class="headerlink" title="建造者模式（Builder Pattern）"></a>建造者模式（Builder Pattern）</h2><p>建造者模式通过一步步的提供输入来创建复杂的对象，而不需要在初始化的时候提供所有的输入。</p>
-<p>这个模式包含以下三个方面：</p>
-<p><img src="/2019/11/18/建造者模式/build_strategy.png" alt=""></p>
-<ol>
-<li>director接受输入并和builder配合。这通常是view controller或view controller使用的工具类。</li>
-<li>product是将要被创建的复杂对象。根据所需的引用语义，它可以是结构体或类。它根据你的使用需要可以是任何类型，但通常是模型。</li>
-<li>builder接收一步步的输入并负责product的创建。它通常是一个类。</li>
-</ol>
-<p>当你想要通过一系列的步骤来创建一个复杂对象时，你就可以考虑使用创造者模式。</p>
-<h2 id="使用例子"><a href="#使用例子" class="headerlink" title="使用例子"></a>使用例子</h2><p>使用这个模式来实现一个汉堡构造者</p>
-<h3 id="1-定义product"><a href="#1-定义product" class="headerlink" title="1.定义product"></a>1.定义product</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">// MARK: - Product</div><div class="line">public struct Hamburger &#123;</div><div class="line">  public let meat: Meat</div><div class="line">  public let sauce: Sauces</div><div class="line">  public let toppings: Toppings</div><div class="line">&#125;</div><div class="line"></div><div class="line">extension Hamburger: CustomStringConvertible &#123;</div><div class="line">  public var description: String &#123;</div><div class="line">    return meat.rawValue + &quot; burger&quot;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public enum Meat: String &#123;</div><div class="line">  case beef</div><div class="line">  case chicken</div><div class="line">  case kitten</div><div class="line">  case tofu</div><div class="line">&#125;</div><div class="line"></div><div class="line">public struct Sauces: OptionSet &#123;</div><div class="line">  public static let mayonnaise = Sauces(rawValue: 1 &lt;&lt; 0)</div><div class="line">  public static let mustard = Sauces(rawValue: 1 &lt;&lt; 1)</div><div class="line">  public static let ketchup = Sauces(rawValue: 1 &lt;&lt; 2)</div><div class="line">  public static let secret = Sauces(rawValue: 1 &lt;&lt; 3)</div><div class="line">  </div><div class="line">  public let rawValue: Int</div><div class="line">  public init(rawValue: Int) &#123;</div><div class="line">    self.rawValue = rawValue</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">public struct Toppings: OptionSet &#123;</div><div class="line">  public static let cheese = Toppings(rawValue: 1 &lt;&lt; 0)</div><div class="line">  public static let lettuce = Toppings(rawValue: 1 &lt;&lt; 1)</div><div class="line">  public static let pickles = Toppings(rawValue: 1 &lt;&lt; 2)</div><div class="line">  public static let tomatoes = Toppings(rawValue: 1 &lt;&lt; 3)</div><div class="line">  </div><div class="line">  public let rawValue: Int</div><div class="line">  public init(rawValue: Int) &#123;</div><div class="line">    self.rawValue = rawValue</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="2-定义builder"><a href="#2-定义builder" class="headerlink" title="2.定义builder"></a>2.定义builder</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">// MARK: - Builder</div><div class="line">public class HamburgerBuilder &#123;</div><div class="line">  </div><div class="line">  public enum Error: Swift.Error &#123;</div><div class="line">    case soldOut</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public private(set) var meat: Meat = .beef</div><div class="line">  public private(set) var sauces: Sauces = []</div><div class="line">  public private(set) var toppings: Toppings = []</div><div class="line">  </div><div class="line">  private var soldOutMeats: [Meat] = [.kitten]</div><div class="line">  </div><div class="line">  public func addSauces(_ sauce: Sauces) &#123;</div><div class="line">    sauces.insert(sauce)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func removeSauces(_ sauce: Sauces) &#123;</div><div class="line">    sauces.remove(sauce)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func addToppings(_ topping: Toppings) &#123;</div><div class="line">    toppings.insert(topping)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func removeToppings(_ topping: Toppings) &#123;</div><div class="line">    toppings.remove(topping)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func setMeat(_ meat: Meat) throws &#123;</div><div class="line">    guard isAvailable(meat) else &#123; throw Error.soldOut &#125;</div><div class="line">    self.meat = meat</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func isAvailable(_ meat: Meat) -&gt; Bool &#123;</div><div class="line">    return !soldOutMeats.contains(meat)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func build() -&gt; Hamburger &#123;</div><div class="line">    return Hamburger(meat: meat,</div><div class="line">                     sauce: sauces,</div><div class="line">                     toppings: toppings)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="3-定义director"><a href="#3-定义director" class="headerlink" title="3.定义director"></a>3.定义director</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">// MARK: - Director</div><div class="line">public class Employee &#123;</div><div class="line">  </div><div class="line">  public func createCombo1() throws -&gt; Hamburger &#123;</div><div class="line">    let builder = HamburgerBuilder()</div><div class="line">    try builder.setMeat(.beef)</div><div class="line">    builder.addSauces(.secret)</div><div class="line">    builder.addToppings([.lettuce, .tomatoes, .pickles])</div><div class="line">    return builder.build()</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  public func createKittenSpecial() throws -&gt; Hamburger &#123;</div><div class="line">    let builder = HamburgerBuilder()</div><div class="line">    try builder.setMeat(.kitten)</div><div class="line">    builder.addSauces(.mustard)</div><div class="line">    builder.addToppings([.lettuce, .tomatoes])</div><div class="line">    return builder.build()</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="4-使用举例"><a href="#4-使用举例" class="headerlink" title="4.使用举例"></a>4.使用举例</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">// MARK: - Example</div><div class="line">let burgerFlipper = Employee()</div><div class="line"></div><div class="line">if let combo1 = try? burgerFlipper.createCombo1() &#123;</div><div class="line">  print(&quot;Nom nom &quot; + combo1.description)</div><div class="line">&#125;</div><div class="line"></div><div class="line">if let kittenBurger = try?</div><div class="line">  burgerFlipper.createKittenSpecial() &#123;</div><div class="line">  print(&quot;Nom nom nom &quot; + kittenBurger.description)</div><div class="line">  </div><div class="line">&#125; else &#123;</div><div class="line">  print(&quot;Sorry, no kitten burgers here... :[&quot;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="其他例子"><a href="#其他例子" class="headerlink" title="其他例子"></a>其他例子</h2><p>可以在一个表单页面使用创造者模式，当用户在表单输入的时候给builder输入，最后在点击完成的时候建造完成的product。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/15/策略模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="蒋正义">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蒋正义的修炼之路">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/15/策略模式/" itemprop="url">策略模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-15T14:46:59+08:00">
-                2019-11-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="策略模式（Strategy-Pattern）"><a href="#策略模式（Strategy-Pattern）" class="headerlink" title="策略模式（Strategy Pattern）"></a>策略模式（Strategy Pattern）</h2><p>策略模式定义了一系列可互换的对象，这些对象在运行时可以互相更换。</p>
-<p>策略这个词应该怎么理解，打个比方说，我们出门的时候会选择不同的出行方式，比如骑自行车、坐公交、坐火车、坐飞机、坐火箭等等，这些出行方式，每一种都是一个策略。</p>
-<p>再比如我们去逛商场，商场现在正在搞活动，有打折的、有满减的、有返利的等等，其实不管商场如何进行促销，说到底都是一些算法，这些算法本身只是一种策略，并且这些算法是随时都可能互相替换的，比如针对同一件商品，今天打八折、明天满100减30，这些策略间是可以互换的。</p>
-<p>策略模式定义了一组算法，将每个算法都封装起来，并且使它们之间可以互换。</p>
-<p>策略模式包含3部分:</p>
-<p><img src="/2019/11/15/策略模式/strategy_overall.png" alt=""></p>
-<ul>
-<li>The object using a strategy：它经常是view controller，但在技术上也可以是任何需要可替换行为的对象。</li>
-<li>strategy protocol：定义了每个策略都需要实现的方法</li>
-<li>strategies：遵循strategy protocol协议的对象</li>
-</ul>
-<h2 id="使用例子：电影评分app"><a href="#使用例子：电影评分app" class="headerlink" title="使用例子：电影评分app"></a>使用例子：电影评分app</h2><p>这是一个使用多个电影评分服务的app，比如烂番茄，IMDb和Metacritic。我们可以使用策略模式为每个电影评分服务定义一些公共的api，而不是直接在view controller中为每个服务编写代码，并可能在代码里包含复杂的if-else语句。</p>
-<h3 id="创建一个策略协议"><a href="#创建一个策略协议" class="headerlink" title="创建一个策略协议:"></a>创建一个策略协议:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public protocol MovieRatingStrategy &#123;</div><div class="line">    var ratingServiceName: String &#123; get &#125;</div><div class="line">    func fetchRating(for movieTitle: String,success: (_ rating: String, _ review: String) -&gt; ())</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>ratingServiceName表示服务的名字，比如返回“豆瓣”。</p>
-<p>使用fetchRatingForMovieTitle(_:success:)来异步获取电影评分。</p>
-<h3 id="实现多个服务"><a href="#实现多个服务" class="headerlink" title="实现多个服务"></a>实现多个服务</h3><p>首先实现烂番茄的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public class RottenTomatoesClient: MovieRatingStrategy &#123;</div><div class="line">  public let ratingServiceName = &quot;Rotten Tomatoes&quot;</div><div class="line">  public func fetchRating(</div><div class="line">    for movieTitle: String,</div><div class="line">    success: (_ rating: String, _ review: String) -&gt; ()) &#123;</div><div class="line">    let rating = &quot;95%&quot;</div><div class="line">    let review = &quot;It rocked!&quot;</div><div class="line">    success(rating, review)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>接着实现IMBD服务:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">public class IMDbClient: MovieRatingStrategy &#123;</div><div class="line">  public let ratingServiceName = &quot;IMDb&quot;</div><div class="line">  public func fetchRating(</div><div class="line">    for movieTitle: String,</div><div class="line">    success: (_ rating: String, _ review: String) -&gt; ()) &#123;</div><div class="line">    let rating = &quot;3 / 10&quot;</div><div class="line">    let review = &quot;&quot;&quot;</div><div class="line">      It was terrible! The audience was throwing rotten</div><div class="line">      tomatoes!</div><div class="line">      &quot;&quot;&quot;</div><div class="line">    success(rating, review)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="使用策略"><a href="#使用策略" class="headerlink" title="使用策略"></a>使用策略</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">public class MoviewRatingViewController: UIViewController &#123;</div><div class="line">  </div><div class="line">  // MARK: - Properties</div><div class="line">  public var movieRatingClient: MovieRatingStrategy!</div><div class="line">  </div><div class="line">  // MARK: - Outlets</div><div class="line">  @IBOutlet public var movieTitleTextField: UITextField!</div><div class="line">  @IBOutlet public var ratingServiceNameLabel: UILabel!</div><div class="line">  @IBOutlet public var ratingLabel: UILabel!</div><div class="line">  @IBOutlet public var reviewLabel: UILabel!</div><div class="line">  </div><div class="line">  // MARK: - View Lifecycle</div><div class="line">  public override func viewDidLoad() &#123;</div><div class="line">    super.viewDidLoad()</div><div class="line">    ratingServiceNameLabel.text =</div><div class="line">      movieRatingClient.ratingServiceName</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  // MARK: - Actions</div><div class="line">  @IBAction public func searchButtonPressed(sender: Any) &#123;</div><div class="line">    guard let movieTitle = movieTitleTextField.text</div><div class="line">      else &#123; return &#125;</div><div class="line">    </div><div class="line">    movieRatingClient.fetchRating(for: movieTitle) &#123;</div><div class="line">      (rating, review) in</div><div class="line">      self.ratingLabel.text = rating</div><div class="line">      self.reviewLabel.text = review</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>view controller不需要知道他在使用哪个策略，它只用依赖一个协议就够了。</p>
-<p>view controller初始化的时候必定会传入一个策略，而它并不需要知道这个策略的具体实现。</p>
-<h2 id="其他例子"><a href="#其他例子" class="headerlink" title="其他例子"></a>其他例子</h2><p>还有一个oc的使用例子：<a href="https://www.jianshu.com/p/014df9e21c35" target="_blank" rel="external">https://www.jianshu.com/p/014df9e21c35</a><br>还有一个验证textfield输入的例子：<a href="https://blog.csdn.net/wtdask/article/details/80454852" target="_blank" rel="external">https://blog.csdn.net/wtdask/article/details/80454852</a><br>如果代码理由有很多的if else的话，可以考虑用策略模式来优化。</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1589,7 +1591,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
